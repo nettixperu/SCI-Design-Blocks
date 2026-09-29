@@ -1,0 +1,34 @@
+# OS, editor, and temporary files
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.bak
+*.swp
+.idea/
+.vscode/
+tmp/
+temp/
+extracted/
+
+# Local configuration and secrets
+.env
+.env.*
+
+# Release and test archives are published as release assets
+*.zip
+sci-design-blocks-m1-test-*.zip
+sci-design-blocks-m2-test-*.zip
+sci-design-blocks-m3-test-*.zip
+sci-design-blocks-m4-rc-test.zip
+
+# Private site CSS audit input and internal QA history
+audit-input/
+CSS-MIGRATION-MATRIX.md
+ICON-LIST-M3.md
+M1-INTEGRATION-GATE.md
+M3-ESSENTIALS.md
+PATTERN-LIBRARY-M2.md
+RELEASE-TEST-MATRIX.md
+SDD-M1.md
+TEST-MATRIX-M1.md
