@@ -24,7 +24,7 @@ SCI Design Blocks is **Core-first**, **pattern-based**, and **theme-native**. Pa
 
 ## Development 1.1
 
-The development branch contains a curated set of 83 Bootstrap Icons v1.13.1 in the WordPress 7.1 Core Icon API collection. The 1.1 line is not released; the 1.0.0 ZIP remains the current stable installation. See [SDD-1.1.md](SDD-1.1.md) for the architecture, catalog decisions, and validation commands.
+The development branch contains a curated set of 83 Bootstrap Icons v1.13.1 in the WordPress 7.1 Core Icon API collection and two opt-in Block Styles for the existing Core Accordion: Minimal and Bordered. The 1.1 line is not released; the 1.0.0 ZIP remains the current stable installation. See [SDD-1.1.md](SDD-1.1.md) for the architecture, catalog decisions, and validation commands.
 
 ## Installation
 

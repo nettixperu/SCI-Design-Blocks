@@ -9,12 +9,16 @@ $GLOBALS['sci_test_patterns']     = array();
 $GLOBALS['sci_test_categories']   = array();
 $GLOBALS['sci_test_collections']  = array();
 $GLOBALS['sci_test_icons']        = array();
+$GLOBALS['sci_test_block_styles'] = array();
+$GLOBALS['sci_test_stylesheets']  = array();
+$GLOBALS['sci_test_translations'] = array();
 
 function add_action( $hook, $callback, $priority = 10 ) {
 	$GLOBALS['sci_test_hooks'][ $hook ][ $priority ][] = $callback;
 }
 
 function __( $text, $domain = null ) {
+	$GLOBALS['sci_test_translations'][] = array( $text, $domain );
 	return $text;
 }
 
@@ -28,6 +32,20 @@ function register_block_pattern_category( $slug, $args ) {
 
 function register_block_pattern( $name, $args ) {
 	$GLOBALS['sci_test_patterns'][ $name ] = $args;
+}
+
+function plugins_url( $path, $plugin = '' ) {
+	return 'plugin-assets/' . ltrim( $path, '/' );
+}
+
+function wp_register_style( $handle, $src, $deps = array(), $ver = false, $media = 'all' ) {
+	$GLOBALS['sci_test_stylesheets'][ $handle ] = compact( 'src', 'deps', 'ver', 'media' );
+	return true;
+}
+
+function register_block_style( $block_name, $properties ) {
+	$GLOBALS['sci_test_block_styles'][ $block_name ][ $properties['name'] ] = $properties;
+	return true;
 }
 
 function wp_register_icon_collection( $slug, $args ) {
@@ -100,6 +118,33 @@ if ( $icon_names !== $expected_icons ) {
 	throw new RuntimeException( 'Registered icon handles must match the unique manifest entries.' );
 }
 
+$accordion_styles = $GLOBALS['sci_test_block_styles']['core/accordion'] ?? array();
+$style_names      = array_keys( $accordion_styles );
+sort( $style_names );
+if ( array( 'sci-bordered', 'sci-minimal' ) !== $style_names ) {
+	throw new RuntimeException( 'Expected exactly the opt-in Minimal and Bordered Core Accordion styles.' );
+}
+if ( 1 !== count( $GLOBALS['sci_test_stylesheets'] ) || ! isset( $GLOBALS['sci_test_stylesheets']['sci-design-blocks-accordion-styles'] ) ) {
+	throw new RuntimeException( 'Expected one registered Accordion stylesheet handle.' );
+}
+foreach ( array( 'sci-minimal' => 'Minimal', 'sci-bordered' => 'Bordered' ) as $name => $label ) {
+	$style = $accordion_styles[ $name ];
+	if ( $label !== $style['label'] || 'sci-design-blocks-accordion-styles' !== $style['style_handle'] || isset( $style['is_default'] ) ) {
+		throw new RuntimeException( 'Accordion style label/asset is invalid or changes the default style.' );
+	}
+	if ( ! in_array( array( $label, 'sci-design-blocks' ), $GLOBALS['sci_test_translations'], true ) ) {
+		throw new RuntimeException( 'Accordion style labels must use the plugin text domain.' );
+	}
+}
+if ( 'plugin-assets/assets/css/accordion-styles.css' !== $GLOBALS['sci_test_stylesheets']['sci-design-blocks-accordion-styles']['src'] ) {
+	throw new RuntimeException( 'Accordion style handle must point to the local SCI stylesheet.' );
+}
+
+$accordion_pattern = $GLOBALS['sci_test_patterns']['sci-design-blocks/accordion']['content'] ?? '';
+if ( false === strpos( $accordion_pattern, '<!-- wp:accordion {"autoclose":true} -->' ) || false !== strpos( $accordion_pattern, 'is-style-sci-' ) ) {
+	throw new RuntimeException( 'The original SCI Accordion pattern must keep Core markup and autoclose unchanged.' );
+}
+
 if ( 83 !== count( $manifest ) ) {
 	throw new RuntimeException( 'Expected exactly 83 curated manifest entries.' );
 }
@@ -137,4 +182,4 @@ if ( false === $notice || false === strpos( $notice, 'Bootstrap Icons' ) || fals
 	throw new RuntimeException( 'Bootstrap MIT third-party notice is missing or incomplete.' );
 }
 
-fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one collection, 83 icons across nine categories, nine patterns, provenance and MIT notice.\n" );
+fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one SCI collection, 83 icons, two opt-in Core Accordion styles, nine unchanged patterns, provenance and MIT notice.\n" );

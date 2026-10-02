@@ -1,6 +1,6 @@
 # SCI Design Blocks — Software Design Document 1.1
 
-**Status:** M1 and M2 implemented on the development branch; no 1.1.0 release has been created.
+**Status:** M1, M2, and M3 implemented on the development branch; no 1.1.0 release has been created.
 **Development version:** `1.1.0-dev`
 **Minimum WordPress:** 7.1
 **PHP minimum:** 7.4 (unchanged plugin baseline)
@@ -108,12 +108,58 @@ The PHP static smoke test stubs Core registration and checks one collection, 83 
 
 The Product Owner’s prior PoC gate reported successful handle restoration after reactivation. M2 does not change that registration architecture. Real editor checks are not claimed as independently performed; record them in M4.
 
-## 11. Release boundaries
+## 11. M3 — Core Accordion styles
+
+The existing **SCI Accordion** pattern remains one pattern using `core/accordion` with `autoclose: true`. M3 does not alter its serialized markup, Core interaction, view script, ARIA, or keyboard behavior.
+
+### Registered styles
+
+WordPress `register_block_style()` registers two opt-in styles for `core/accordion`:
+
+| Technical name | Editor label | CSS class | Visual role |
+| --- | --- | --- | --- |
+| `sci-minimal` | Minimal | `.is-style-sci-minimal` | Theme-colored horizontal separators between items. |
+| `sci-bordered` | Bordered | `.is-style-sci-bordered` | Individually bordered cards, theme spacing between cards, and inset toggle/panel content. |
+
+No style is marked default. Accordions without one of these classes retain Core appearance. The single stylesheet is `assets/css/accordion-styles.css`, registered as a `style_handle` through the Block Styles API so Core makes it available in the editor and frontend. Core controls whether registered block-style assets load with block assets or on demand. CSS rules only match the two SCI classes.
+
+### CSS and theme behavior
+
+- CSS size: **1,076 bytes**.
+- Borders use `currentColor` with a `color-mix()` lightening declaration; the preceding `currentColor` border is the fallback.
+- Bordered spacing and inner padding use `--wp--preset--spacing--20`, falling back to `1rem` if the active theme has no such preset.
+- No fixed font, font size, background, brand color, shadow, animation, breakpoint, `!important`, or custom indicator is added.
+- Selectors address direct Core accordion items and their Core heading/panel children. They do not style arbitrary nested content such as lists, images, headings, or buttons.
+- Core retains the toggle indicator, focus behavior, semantics, open/close state, autoclose, ARIA, keyboard handling, and view script. Core `core/icon` and its 83-icon collection are unaffected.
+- Content remains Core markup. If SCI is deactivated, the block and interaction remain; only the opt-in SCI appearance may be lost.
+
+### Separated decision
+
+**REDUNDANT — NOT INCLUDED.** Bordered already uses separate bordered cards with theme spacing between items. Another style would differ only by spacing or by restating Minimal’s separators with a gap, so it would not add a distinct visual/use case.
+
+### M3 validation
+
+Run:
+
+```sh
+php -l sci-design-blocks.php
+php -l includes/accordion-styles.php
+php -d error_reporting=E_ALL -d display_errors=1 tests/check-icon-library.php
+python3 tests/check-icon-svg.py
+python3 tests/check-accordion-css.py
+```
+
+Static registration checks assert exactly two opt-in Core styles, translated labels, the shared local style handle, the original nine patterns, and the Accordion pattern’s unchanged `autoclose: true` markup. The CSS check validates syntax shape, six scoped rules, allowed structural properties, and zero `!important`. No WordPress browser UI was available; visual/editor/frontend, multiline content, focus, responsive, and autoclose interaction checks remain for M4.
+
+## 12. Release boundaries
 
 This branch is development-only at `1.1.0-dev`. No 1.1.0 release, release ZIP, tag, or GitHub publication is authorized by this SDD. M2 completes the curated catalog; further work requires separate authorization and review.
 
 ## References
 
+- [Block Styles API](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-styles/)
+- [`register_block_style()`](https://developer.wordpress.org/reference/functions/register_block_style/)
+- [`wp_enqueue_block_style()` asset-loading behavior](https://developer.wordpress.org/reference/functions/wp_enqueue_block_style/)
 - [WordPress 7.1 icon registration and rendering API](https://make.wordpress.org/core/2026/07/24/registering-and-rendering-svg-icons-in-wordpress-7-1/)
 - [WordPress Developer Blog: 7.1 Icon Registration API](https://developer.wordpress.org/news/2026/08/hands-on-with-the-wordpress-7-1-icon-registration-api/)
 - Local WordPress Core 7.1.2 source inspected during the pre-SDD spike: `wp-includes/icons.php`, `wp-includes/class-wp-icons-registry.php`, `wp-includes/blocks/icon.php`, `wp-includes/blocks/icon/block.json`, and `wp-includes/blocks/icon/style.css`.

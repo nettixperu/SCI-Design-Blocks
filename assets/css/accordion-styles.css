@@ -1,0 +1,26 @@
+.wp-block-accordion.is-style-sci-minimal > .wp-block-accordion-item {
+	border-block-start: 1px solid currentColor;
+	border-block-start-color: color-mix(in srgb, currentColor 24%, transparent);
+}
+
+.wp-block-accordion.is-style-sci-minimal > .wp-block-accordion-item:last-child {
+	border-block-end: 1px solid currentColor;
+	border-block-end-color: color-mix(in srgb, currentColor 24%, transparent);
+}
+
+.wp-block-accordion.is-style-sci-bordered > .wp-block-accordion-item {
+	border: 1px solid currentColor;
+	border-color: color-mix(in srgb, currentColor 24%, transparent);
+}
+
+.wp-block-accordion.is-style-sci-bordered > .wp-block-accordion-item + .wp-block-accordion-item {
+	margin-block-start: var(--wp--preset--spacing--20, 1rem);
+}
+
+.wp-block-accordion.is-style-sci-bordered > .wp-block-accordion-item > .wp-block-accordion-heading .wp-block-accordion-heading__toggle {
+	padding-inline: var(--wp--preset--spacing--20, 1rem);
+}
+
+.wp-block-accordion.is-style-sci-bordered > .wp-block-accordion-item > .wp-block-accordion-panel {
+	padding: var(--wp--preset--spacing--20, 1rem);
+}
