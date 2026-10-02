@@ -313,6 +313,12 @@ Certificación manual en WordPress 7.1.x como versión mínima (preferir 7.1.2 s
 - SHA-256 registrado; artefacto instalado probado es exactamente el release ZIP publicado.
 - v1.1.0/tag/ZIP/release/checksum siguen intactos.
 
+#### M4 Phase A — RC status — 2026-10-02
+
+- Certificación estática, regresión 1.1, documentación RC y validación del ZIP RC completadas; versión del plugin se mantiene en 1.1.0 mientras el gate visual esté pendiente.
+- WordPress/editor/browser real no estuvo disponible para completar las seis pruebas manuales. El RC queda para evaluación del Product Owner; no se crea ni publica tag/release 1.2.0 ni ZIP estable hasta recibir confirmación manual PASS.
+- Evidencia detallada: `RELEASE-TEST-MATRIX-1.2.md`.
+
 ## 13. Asset y release policy
 
 Mantener CSS Tabs en `assets/css/tabs-styles.css` y registro en un include PHP pequeño siguiendo `SCI\DesignBlocks`. No editar CSS del Accordion salvo que una colisión concreta esté reproducida y aprobada. No añadir Node, npm, Composer ni dependencia de build para una hoja CSS pequeña.
