@@ -16,6 +16,7 @@ namespace SCI\DesignBlocks;
 
 require_once __DIR__ . '/includes/icon-library.php';
 require_once __DIR__ . '/includes/accordion-styles.php';
+require_once __DIR__ . '/includes/tabs-styles.php';
 
 add_action( 'init', __NAMESPACE__ . '\register_feature_patterns' );
 
