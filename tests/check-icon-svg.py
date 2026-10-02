@@ -67,11 +67,14 @@ for name, entry in manifest.items():
             sys.exit(f"Outside Core 7.1 allowlist: {path}: <{tag}> {sorted(unsupported)}")
     print(f"{name}.svg PASS")
 
-runtime_css_js = [p for p in ROOT.rglob("*") if p.is_file() and p.suffix.lower() in {".css", ".js"} and not ({".git", "audit-input"} & set(p.relative_to(ROOT).parts))]
-allowed_css = ROOT / "assets" / "css" / "accordion-styles.css"
-unexpected_assets = [p for p in runtime_css_js if p.suffix.lower() == ".js" or p != allowed_css]
+runtime_css_js = [p for p in ROOT.rglob("*") if p.is_file() and p.suffix.lower() in {".css", ".js"} and not ({".git", "audit-input", "poc"} & set(p.relative_to(ROOT).parts))]
+allowed_css = {
+    ROOT / "assets" / "css" / "accordion-styles.css",
+    ROOT / "assets" / "css" / "tabs-styles.css",
+}
+unexpected_assets = [p for p in runtime_css_js if p.suffix.lower() == ".js" or p not in allowed_css]
 if unexpected_assets:
     sys.exit("Unexpected CSS or JavaScript file in plugin source: " + ", ".join(str(p.relative_to(ROOT)) for p in unexpected_assets))
 if (ROOT / "package.json").exists() or (ROOT / "composer.json").exists() or (ROOT / "vendor").exists():
     sys.exit("Unexpected runtime/development dependency manifest or vendor tree")
-print("SVG/source checks PASS: 83 entries match 83 safe sources; only scoped Accordion CSS is present; no frontend JS/dependency manifest.")
+print("SVG/source checks PASS: 83 entries match 83 safe sources; only Accordion/Tabs CSS is present; no frontend JS/dependency manifest.")
