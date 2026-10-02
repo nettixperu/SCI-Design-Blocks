@@ -294,6 +294,15 @@ Certificación manual en WordPress 7.1.x como versión mínima (preferir 7.1.2 s
 - Regresión 1.1 completa: 9 patterns, 83 iconos, collection, 2 Accordion styles.
 - No plugin errors/warnings atribuibles, no custom blocks, scripts o dependencias.
 
+#### M3 execution record — 2026-10-02
+
+- **Static/Core source gate:** PASS en WordPress Core 7.1.2; cuatro metadata `block.json` de Tabs/Tab List/Tab Panels/Tab Panel presentes. Core mantiene edición/operaciones, serialización, ARIA, teclado, foco y deep linking; SCI solo registra dos Block Styles y no añade interacción.
+- **Parse/serialize:** PASS con fixtures de tres panels y contenido Core anidado para ambos estilos, mediante el parser/serializador Core 7.1.2.
+- **SCI 1.1 regression:** PASS: nueve patterns, una icon collection con 83 iconos, dos estilos Accordion y dos Tabs; metadata sigue en 1.1.0, mínimo WordPress 7.1 y PHP 7.4.
+- **Static checks:** PHP lint, registration/i18n smoke, Tabs/Accordion CSS, SVG/dependency inventory y `git diff --check`: PASS. No se modificó CSS de producto, Accordion, Icon Library, patterns, versión, ZIP ni tags.
+- **Entorno visual:** PHP CLI 8.5.4; temas Twenty Twenty-Three, Twenty Twenty-Four y Twenty Twenty-Five instalados. No había editor/browser conectado: localhost devolvió la página predeterminada de nginx. Interacción visual, focus/scroll en viewport estrecho y deactivate/reactivate quedan para el gate manual M4.
+- **Estado M3:** PASS para QA Core estática y regresión; listo para revisión antes de M4. Esta anotación no inicia ni autoriza M4.
+
 ### M4 acceptance / Definition of Done
 
 - Todo requirement aplicable PASS o excepción con aprobación escrita del Technical Director/Product Owner.
