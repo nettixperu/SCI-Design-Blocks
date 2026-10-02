@@ -1,9 +1,14 @@
 # Backlog
 
-## Tabs — 1.1 candidate
+Items below are future candidates or separate projects. None is approved or committed for implementation.
 
-No implementation commitment. Any future proposal should evaluate nested Gutenberg content, horizontal and vertical layouts, accessibility, keyboard navigation, responsive behavior, and Minimal / Underline / Pills styles, with Core and `theme.json` first.
+## Future candidate
 
-## Other ideas — no commitment
+- Tabs
 
-Timeline, Counter, Progress, Before/After, and Hotspot are historical ideas only. They have not been designed or approved.
+## Separate projects
+
+- Mega Menu
+- SCI Photo
+
+Other historical ideas, including Timeline, Counter, Progress, Before/After, and Hotspot, remain unapproved.

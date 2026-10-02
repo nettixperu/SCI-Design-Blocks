@@ -22,7 +22,7 @@ function register_accordion_styles(): void {
 		$style_handle,
 		plugins_url( 'assets/css/accordion-styles.css', $plugin_file ),
 		array(),
-		'1.1.0-dev'
+		'1.1.0'
 	);
 
 	register_block_style(

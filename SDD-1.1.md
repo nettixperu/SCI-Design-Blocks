@@ -1,13 +1,13 @@
 # SCI Design Blocks — Software Design Document 1.1
 
-**Status:** M1, M2, and M3 implemented on the development branch; no 1.1.0 release has been created.
-**Development version:** `1.1.0-dev`
+**Status:** SCI Design Blocks 1.1.0 release approved after M4 gate.
+**Release version:** `1.1.0`
 **Minimum WordPress:** 7.1
 **PHP minimum:** 7.4 (unchanged plugin baseline)
 **Text domain:** `sci-design-blocks`
 **License:** GPL-2.0-or-later
 
-This document records the approved architecture and M2 catalog decisions for the SCI Icon Library. The 1.0.0 tag, GitHub release, and release ZIP remain frozen and represent the WordPress 7.0+ line.
+This document records the approved architecture and M2 catalog decisions for the SCI Icon Library. The 1.0.0 tag and release ZIP remain frozen and represent the WordPress 7.0+ line.
 
 ## 1. Scope
 
@@ -97,7 +97,7 @@ The PHP static smoke test stubs Core registration and checks one collection, 83 
 | --- | --- |
 | A. Catalog integrity | PASS — 83 names, unique local names/handles, valid categories, manifest/SVG one-to-one. |
 | B. Registration | PASS — one `SCI` collection and 83 Core icon registrations; nine patterns still register. |
-| C. Picker/search | Pending manual M4 — real editor picker/search UI was not available in this run. |
+| C. Picker/search | Pending at M2; the Product Owner’s completed M4 picker/search gate is recorded in `RELEASE-TEST-MATRIX-1.1.md`. |
 | D. Core controls and accessibility | Static PASS — `core/icon` declares width, color, alignment, and `ariaLabel` support. Core `wp_get_icon()` marks unlabeled decorative icons hidden and labeled icons as `role="img"` with `aria-label`. UI sample remains for M4. |
 | E. Feature compatibility | Static PASS — patterns unchanged and retain Core `core/icon`; editor save/reopen sample remains for M4. |
 | F. Icon List compatibility | Static PASS — pattern unchanged; editor replacement/layout sample remains for M4. |
@@ -149,11 +149,11 @@ python3 tests/check-icon-svg.py
 python3 tests/check-accordion-css.py
 ```
 
-Static registration checks assert exactly two opt-in Core styles, translated labels, the shared local style handle, the original nine patterns, and the Accordion pattern’s unchanged `autoclose: true` markup. The CSS check validates syntax shape, six scoped rules, allowed structural properties, and zero `!important`. No WordPress browser UI was available; visual/editor/frontend, multiline content, focus, responsive, and autoclose interaction checks remain for M4.
+Static registration checks assert exactly two opt-in Core styles, translated labels, the shared local style handle, the original nine patterns, and the Accordion pattern’s unchanged `autoclose: true` markup. The CSS check validates syntax shape, six scoped rules, allowed structural properties, and zero `!important`. Browser validation was not available during M3; the Product Owner’s M4 manual gate result is recorded in `RELEASE-TEST-MATRIX-1.1.md`.
 
 ## 12. Release boundaries
 
-This branch is development-only at `1.1.0-dev`. No 1.1.0 release, release ZIP, tag, or GitHub publication is authorized by this SDD. M2 completes the curated catalog; further work requires separate authorization and review.
+M4 authorizes release `1.1.0` after the Product Owner’s manual gate. The release contains the approved M1–M3 scope only. Future features require separate authorization and review.
 
 ## References
 
