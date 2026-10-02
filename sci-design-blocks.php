@@ -2,8 +2,8 @@
 /**
  * Plugin Name: SCI Design Blocks
  * Description: Reusable editorial and corporate compositions built from WordPress Core blocks.
- * Version: 1.0.0
- * Requires at least: 7.0
+ * Version: 1.1.0-dev
+ * Requires at least: 7.1
  * Requires PHP: 7.4
  * Author: Martín
  * Text Domain: sci-design-blocks
@@ -13,6 +13,8 @@
  */
 
 namespace SCI\DesignBlocks;
+
+require_once __DIR__ . '/includes/icon-library.php';
 
 add_action( 'init', __NAMESPACE__ . '\register_feature_patterns' );
 

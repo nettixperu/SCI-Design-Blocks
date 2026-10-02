@@ -1,0 +1,122 @@
+<?php
+/**
+ * Lightweight static registration smoke test. WordPress is represented by API stubs.
+ * Run: php tests/check-icon-library.php
+ */
+
+$GLOBALS['sci_test_hooks']       = array();
+$GLOBALS['sci_test_patterns']     = array();
+$GLOBALS['sci_test_categories']   = array();
+$GLOBALS['sci_test_collections']  = array();
+$GLOBALS['sci_test_icons']        = array();
+
+function add_action( $hook, $callback, $priority = 10 ) {
+	$GLOBALS['sci_test_hooks'][ $hook ][ $priority ][] = $callback;
+}
+
+function __( $text, $domain = null ) {
+	return $text;
+}
+
+function esc_html__( $text, $domain = null ) {
+	return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' );
+}
+
+function register_block_pattern_category( $slug, $args ) {
+	$GLOBALS['sci_test_categories'][ $slug ] = $args;
+}
+
+function register_block_pattern( $name, $args ) {
+	$GLOBALS['sci_test_patterns'][ $name ] = $args;
+}
+
+function wp_register_icon_collection( $slug, $args ) {
+	$GLOBALS['sci_test_collections'][ $slug ] = $args;
+	return true;
+}
+
+function wp_register_icon( $name, $args ) {
+	if ( ! is_readable( $args['file_path'] ) ) {
+		throw new RuntimeException( 'Unreadable SVG path for ' . $name );
+	}
+	$GLOBALS['sci_test_icons'][ $name ] = $args;
+	return true;
+}
+
+$plugin_file = dirname( __DIR__ ) . '/sci-design-blocks.php';
+$plugin      = file_get_contents( $plugin_file );
+if ( false === $plugin || ! preg_match( '/^ \* Version: 1\.1\.0-dev$/m', $plugin ) || ! preg_match( '/^ \* Requires at least: 7\.1$/m', $plugin ) || ! preg_match( '/^ \* Requires PHP: 7\.4$/m', $plugin ) ) {
+	throw new RuntimeException( 'Plugin development version or platform minimum is incorrect.' );
+}
+
+require $plugin_file;
+ksort( $GLOBALS['sci_test_hooks']['init'] );
+foreach ( $GLOBALS['sci_test_hooks']['init'] as $callbacks ) {
+	foreach ( $callbacks as $callback ) {
+		call_user_func( $callback );
+	}
+}
+
+$expected_patterns = array(
+	'sci-design-blocks/feature-icon-vertical',
+	'sci-design-blocks/feature-image-vertical',
+	'sci-design-blocks/feature-icon-left',
+	'sci-design-blocks/feature-image-left',
+	'sci-design-blocks/cta',
+	'sci-design-blocks/testimonial',
+	'sci-design-blocks/stats',
+	'sci-design-blocks/icon-list',
+	'sci-design-blocks/accordion',
+);
+$expected_icons = array(
+	'sci-design-blocks/briefcase',
+	'sci-design-blocks/camera-reels',
+	'sci-design-blocks/cloud-arrow-up',
+	'sci-design-blocks/envelope-check',
+	'sci-design-blocks/hdd-rack',
+	'sci-design-blocks/person-lines-fill',
+	'sci-design-blocks/shield-lock',
+);
+
+$pattern_names = array_keys( $GLOBALS['sci_test_patterns'] );
+$icon_names    = array_keys( $GLOBALS['sci_test_icons'] );
+sort( $pattern_names );
+sort( $expected_patterns );
+sort( $icon_names );
+sort( $expected_icons );
+
+if ( 1 !== count( $GLOBALS['sci_test_categories'] ) || $pattern_names !== $expected_patterns ) {
+	throw new RuntimeException( 'The original single category and nine patterns must remain registered.' );
+}
+if ( 1 !== count( $GLOBALS['sci_test_collections'] ) || ! isset( $GLOBALS['sci_test_collections']['sci-design-blocks'] ) ) {
+	throw new RuntimeException( 'Expected exactly one SCI icon collection.' );
+}
+if ( $icon_names !== $expected_icons ) {
+	throw new RuntimeException( 'Expected exactly seven unique SCI icon handles.' );
+}
+
+$manifest = require dirname( __DIR__ ) . '/icons/manifest.php';
+if ( 7 !== count( $manifest ) ) {
+	throw new RuntimeException( 'Expected exactly seven manifest entries.' );
+}
+$required_fields = array( 'local_name', 'label', 'source', 'source_version', 'source_name', 'conceptual_category', 'modified' );
+foreach ( $manifest as $key => $entry ) {
+	if ( $key !== $entry['local_name'] ) {
+		throw new RuntimeException( 'Manifest key and local_name differ for ' . $key );
+	}
+	foreach ( $required_fields as $field ) {
+		if ( ! array_key_exists( $field, $entry ) ) {
+			throw new RuntimeException( 'Missing manifest field ' . $field . ' for ' . $key );
+		}
+	}
+	if ( 'Bootstrap Icons' !== $entry['source'] || 'v1.13.1' !== $entry['source_version'] || false !== $entry['modified'] ) {
+		throw new RuntimeException( 'Unexpected source provenance for ' . $key );
+	}
+}
+
+$notice = file_get_contents( dirname( __DIR__ ) . '/THIRD-PARTY-NOTICES.md' );
+if ( false === $notice || false === strpos( $notice, 'Bootstrap Icons' ) || false === strpos( $notice, 'Version: v1.13.1' ) || false === strpos( $notice, 'THE SOFTWARE IS PROVIDED "AS IS"' ) ) {
+	throw new RuntimeException( 'Bootstrap MIT third-party notice is missing or incomplete.' );
+}
+
+fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one collection, seven icons, one category, nine patterns, provenance and MIT notice.\n" );
