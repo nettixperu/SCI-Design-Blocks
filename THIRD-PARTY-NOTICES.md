@@ -6,7 +6,7 @@
 - Source: https://github.com/twbs/icons/tree/v1.13.1/icons
 - License: MIT
 - Copyright: The Bootstrap Authors
-- Included assets: the seven unmodified SVG files listed in `icons/manifest.php`.
+- Included assets: the 83 unmodified SVG files listed in `icons/manifest.php`.
 
 The full MIT license text follows.
 
