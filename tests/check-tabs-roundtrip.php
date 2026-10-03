@@ -63,7 +63,7 @@ function sci_test_collect_block_names( $blocks ) {
 	return $names;
 }
 
-foreach ( array( 'sci-underline', 'sci-pills' ) as $style ) {
+foreach ( array( 'sci-underline', 'sci-pills', 'sci-connected', 'sci-filled' ) as $style ) {
 	$source     = sci_test_tabs_fixture( $style );
 	$first      = parse_blocks( $source );
 	$serialized = serialize_blocks( $first );

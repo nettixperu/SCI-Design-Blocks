@@ -2,7 +2,7 @@
 
 A lightweight Gutenberg-native design library for WordPress.
 
-This release candidate adds two opt-in visual styles to WordPress Core Tabs. It is awaiting the compact manual WordPress gate; it is not the stable 1.2.0 release.
+This release candidate adds four opt-in visual styles to WordPress Core Tabs. Accent states derive from Core/theme colors; no separate SCI Accent Color control is provided. It is awaiting the compact manual WordPress gate; it is not the stable 1.2.0 release.
 
 SCI Design Blocks is **Core-first**, **pattern-based**, and **theme-native**. Its patterns use ordinary WordPress Core blocks and preserve a content-first, no-lock-in structure.
 
@@ -17,7 +17,7 @@ SCI Design Blocks is **Core-first**, **pattern-based**, and **theme-native**. It
 - 9 Gutenberg patterns
 - SCI Icon Library with 83 curated icons
 - Core Accordion styles: Minimal and Bordered
-- Core Tabs styles: Underline and Pills, with horizontal scrolling on narrow viewports
+- Core Tabs styles: Underline, Pills, Connected, and Filled, with horizontal scrolling on narrow viewports
 
 The SCI icon set uses Bootstrap Icons v1.13.1 under the MIT license. SCI Design Blocks is licensed under GPL-2.0-or-later; see [LICENSE](LICENSE) and [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 

@@ -44,4 +44,22 @@ function register_tabs_styles(): void {
 			'style_handle' => $style_handle,
 		)
 	);
+
+	register_block_style(
+		'core/tabs',
+		array(
+			'name'         => 'sci-connected',
+			'label'        => __( 'Connected', 'sci-design-blocks' ),
+			'style_handle' => $style_handle,
+		)
+	);
+
+	register_block_style(
+		'core/tabs',
+		array(
+			'name'         => 'sci-filled',
+			'label'        => __( 'Filled', 'sci-design-blocks' ),
+			'style_handle' => $style_handle,
+		)
+	);
 }

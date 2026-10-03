@@ -8,19 +8,21 @@
 - **Feature:** estilos SCI opt-in y scroll horizontal visual para el bloque Core `core/tabs`
 - **Rama de implementación:** `feature/tabs-styles-1.2`, derivada del commit etiquetado `v1.1.0`
 
-Este documento es el contrato aprobado de SCI Design Blocks 1.2.0. El discovery está cerrado y sus decisiones de arquitectura y alcance quedan fijadas aquí. M1 está autorizado por solicitud explícita del Product Owner. Los siguientes milestones no comienzan automáticamente; cada uno requiere solicitud y revisión explícitas.
+Este documento es el contrato aprobado de SCI Design Blocks 1.2.0. El discovery está cerrado y sus decisiones de arquitectura y alcance quedan fijadas aquí. Las enmiendas M4 autorizan Connected (2026-10-03) y Filled (2026-10-03); Boxed sigue excluido. La arquitectura Core Tabs + Block Styles + CSS permanece intacta. El Product Owner autorizó este RC Fix 02 como último ajuste funcional antes del freeze visual. No se inicia otro feature sin solicitud explícita.
 
 ---
 
 ## 1. Propósito y resultado
 
-SCI Design Blocks 1.2.0 añade dos presentaciones opt-in al bloque de WordPress Core Tabs. SCI no crea ni registra un bloque Tabs propio.
+SCI Design Blocks 1.2.0 añade cuatro presentaciones opt-in al bloque de WordPress Core Tabs. SCI no crea ni registra un bloque Tabs propio.
 
 ```text
 SCI Tabs experience
 = core/tabs
 + Underline Block Style
 + Pills Block Style
++ Connected Block Style
++ Filled Block Style
 + CSS acotado para scroll horizontal
 ```
 
@@ -59,29 +61,32 @@ Codex puede corregir automáticamente defectos locales de CSS, registro, traducc
 ## 4. Decisiones de arquitectura cerradas
 
 1. Usar `core/tabs`, `core/tab-list`, `core/tab-panels` y `core/tab-panel` de WordPress 7.1+.
-2. Registrar exactamente dos estilos Core sobre `core/tabs`: slug `sci-underline`, label traducible `Underline`; slug `sci-pills`, label traducible `Pills`.
+2. Registrar exactamente cuatro estilos Core sobre `core/tabs`: `sci-underline`/`Underline`, `sci-pills`/`Pills`, `sci-connected`/`Connected` y `sci-filled`/`Filled`, todos traducibles.
 3. No añadir patterns 1.2 por defecto. El inserter Core crea dos tabs; añadir un tercero es una operación nativa y simple.
 4. Mantener las interacciones, serialización y relaciones ARIA/IDs de Core. SCI no crea, duplica ni modifica estado del frontend.
 5. No añadir JavaScript, Interactivity API code de SCI, dependencias runtime, endpoints, requests remotos ni build pipeline.
 6. Aplicar `flex-wrap: nowrap` y `overflow-x: auto` (o equivalente justificado) a la lista Core solamente cuando se aplique un estilo SCI.
-7. Mantener Underline y Pills como estilos opt-in. El estilo Core por defecto no cambia.
+7. Mantener Underline, Pills, Connected y Filled como estilos opt-in. El estilo Core por defecto no cambia.
 8. Los colores, tipografía, spacing, gap y justificación expuestos por Core siguen bajo los controles Core y `theme.json`/Global Styles.
 9. Sin color de marca SCI. El indicador Underline usa `currentColor` cuando el indicador Core existente sea suficiente.
 10. Core URL-fragment activation queda habilitado sin cambios. SCI no implementa, personaliza ni deshabilita deep linking.
 11. Labels con iconos: deferred. Labels con imágenes: fuera del alcance. No crear Tabs custom para soportar ninguno.
 12. Sin requisito de tabs de ancho completo/igual. La justificación distribuida Core separa botones de ancho automático.
 13. Si SCI se desactiva, Core Tabs, sus contenidos e interacción permanecen; las clases/presentaciones SCI y su scroll CSS pueden desaparecer. Este comportamiento es aceptado.
+14. Enmienda M4 aprobada por Product Owner (2026-10-03): Connected se añade como tercer estilo. Boxed se evalúa y queda fuera por redundante con Pills; no se registra `sci-boxed`.
+15. Enmienda RC Fix 02 aprobada por Product Owner (2026-10-03): Filled es el cuarto y último estilo para 1.2. Tabs visual scope queda congelado en Core Default, Underline, Pills, Connected y Filled; no añadir otro estilo en 1.2.
+16. Accent Color: **DERIVED FROM CORE/THEME COLORS**. No existe un control Core estable e independiente para un acento activo de Tabs: `core/tabs` ofrece text/background; `core/tab-list` ofrece text/background y `__experimentalBorder.color` general para los botones, no un Accent Color estable dedicado al estado activo. No crear control SCI. Los estados SCI derivan de `currentColor` y, en Filled, de una mezcla de `currentColor` con transparencia.
 
-La investigación se realizó en un checkout WordPress 7.1.2. `core/tab-list` expone texto/background, font size, spacing padding/blockGap, layout flex y controles de justificación; border/radius figura bajo `__experimentalBorder`. No hacer de una capacidad experimental un requisito obligatorio 1.2. Los controles experimentales se documentan y se prueban, pero no se sustituyen con controles SCI.
+La inspección de capacidades se realizó en WordPress 7.1.2: `/home/mgarcia/dev01/nettix-proposal-lab/wordpress/wp-includes/blocks/tabs/block.json` declara text/background para `core/tabs`; `.../blocks/tab-list/block.json` declara text/background y `__experimentalBorder.color` para botones mediante el selector Core `.wp-block-tab-list button`. Ese soporte de borde es experimental y general, no un control independiente estable de Accent Color para el estado activo. Por tanto, Accent Color es **DERIVED FROM CORE/THEME COLORS**. La superficie/estado de Filled deriva de `currentColor` con `color-mix`; Core 7.1.2 también usa este mecanismo en `wp-includes/blocks/playlist-track/style.css`. No se añade UI SCI.
 
-Referencias: [Tabs block](https://wordpress.org/documentation/article/tabs-block/), [register_block_style](https://developer.wordpress.org/reference/functions/register_block_style/), [Block Supports](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-supports/), [theme.json](https://developer.wordpress.org/block-editor/reference-guides/theme-json-reference/theme-json-living/), [Interactivity API](https://developer.wordpress.org/block-editor/reference-guides/interactivity-api/), [WAI-ARIA Tabs Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/).
+Referencias: [Tabs block](https://wordpress.org/documentation/article/tabs-block/), [register_block_style](https://developer.wordpress.org/reference/functions/register_block_style/), [Block Supports](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-supports/), [Color settings and theme.json](https://developer.wordpress.org/themes/global-settings-and-styles/settings/color/), [theme.json](https://developer.wordpress.org/block-editor/reference-guides/theme-json-reference/theme-json-living/), [Interactivity API](https://developer.wordpress.org/block-editor/reference-guides/interactivity-api/), [WAI-ARIA Tabs Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/).
 
 ## 5. Alcance funcional
 
 ### Incluido
 
-- Dos Block Styles traducibles en `core/tabs`: Underline y Pills.
-- Scroll horizontal nativo en las dos presentaciones SCI cuando los tabs no caben.
+- Cuatro Block Styles traducibles en `core/tabs`: Underline, Pills, Connected y Filled.
+- Scroll horizontal nativo en las cuatro presentaciones SCI cuando los tabs no caben.
 - Compatibilidad con justificación Core izquierda/centro/distribuida y botones de ancho automático.
 - Visualización respetuosa de texto/background colors y typography configurados por Core/tema.
 - CSS mínimo, scoppado a clases de estilo SCI.
@@ -92,7 +97,7 @@ Referencias: [Tabs block](https://wordpress.org/documentation/article/tabs-block
 - Bloques SCI `tabs`, `tab`, `tab-panel` o cualquier bloque nuevo.
 - JavaScript frontend SCI, Interactivity API de SCI, jQuery o librerías.
 - Vertical tabs, íconos o imágenes en labels, full/equal-width buttons.
-- Classic, Boxed, Cards u otro tercer estilo.
+- Boxed, Classic, Cards, Segmented, Vertical u otros estilos fuera de la biblioteca aprobada.
 - Pattern de tres tabs por defecto.
 - Accordion responsive, dropdown, hamburger o transformación vertical.
 - Auto-switching, autoplay, animaciones/framework de movimiento, carousel, flechas o arrastre.
@@ -107,10 +112,10 @@ Referencias: [Tabs block](https://wordpress.org/documentation/article/tabs-block
 | Elemento | Contrato |
 |---|---|
 | Block type objetivo | `core/tabs` |
-| Style slugs | `sci-underline`, `sci-pills` |
-| Visible style labels | `Underline`, `Pills` |
+| Style slugs | `sci-underline`, `sci-pills`, `sci-connected`, `sci-filled` |
+| Visible style labels | `Underline`, `Pills`, `Connected`, `Filled` |
 | Text domain | `sci-design-blocks` |
-| Wrapper classes generadas por Core | `.is-style-sci-underline`, `.is-style-sci-pills` |
+| Wrapper classes generadas por Core | `.is-style-sci-underline`, `.is-style-sci-pills`, `.is-style-sci-connected`, `.is-style-sci-filled` |
 
 Los slugs CSS son técnicos y no traducibles; los labels visibles son traducibles.
 
@@ -130,17 +135,34 @@ Los slugs CSS son técnicos y no traducibles; los labels visibles son traducible
 - Si una decisión CSS de contraste depende del tema/browser, validar en fondos claros y oscuros durante M2. No usar un color global fijo para invertir foreground/background.
 - Habilitar la misma fila no envolvente y scroll horizontal que Underline.
 
-### 6.4 Reglas compartidas
+### 6.4 Connected (enmienda M4 aprobada)
 
-- Selectores comienzan desde `.wp-block-tabs.is-style-sci-underline` o `.wp-block-tabs.is-style-sci-pills`.
+- Usa bordes `currentColor` en los botones y en el contenedor Core `.wp-block-tab-panels`; el botón activo pierde su borde inferior y se solapa un píxel con el borde del panel para crear continuidad.
+- El pseudo-elemento underline de Core se suprime solo en el botón activo de Connected; ARIA/estado Core no se modifica.
+- Una sombra superior mínima `rgba(0, 0, 0, 0.08)` aporta separación sin introducir color de marca. El borde sigue el color contextual. Sin fondo forzado, controles propios ni reglas para el contenido dentro del panel.
+- Recibe el mismo nowrap + overflow horizontal scoped que Underline y Pills.
+
+Boxed se evaluó y se descarta como redundante con Pills. Mantenerlo fuera del registro.
+
+### 6.5 Filled (enmienda M4 RC Fix 02 aprobada)
+
+- El tablist completo recibe una superficie tenue derivada de `currentColor` mediante `color-mix(in srgb, currentColor 5%, transparent)`. No añade una paleta ni decide identidad cromática.
+- Los botones mantienen una forma rectangular de radio corto; el botón activo recibe un borde `currentColor`, un fondo translúcido derivado de `currentColor` y una línea inset para marcar el estado con estructura además de color.
+- El fill activo se compone como `background-image` sobre el `background-color` de Core, para conservar debajo el valor establecido mediante los controles Core. Texto sigue heredado de Core.
+- No fuerza igual ancho, no modifica gap/justificación ni paneles y comparte la regla de nowrap + overflow horizontal.
+- Se distingue de Pills (píldoras individuales de radio completo y borde/inset) y Connected (tab activo unido al panel con borde/sombra).
+
+### 6.6 Reglas compartidas
+
+- Selectores comienzan desde `.wp-block-tabs.is-style-sci-underline`, `.wp-block-tabs.is-style-sci-pills`, `.wp-block-tabs.is-style-sci-connected` o `.wp-block-tabs.is-style-sci-filled`.
 - No afectar `core/tab-panel` ni bloques hijos dentro del panel.
 - No usar selectores globales, resets, alta especificidad innecesaria, `!important`, valores de color marca o font rules.
 - No esconder scrollbars.
 - No añadir media queries salvo necesidad demostrada; no introducir JS responsive.
 - Preservar flex justification y auto width de Core; no forzar full width.
-- Budget indicativo del spike: ~15 líneas CSS no vacías, 3 reglas, 4 selectores. La implementación M1 tiene 17 líneas CSS no vacías, 4 reglas y 5 selectores; sigue siendo pequeña y acotada. No es un contrato rígido. Cientos de líneas requieren revisión arquitectónica.
+- La hoja de estilos Tabs se mantiene pequeña y legible; métricas actuales del RC Fix 02 quedan registradas en `M4-RC-FIX-02.md`. No imponer un límite artificial de bytes.
 
-### 6.5 Registro y asset
+### 6.7 Registro y asset
 
 Registrar estilos mediante `register_block_style()` para `core/tabs`. Usar un CSS pequeño dedicado (`assets/css/tabs-styles.css`) salvo que durante M1 se demuestre una opción más sencilla sin acoplar Tabs a Accordion. Registrar/enqueue el handle mediante la API Core. Favorecer carga asociada a estilos Core cuando la API lo permita. No añadir tooling de build para CSS plano.
 
@@ -168,7 +190,7 @@ SCI no debe interceptar los controles/acciones del editor ni volver a representa
 
 - **ARCH-01:** Implementar Tabs exclusivamente sobre los bloques Core Tabs disponibles desde WordPress 7.1.
 - **ARCH-02:** No registrar ningún custom block type ni una arquitectura de bloques/paneles SCI.
-- **ARCH-03:** Registrar exactamente dos Block Styles mediante `register_block_style()` para `core/tabs`.
+- **ARCH-03:** Registrar exactamente cuatro Block Styles mediante `register_block_style()` para `core/tabs`.
 - **ARCH-04:** No añadir paquetes/dependencias runtime ni pipeline build para CSS plano.
 - **ARCH-05:** Mantener el desarrollo de 1.2 en rama nueva basada en `v1.1.0`; no alterar la historia/tag/release 1.1.0.
 
@@ -179,6 +201,8 @@ SCI no debe interceptar los controles/acciones del editor ni volver a representa
 - **TAB-03:** Label sigue siendo el formato Core RichText; icono deferred, imagen fuera de scope.
 - **STYLE-01:** Registrar slug `sci-underline`, label traducible `Underline`.
 - **STYLE-02:** Registrar slug `sci-pills`, label traducible `Pills`.
+- **STYLE-08:** Registrar slug `sci-connected`, label traducible `Connected`; unir visualmente el tab activo con el panel usando CSS scoped y sin modificar Core state.
+- **STYLE-09:** Registrar slug `sci-filled`, label traducible `Filled`; superficie visual de navegación y estado seleccionado segmentado, derivados de `currentColor`, sin sustituir el `background-color` Core.
 - **STYLE-03:** Los estilos son opt-in; tabs sin clase SCI conserva presentación Core por defecto.
 - **STYLE-04:** Underline mantiene el indicador `currentColor` Core donde corresponda.
 - **STYLE-05:** Pills diferencia activo estructuralmente usando estado Core, sin identidad cromática SCI.
@@ -187,7 +211,7 @@ SCI no debe interceptar los controles/acciones del editor ni volver a representa
 
 ### Responsive / tema
 
-- **RESP-01:** Con cualquiera de los dos estilos SCI, la fila permanece horizontal y no wrappea al superar su ancho disponible.
+- **RESP-01:** Con cualquiera de los cuatro estilos SCI, la fila permanece horizontal y no wrappea al superar su ancho disponible.
 - **RESP-02:** En desbordamiento, la lista tablist admite desplazamiento horizontal nativo.
 - **RESP-03:** No hay conversión a Accordion, dropdown, hamburger, vertical tabs ni controles carousel.
 - **RESP-04:** No hay JavaScript responsive; preservar foco y acceso teclado a tabs fuera del viewport.
@@ -209,7 +233,7 @@ SCI no debe interceptar los controles/acciones del editor ni volver a representa
 - **PERF-01:** Cero JS frontend SCI, requests remotos o dependencias runtime nuevas.
 - **PERF-02:** Tabs CSS es pequeño, scoppado y asociado a los Block Styles cuando Core pueda cargarlo así.
 - **SEC-01:** Cero REST/AJAX, user HTML processing SCI, CSS dinámico inseguro, inyección de scripts, eval o endpoint nuevo.
-- **I18N-01:** Labels visibles Underline/Pills usan text domain `sci-design-blocks`; slugs técnicos no se traducen.
+- **I18N-01:** Labels visibles Underline/Pills/Connected/Filled usan text domain `sci-design-blocks`; slugs técnicos no se traducen.
 - **COMPAT-01:** WordPress mínimo sigue siendo 7.1; PHP mínimo sigue siendo 7.4.
 - **COMPAT-02:** Sin compatibilidad hacia WordPress anterior a 7.1 ni polyfills.
 - **REG-01:** Mantener nueve patterns en total.
@@ -235,8 +259,10 @@ M1–M3 usan validación dirigida al delta. M4 corre una certificación completa
 ### 11.2 Static validation
 
 - PHP lint del bootstrap e includes modificados.
-- Registration smoke: exactamente dos estilos Tabs registrados en `core/tabs`, labels/slugs correctos, sin custom blocks.
-- CSS selector/scope check: únicamente wrapper styles SCI y tab list/button requerido; cero reglas para contenido de panel global; sin !important/brand color.
+- Registration smoke: exactamente cuatro estilos Tabs registrados en `core/tabs`, labels/slugs correctos, sin custom blocks.
+- CSS selector/scope check: únicamente wrapper styles SCI y tab list/button requerido; cero reglas para contenido de panel global; sin `!important`/brand color, media queries, anchos o altos fijos.
+- Filled conserva `background-color` Core bajo la capa de `background-image`; su tinte se deriva de `currentColor` con `color-mix`.
+- Accent Color documentado como `DERIVED FROM CORE/THEME COLORS`; no existe control SCI.
 - Confirmar cero assets JS nuevos, cero `package.json`/lockfile o build tooling añadidos y cero runtime dependencies.
 - `git diff --check`; revisar diff staged y no staged por separado durante release.
 
@@ -245,9 +271,10 @@ M1–M3 usan validación dirigida al delta. M4 corre una certificación completa
 1. Core Tabs sin estilo SCI conserva apariencia/controles por defecto.
 2. Underline se selecciona y funciona en editor y frontend.
 3. Pills se selecciona y funciona en editor y frontend.
-4. Cambiar text/background colors y probar contexto contrastante; comprobar herencia/theme controls.
-5. Labels largos en viewport estrecho: horizontal scroll, una fila, sin clip que impida acceso.
-6. Click, Left/Right, Home/End, Enter/Space, focus visible, panel y contenido anidado. Confirmar deep-link Core heredado; no crear personalización SCI.
+4. Connected muestra unión tab/panel, borde inferior activo ausente y sombra sutil.
+5. Filled se ve como superficie segmentada distinta de Pills; estado activo claro sin anchos iguales forzados.
+6. Cambiar text/background colors, Group/background y contexto contrastante; comprobar herencia/theme controls. No esperar picker Accent SCI; los acentos son derivados.
+7. Labels largos en viewport estrecho: horizontal scroll, una fila, sin overflow horizontal de página.
 
 ### 11.4 Regression
 
@@ -319,6 +346,24 @@ Certificación manual en WordPress 7.1.x como versión mínima (preferir 7.1.2 s
 - WordPress/editor/browser real no estuvo disponible para completar las seis pruebas manuales. El RC queda para evaluación del Product Owner; no se crea ni publica tag/release 1.2.0 ni ZIP estable hasta recibir confirmación manual PASS.
 - Evidencia detallada: `RELEASE-TEST-MATRIX-1.2.md`.
 
+#### M4 RC Fix 01 — visual amendment — 2026-10-03
+
+- Product Owner aprueba `Connected` como tercer Core Block Style y autoriza evaluar `Boxed`. Se implementa `sci-connected`; `sci-boxed` se declara redundante con Pills y queda fuera.
+- Connected aplica borde contextual, elimina el borde inferior solo al botón activo, une visualmente con el borde de `.wp-block-tab-panels` y usa una sombra neutral muy sutil. Core mantiene interacción, estados, foco, ARIA y deep linking.
+- Boxed no se añade porque solo cuadrar el radio de Pills sería una variante redundante. No cambia arquitectura, versión, mínimo de plataforma, cantidad de patterns, custom blocks ni JS.
+- RC anterior preservado; reemplazo: `sci-design-blocks-1.2-rc-fix-01.zip`. SHA-256 y targeted validation se registran en `M4-RC-FIX-01.md`.
+- El manual gate del Product Owner sigue pendiente; no publicar ni etiquetar versión estable 1.2.0 antes del PASS manual.
+- Reemplaza el RC previo `sci-design-blocks-1.2-rc-test.zip`; el ZIP previo se conserva sin modificar.
+
+#### M4 RC Fix 02 — final Tabs visual scope — 2026-10-03
+
+- Product Owner aprueba `Filled` como cuarto y último estilo SCI Tabs para 1.2. Inventario final: Core Default, Underline, Pills, Connected y Filled; no se añaden más estilos en 1.2.
+- Accent Color: **DERIVED FROM CORE/THEME COLORS**. Evidencia WP 7.1.2: `core/tabs/block.json` expone text/background; `core/tab-list/block.json` expone text/background y `__experimentalBorder.color`, sin control estable e independiente para el acento del estado activo. No se añade control SCI. `color-mix()` usado por Filled también está presente en el CSS Core `blocks/playlist-track/style.css` del mismo checkout.
+- Filled presenta una superficie tenue en el tablist y segmento activo con borde y fill derivado de `currentColor`. Usa `background-image` para conservar debajo el `background-color` que Core aplica. Sin JS, controles propios, palette de marca, igual ancho forzado ni styling de paneles.
+- Boxed permanece `REDUNDANT — NOT INCLUDED`; Segmented no se registra; iconos deferred e imágenes fuera de scope. CSS/responsive sigue scoped y compartido.
+- El nuevo RC se valida estáticamente y desde extracción; WordPress visual/editor gate queda para el Product Owner. Plugin metadata permanece 1.1.0; no se crea stable ZIP/tag/release sin PASS manual.
+- Evidencia, métricas y checksum: `M4-RC-FIX-02.md` y `RELEASE-TEST-MATRIX-1.2.md`.
+
 ## 13. Asset y release policy
 
 Mantener CSS Tabs en `assets/css/tabs-styles.css` y registro en un include PHP pequeño siguiendo `SCI\DesignBlocks`. No editar CSS del Accordion salvo que una colisión concreta esté reproducida y aprobada. No añadir Node, npm, Composer ni dependencia de build para una hoja CSS pequeña.
@@ -329,7 +374,7 @@ Tag recomendado `v1.2.0`; no tocar tags preexistentes. Push y creación de GitHu
 
 ## 14. Open issues
 
-No hay blocker arquitectónico. El patrón Core de tres tabs fue explícitamente rechazado como requisito inicial. Iconos, imágenes y full-width tabs tienen estado/alcance fijado en §4. El comportamiento hash Core fue aceptado. El soporte experimental border/radius no es contrato obligatorio. El SDD está APPROVED / FROZEN FOR IMPLEMENTATION; solo los milestones expresamente autorizados pueden ejecutarse.
+No hay blocker arquitectónico. El patrón Core de tres tabs fue explícitamente rechazado como requisito inicial. Iconos, imágenes y full-width tabs tienen estado/alcance fijado en §4. Boxed sigue excluido; Filled es el cuarto y último estilo. El comportamiento hash Core fue aceptado. El soporte experimental border/radius no es contrato obligatorio ni se usa como Accent Color. El SDD está APPROVED / FROZEN FOR IMPLEMENTATION; solo los milestones expresamente autorizados pueden ejecutarse.
 
 ## 15. Trazabilidad resumida
 
@@ -544,18 +589,18 @@ Lee SDD-1.2.md y los resultados aprobados de M1, M2 y M3. No añadir funcionalid
 PRECHECK
 - Confirmar repo/owner/remotes/branch y permisos esperados para SCI Design Blocks; no cambiar origin automáticamente.
 - Confirmar base v1.1.0 intacta y todos los cambios de 1.2 revisados.
-- Confirmar nueve patterns, 83 icons/collection, dos Accordion styles, dos Tabs styles, cero custom blocks, cero SCI frontend JS, cero external runtime deps.
+- Confirmar nueve patterns, 83 icons/collection, dos Accordion styles, cuatro Tabs styles, cero custom blocks, cero SCI frontend JS, cero external runtime deps.
 - Confirmar PHP minimum 7.4, WP minimum 7.1 o escalar si evidencia exige cambio.
 - Mantener archivos locales/user work no relacionados. No hacer `git add .`.
 
 FINAL CERTIFICATION
 1. Ejecutar PHP lint para todos los PHP del plugin.
-2. Validar registro de 9 patterns, icon collection/83 assets, 2 Accordion styles y 2 Tabs styles.
+2. Validar registro de 9 patterns, icon collection/83 assets, 2 Accordion styles y 4 Tabs styles.
 3. Validar CSS scope, no colores marca, no global leakage, no unnecessary !important, tabs CSS pequeño.
 4. Confirmar sin JS build/runtime SCI nuevo, build tools o runtime dependency.
 5. Revisar requisitos ARCH/TAB/STYLE/RESP/THEME/A11Y/SEO/PERF/SEC/I18N/COMPAT/REG.
 6. Ejecutar `git diff --check`, inspeccionar staged/unstaged, no incluir `poc/`, fase/spike interno ni artefactos no aprobados en ZIP.
-7. Repetir una vez el manual WordPress gate compacto: default, Underline editor/frontend, Pills editor/frontend, colors/theme, mobile long labels scroll, Core click/keyboard/nested content.
+7. Ejecutar el manual WordPress gate compacto para Core Default, Underline, Pills, Connected, Filled, color/theme y mobile horizontal scroll. No esperar un control Accent SCI: el estado se deriva de colores Core/tema. Boxed no está incluido.
 8. Probar con WP 7.1.x (preferir 7.1.2 disponible) y versión WP estable actual; probar PHP 7.4 si el entorno existe. Registrar versiones exactas y no afirmar pruebas no ejecutadas.
 9. Validar deactivate/reactivate content-first behavior.
 

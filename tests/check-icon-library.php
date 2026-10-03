@@ -147,13 +147,17 @@ if ( 'plugin-assets/assets/css/accordion-styles.css' !== $GLOBALS['sci_test_styl
 $tabs_styles = $GLOBALS['sci_test_block_styles']['core/tabs'] ?? array();
 $tabs_names  = array_keys( $tabs_styles );
 sort( $tabs_names );
-if ( array( 'sci-pills', 'sci-underline' ) !== $tabs_names ) {
-	throw new RuntimeException( 'Expected exactly the opt-in Underline and Pills Core Tabs styles.' );
+if ( array( 'sci-connected', 'sci-filled', 'sci-pills', 'sci-underline' ) !== $tabs_names ) {
+	throw new RuntimeException( 'Expected exactly the opt-in Underline, Pills, Connected, and Filled Core Tabs styles.' );
+}
+$tabs_registration_source = file_get_contents( dirname( __DIR__ ) . '/includes/tabs-styles.php' );
+if ( false === $tabs_registration_source || 4 !== substr_count( $tabs_registration_source, 'register_block_style(' ) ) {
+	throw new RuntimeException( 'Expected exactly four Core Tabs style registration calls.' );
 }
 if ( 'plugin-assets/assets/css/tabs-styles.css' !== $GLOBALS['sci_test_stylesheets']['sci-design-blocks-tabs-styles']['src'] ) {
 	throw new RuntimeException( 'Tabs style handle must point to the local SCI stylesheet.' );
 }
-foreach ( array( 'sci-underline' => 'Underline', 'sci-pills' => 'Pills' ) as $name => $label ) {
+foreach ( array( 'sci-underline' => 'Underline', 'sci-pills' => 'Pills', 'sci-connected' => 'Connected', 'sci-filled' => 'Filled' ) as $name => $label ) {
 	$style = $tabs_styles[ $name ];
 	if ( $label !== $style['label'] || 'sci-design-blocks-tabs-styles' !== $style['style_handle'] || isset( $style['is_default'] ) ) {
 		throw new RuntimeException( 'Tabs style label/asset is invalid or changes the default style.' );
@@ -205,4 +209,4 @@ if ( false === $notice || false === strpos( $notice, 'Bootstrap Icons' ) || fals
 	throw new RuntimeException( 'Bootstrap MIT third-party notice is missing or incomplete.' );
 }
 
-fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one SCI collection, 83 icons, two Core Accordion styles, two opt-in Core Tabs styles, nine unchanged patterns, provenance and MIT notice.\n" );
+fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one SCI collection, 83 icons, two Core Accordion styles, four opt-in Core Tabs styles, nine unchanged patterns, provenance and MIT notice.\n" );
