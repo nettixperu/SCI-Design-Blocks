@@ -4,7 +4,7 @@
 
 **Estado:** FINAL RELEASE PASS — Product Owner manual gate PASS; stable package and publication recorded below.
 
-**Branch:** `feature/tabs-styles-1.2`
+**Development branch:** `feature/tabs-styles-1.2`; **release branch:** `main`
 **Baselines:** WordPress Core 7.1.2 source; PHP CLI 8.5.4; plugin metadata 1.2.0; WordPress minimum 7.1; PHP minimum 7.4.
 
 ## Precheck / product inventory
@@ -170,4 +170,15 @@
 
 ## Publication record
 
-Publication is performed only after the final release commit, `main` integration, annotated tag, and GitHub Release/asset are verified. Commit, tag target, push results, release URL, and remote asset checksum are recorded here after publication.
+| Publication gate | Result | Evidence |
+|---|---|---|
+| Release commit | PASS | `cba30a1a768fdcc6a8901f8cb901f2670afb97d0` — `Release SCI Design Blocks 1.2.0`. |
+| Main integration / push | PASS | Fast-forwarded `main`; `origin/main` points to the release commit. No force push. |
+| Annotated tag | PASS | `v1.2.0`, message `SCI Design Blocks 1.2.0`; peeled target is `cba30a1a768fdcc6a8901f8cb901f2670afb97d0`. |
+| Repository | PASS | Public: `https://github.com/nettixperu/SCI-Design-Blocks`. |
+| GitHub Release | PASS | [SCI Design Blocks 1.2.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.2.0), published, not draft/prerelease. |
+| Release asset | PASS | Exactly `sci-design-blocks-1.2.0.zip` uploaded (64,670 bytes). |
+| Downloaded asset checksum | MATCH | Local and downloaded SHA-256: `8e2b7ababbcbb793b7eed82f07f387fa10ea113381a3cd89bb627db0dd19a803`. |
+| v1.1.0 immutability | PASS | Remote tag still peels to `424aa1bb82b13a24dcfe842587d7435a4cad3205`; no prior tag/release/ZIP was modified. |
+
+The certification update is documentation-only and follows publication. The annotated release tag remains on the source/package commit above; no source or package bytes changed after release.
