@@ -155,6 +155,7 @@ Boxed se evaluó y se descarta como redundante con Pills. Mantenerlo fuera del r
 ### 6.6 Reglas compartidas
 
 - Selectores comienzan desde `.wp-block-tabs.is-style-sci-underline`, `.wp-block-tabs.is-style-sci-pills`, `.wp-block-tabs.is-style-sci-connected` o `.wp-block-tabs.is-style-sci-filled`.
+- Los botones tab de los cuatro estilos usan `white-space: nowrap` y `flex-shrink: 0` para preservar labels largos de una línea y su ancho de contenido. Core 7.1.2 define botones directos como hijos flexibles con `width: max-content`, pero deja el shrink por defecto activo y wrapping normal; el fix no se aplica a Core Default.
 - No afectar `core/tab-panel` ni bloques hijos dentro del panel.
 - No usar selectores globales, resets, alta especificidad innecesaria, `!important`, valores de color marca o font rules.
 - No esconder scrollbars.
@@ -211,7 +212,7 @@ SCI no debe interceptar los controles/acciones del editor ni volver a representa
 
 ### Responsive / tema
 
-- **RESP-01:** Con cualquiera de los cuatro estilos SCI, la fila permanece horizontal y no wrappea al superar su ancho disponible.
+- **RESP-01:** Con cualquiera de los cuatro estilos SCI, la fila permanece horizontal, cada label permanece en una sola línea y no wrappea al superar su ancho disponible; el tablist admite scroll horizontal.
 - **RESP-02:** En desbordamiento, la lista tablist admite desplazamiento horizontal nativo.
 - **RESP-03:** No hay conversión a Accordion, dropdown, hamburger, vertical tabs ni controles carousel.
 - **RESP-04:** No hay JavaScript responsive; preservar foco y acceso teclado a tabs fuera del viewport.
@@ -262,6 +263,8 @@ M1–M3 usan validación dirigida al delta. M4 corre una certificación completa
 - Registration smoke: exactamente cuatro estilos Tabs registrados en `core/tabs`, labels/slugs correctos, sin custom blocks.
 - CSS selector/scope check: únicamente wrapper styles SCI y tab list/button requerido; cero reglas para contenido de panel global; sin `!important`/brand color, media queries, anchos o altos fijos.
 - Filled conserva `background-color` Core bajo la capa de `background-image`; su tinte se deriva de `currentColor` con `color-mix`.
+- Labels `PRUEBA`, `PRUEBA2`, `MARTIN GARCIA SALAZAR`, `SERVICIOS DE INFRAESTRUCTURA` y `SEGURIDAD Y CUMPLIMIENTO` pasan por los cuatro Core parser roundtrips; el CSS check exige `white-space: nowrap` + `flex-shrink: 0` únicamente en botones bajo las cuatro clases SCI.
+- Checks rechazan `text-overflow`, truncation por `overflow:hidden`, fixed dimensions, global selectors y media queries.
 - Accent Color documentado como `DERIVED FROM CORE/THEME COLORS`; no existe control SCI.
 - Confirmar cero assets JS nuevos, cero `package.json`/lockfile o build tooling añadidos y cero runtime dependencies.
 - `git diff --check`; revisar diff staged y no staged por separado durante release.
@@ -363,6 +366,15 @@ Certificación manual en WordPress 7.1.x como versión mínima (preferir 7.1.2 s
 - Boxed permanece `REDUNDANT — NOT INCLUDED`; Segmented no se registra; iconos deferred e imágenes fuera de scope. CSS/responsive sigue scoped y compartido.
 - El nuevo RC se valida estáticamente y desde extracción; WordPress visual/editor gate queda para el Product Owner. Plugin metadata permanece 1.1.0; no se crea stable ZIP/tag/release sin PASS manual.
 - Evidencia, métricas y checksum: `M4-RC-FIX-02.md` y `RELEASE-TEST-MATRIX-1.2.md`.
+
+#### M4 RC Fix 03 — long labels in mobile tablist — 2026-10-03
+
+- Product Owner reportó wrapping en labels largos al estrechar el viewport, aunque la lista ya permitía scroll horizontal.
+- Root cause inspeccionada en Core 7.1.2: `tab-list/block.json` guarda labels como texto RichText de cada `button`; `tab-list/style.css` da a esos botones `width: max-content`, pero no cambia `flex-shrink` (su valor flex inicial sigue siendo `1`) ni `white-space` (wrapping normal). El tablist horizontal puede comprimir un botón y partir su label.
+- Fix mínimo compartido: en botones descendientes de los cuatro wrappers SCI, `white-space: nowrap` y `flex-shrink: 0`. No se aplica a Core Default; no añade width/min-width, truncation, font adjustment, breakpoint ni JavaScript.
+- Test fixture usa cinco labels representativos y verifica roundtrip Core 7.1.2 en los cuatro estilos. Static test verifica selector compartido, propiedades, scope y ausencia de truncation/global leakage.
+- RC Fix 02 se preserva sin cambios; replacement RC Fix 03 y su checksum se documentan en `M4-RC-FIX-03.md` y abajo. Manual retest requerido: viewport móvil y labels largos; no repetir el gate visual completo salvo regresión.
+- Plugin version permanece 1.1.0. Release 1.2.0 queda bloqueado hasta que el Product Owner confirme PASS móvil.
 
 ## 13. Asset y release policy
 

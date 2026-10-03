@@ -47,6 +47,14 @@
 	border-radius: 0.375rem;
 }
 
+.wp-block-tabs.is-style-sci-underline .wp-block-tab-list button,
+.wp-block-tabs.is-style-sci-pills .wp-block-tab-list button,
+.wp-block-tabs.is-style-sci-connected .wp-block-tab-list button,
+.wp-block-tabs.is-style-sci-filled .wp-block-tab-list button {
+	flex-shrink: 0;
+	white-space: nowrap;
+}
+
 .wp-block-tabs.is-style-sci-filled .wp-block-tab-list button {
 	border: 1px solid transparent;
 	border-radius: 0.25rem;

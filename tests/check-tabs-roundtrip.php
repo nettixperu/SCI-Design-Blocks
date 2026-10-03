@@ -38,13 +38,24 @@ require $core_dir . 'blocks.php';
  * @return string
  */
 function sci_test_tabs_fixture( $style ) {
+	$labels = array(
+		'PRUEBA',
+		'PRUEBA2',
+		'MARTIN GARCIA SALAZAR',
+		'SERVICIOS DE INFRAESTRUCTURA',
+		'SEGURIDAD Y CUMPLIMIENTO',
+	);
+	$buttons = implode( '', array_map( static fn( $label ) => '<button>' . $label . '</button>', $labels ) );
+
 	return '<!-- wp:tabs {"className":"is-style-' . $style . '"} -->' .
 		'<div class="wp-block-tabs is-style-' . $style . '">' .
-		'<!-- wp:tab-list --><div class="wp-block-tab-list"><button>Overview</button><button>Services</button><button>Security and Compliance</button></div><!-- /wp:tab-list -->' .
+		'<!-- wp:tab-list --><div class="wp-block-tab-list">' . $buttons . '</div><!-- /wp:tab-list -->' .
 		'<!-- wp:tab-panels --><div class="wp-block-tab-panels">' .
-		'<!-- wp:tab-panel {"label":"Overview"} --><div class="wp-block-tab-panel"><!-- wp:paragraph --><p>Overview text.</p><!-- /wp:paragraph --></div><!-- /wp:tab-panel -->' .
-		'<!-- wp:tab-panel {"label":"Services"} --><div class="wp-block-tab-panel"><!-- wp:heading --><h2 class="wp-block-heading">Services</h2><!-- /wp:heading --><!-- wp:paragraph --><p>Service details.</p><!-- /wp:paragraph --></div><!-- /wp:tab-panel -->' .
-		'<!-- wp:tab-panel {"label":"Security and Compliance"} --><div class="wp-block-tab-panel"><!-- wp:list --><ul class="wp-block-list"><!-- wp:list-item --><li>Secure by design</li><!-- /wp:list-item --></ul><!-- /wp:list --><!-- wp:buttons --><div class="wp-block-buttons"><!-- wp:button --><div class="wp-block-button"><a class="wp-block-button__link wp-element-button">Contact</a></div><!-- /wp:button --></div><!-- /wp:buttons --><!-- wp:group --><div class="wp-block-group"><!-- wp:paragraph --><p>Nested content.</p><!-- /wp:paragraph --></div><!-- /wp:group --><!-- wp:columns --><div class="wp-block-columns"><!-- wp:column --><div class="wp-block-column"><!-- wp:paragraph --><p>Column content.</p><!-- /wp:paragraph --></div><!-- /wp:column --></div><!-- /wp:columns --><!-- wp:image --><figure class="wp-block-image"><img src="https://example.invalid/photo.jpg" alt="" /></figure><!-- /wp:image --></div><!-- /wp:tab-panel -->' .
+		'<!-- wp:tab-panel {"label":"PRUEBA"} --><div class="wp-block-tab-panel"><!-- wp:paragraph --><p>First panel.</p><!-- /wp:paragraph --></div><!-- /wp:tab-panel -->' .
+		'<!-- wp:tab-panel {"label":"PRUEBA2"} --><div class="wp-block-tab-panel"><!-- wp:heading --><h2 class="wp-block-heading">Services</h2><!-- /wp:heading --><!-- wp:paragraph --><p>Service details.</p><!-- /wp:paragraph --></div><!-- /wp:tab-panel -->' .
+		'<!-- wp:tab-panel {"label":"MARTIN GARCIA SALAZAR"} --><div class="wp-block-tab-panel"><!-- wp:list --><ul class="wp-block-list"><!-- wp:list-item --><li>Secure by design</li><!-- /wp:list-item --></ul><!-- /wp:list --><!-- wp:buttons --><div class="wp-block-buttons"><!-- wp:button --><div class="wp-block-button"><a class="wp-block-button__link wp-element-button">Contact</a></div><!-- /wp:button --></div><!-- /wp:buttons --></div><!-- /wp:tab-panel -->' .
+		'<!-- wp:tab-panel {"label":"SERVICIOS DE INFRAESTRUCTURA"} --><div class="wp-block-tab-panel"><!-- wp:group --><div class="wp-block-group"><!-- wp:paragraph --><p>Nested content.</p><!-- /wp:paragraph --></div><!-- /wp:group --><!-- wp:columns --><div class="wp-block-columns"><!-- wp:column --><div class="wp-block-column"><!-- wp:paragraph --><p>Column content.</p><!-- /wp:paragraph --></div><!-- /wp:column --></div><!-- /wp:columns --></div><!-- /wp:tab-panel -->' .
+		'<!-- wp:tab-panel {"label":"SEGURIDAD Y CUMPLIMIENTO"} --><div class="wp-block-tab-panel"><!-- wp:image --><figure class="wp-block-image"><img src="https://example.invalid/photo.jpg" alt="" /></figure><!-- /wp:image --></div><!-- /wp:tab-panel -->' .
 		'</div><!-- /wp:tab-panels --></div><!-- /wp:tabs -->';
 }
 
@@ -72,6 +83,11 @@ foreach ( array( 'sci-underline', 'sci-pills', 'sci-connected', 'sci-filled' ) a
 	if ( serialize_blocks( $second ) !== $serialized ) {
 		throw new RuntimeException( "Unstable parse/serialize round-trip for {$style}." );
 	}
+	foreach ( array( 'PRUEBA', 'PRUEBA2', 'MARTIN GARCIA SALAZAR', 'SERVICIOS DE INFRAESTRUCTURA', 'SEGURIDAD Y CUMPLIMIENTO' ) as $label ) {
+		if ( false === strpos( $serialized, $label ) ) {
+			throw new RuntimeException( "Missing long-label test fixture text '{$label}' for {$style}." );
+		}
+	}
 	if ( 1 !== count( $first ) || 'core/tabs' !== $first[0]['blockName'] || 'is-style-' . $style !== ( $first[0]['attrs']['className'] ?? '' ) ) {
 		throw new RuntimeException( "Core Tabs root or style class mismatch for {$style}." );
 	}
@@ -82,9 +98,9 @@ foreach ( array( 'sci-underline', 'sci-pills', 'sci-connected', 'sci-filled' ) a
 			throw new RuntimeException( "Missing nested {$required} block in {$style} fixture." );
 		}
 	}
-	if ( 3 !== count( array_filter( $names, static fn( $name ) => 'core/tab-panel' === $name ) ) ) {
-		throw new RuntimeException( "Expected three Core tab panels for {$style}." );
+	if ( 5 !== count( array_filter( $names, static fn( $name ) => 'core/tab-panel' === $name ) ) ) {
+		throw new RuntimeException( "Expected five Core tab panels for {$style}." );
 	}
 
-	fwrite( STDOUT, "{$style} Core parser round-trip PASS (3 panels and nested Core content; WordPress {$wp_version}).\n" );
+	fwrite( STDOUT, "{$style} Core parser round-trip PASS (5 long-label panels and nested Core content; WordPress {$wp_version}).\n" );
 }

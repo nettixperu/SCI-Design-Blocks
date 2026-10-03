@@ -120,3 +120,28 @@
 | Manual UI/editor gate | PENDING Product Owner; not performed in this environment. |
 
 **RC Fix 02 path:** `/home/mgarcia/projects/php/SCI Design Blocks/sci-design-blocks-1.2-rc-fix-02.zip`
+
+## M4 RC Fix 03 — mobile long-label wrapping (2026-10-03)
+
+- Product Owner reprodujo que el label `MARTIN GARCIA SALAZAR` se envolvía en líneas en móvil, haciendo crecer su tab aunque el tablist ya tuviera overflow horizontal.
+- Root cause: WordPress Core 7.1.2 serializa cada label como texto directo dentro de `button` en `core/tab-list`. Core da al botón `width: max-content` pero no evita que el flex item se encoja ni fuerza una sola línea; wrapping normal parte el label cuando el espacio es limitado.
+- Fix shared/scoped: `white-space: nowrap; flex-shrink: 0;` sobre botones solo debajo de los cuatro wrappers SCI. Core Default no cambia. Se conserva una fila horizontal con scroll nativo del tablist; no se añade ancho mínimo/fijo, ellipsis, overflow oculto, font-size responsive, media query, `!important` o JS.
+- Fixture cubre `PRUEBA`, `PRUEBA2`, `MARTIN GARCIA SALAZAR`, `SERVICIOS DE INFRAESTRUCTURA`, `SEGURIDAD Y CUMPLIMIENTO` en Core 7.1.2 roundtrip para los cuatro estilos.
+- Manual scope reducido: Product Owner solo debe confirmar móvil con labels largos, una fila, scroll horizontal, texto completo, sin page-level overflow ni cambio de tamaño tipográfico. El mismo selector compartido cubre los cuatro estilos; visualmente basta un estilo representante salvo que encuentre diferencias/regresión.
+- Source static checks and extracted ZIP validation: PASS. RC Fix 02 remains frozen at `5d95871403f4ae117112ef337b77ce39e94a84b991361d9c6ba26aa86a01e6e9`.
+
+| RC Fix 03 validation | Resultado |
+|---|---|
+| Core markup/CSS evidence | PASS — WP 7.1.2 labels are direct text in `.wp-block-tab-list button`; Core gives the button `width: max-content` but leaves flex shrink and normal wrapping active. |
+| Targeted CSS | PASS — shared scoped button rule applies `white-space: nowrap` + `flex-shrink: 0` to all 4 SCI styles only; the existing tablist nowrap/overflow rule remains. |
+| Tabs CSS metrics | 2,202 bytes; 12 rules; 18 scoped selectors; 0 media queries; 0 `!important`; no fixed dimensions, truncation, font-size hack, or new color. |
+| Long-label fixture/Core roundtrip | PASS — five requested labels in parse/serialize/parse fixtures for Underline, Pills, Connected and Filled using WP 7.1.2. |
+| Registration and regression inventory | PASS — 9 patterns, 83 icons/one collection, 2 Accordion styles, 4 Tabs styles; no custom block, SCI frontend JS, or runtime dependency. |
+| PHP lint / CSS and SVG checks | PASS — source and extracted PHP; Tabs/Accordion CSS; 83 SVGs. |
+| ZIP integrity / extracted checks | PASS — `zip -T`; 93 files / 99 entries under `sci-design-blocks/`; runtime/license payload present and development files absent. |
+| RC Fix 03 size | 64,779 bytes. |
+| RC Fix 03 SHA-256 | `6f28037c3d1b40ae7d7681f37df9959b8e2c1cc8b0c73d7500581c74d20c0589` |
+| RC Fix 02 SHA-256 | `5d95871403f4ae117112ef337b77ce39e94a84b991361d9c6ba26aa86a01e6e9` — unchanged. |
+| Manual mobile retest | PENDING Product Owner; no browser/editor visual test claimed. |
+
+**RC Fix 03 path:** `/home/mgarcia/projects/php/SCI Design Blocks/sci-design-blocks-1.2-rc-fix-03.zip`

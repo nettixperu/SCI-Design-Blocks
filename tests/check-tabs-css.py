@@ -15,23 +15,26 @@ if clean.count("{") != clean.count("}"):
     sys.exit("Tabs CSS braces are unbalanced.")
 if "!important" in clean.lower():
     sys.exit("Tabs CSS must not use !important.")
-if re.search(r"#[0-9a-f]{3,8}\b|\b(?:white|black)\b|rgba?\(|hsla?\(", color_scan, re.I):
+if re.search(r"#[0-9a-f]{3,8}\b|\bwhite\b(?!-space)|\bblack\b|rgba?\(|hsla?\(", color_scan, re.I):
     sys.exit("Hardcoded color found outside the documented neutral Connected shadow.")
 if re.search(r"font-family|font-size|width\s*:|min-width\s*:|max-width\s*:|height\s*:|min-height\s*:|max-height\s*:|flex\s*:", clean, re.I):
     sys.exit("SCI Tabs must preserve Core typography and auto-width.")
+if re.search(r"text-overflow\s*:|overflow\s*:\s*hidden|text-overflow\s*:\s*ellipsis", clean, re.I):
+    sys.exit("SCI Tabs must not truncate or hide long tab labels.")
 if "@media" in clean.lower():
     sys.exit("No responsive breakpoint is required for horizontal overflow.")
 
 rules = re.findall(r"([^{}]+)\{([^{}]*)\}", clean)
-if len(rules) != 11:
-    sys.exit(f"Expected eleven compact Tabs CSS rules; found {len(rules)}.")
-if sum(len(selector_text.split(",")) for selector_text, _ in rules) != 14:
-    sys.exit("Expected fourteen compact scoped selectors.")
+if len(rules) != 12:
+    sys.exit(f"Expected twelve compact Tabs CSS rules; found {len(rules)}.")
+if sum(len(selector_text.split(",")) for selector_text, _ in rules) != 18:
+    sys.exit("Expected eighteen compact scoped selectors.")
 
 allowed_properties = {
     "flex-wrap", "overflow-x", "overscroll-behavior-inline", "border", "border-color",
     "border-radius", "box-shadow", "content", "position", "z-index",
     "margin-bottom", "border-bottom-color", "background-color", "background-image",
+    "flex-shrink", "white-space",
 }
 selectors = []
 styles_found = set()
@@ -90,7 +93,16 @@ filled_active = next(
 if filled_active is None or "background-image:" not in filled_active or "background-color:" in filled_active:
     sys.exit("Filled must overlay its active tint without replacing the Core background-color.")
 
+nowrap_rule = next(
+    ((selector_text, declarations) for selector_text, declarations in rules if ".wp-block-tabs.is-style-sci-underline .wp-block-tab-list button" in selector_text),
+    None,
+)
+if nowrap_rule is None or "white-space: nowrap" not in nowrap_rule[1] or "flex-shrink: 0" not in nowrap_rule[1]:
+    sys.exit("Every SCI tab button must preserve its full label on one line without flex shrink.")
+if not all(f".wp-block-tabs.is-style-{style} .wp-block-tab-list button" in nowrap_rule[0] for style in ("sci-underline", "sci-pills", "sci-connected", "sci-filled")):
+    sys.exit("The single-line label fix must be shared and scoped to all four SCI styles.")
+
 print(
     f"Tabs CSS checks PASS: {CSS_PATH.stat().st_size} bytes, {len(rules)} scoped rules, "
-    f"{len(selectors)} selectors, no hardcoded brand colors/dimensions, !important, or media queries."
+    f"{len(selectors)} selectors, no hardcoded brand colors/dimensions, truncation, !important, or media queries."
 )
