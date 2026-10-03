@@ -66,7 +66,7 @@ function wp_register_icon( $name, $args ) {
 
 $plugin_file = dirname( __DIR__ ) . '/sci-design-blocks.php';
 $plugin      = file_get_contents( $plugin_file );
-if ( false === $plugin || ! preg_match( '/^ \* Version: 1\.2\.0$/m', $plugin ) || ! preg_match( '/^ \* Requires at least: 7\.1$/m', $plugin ) || ! preg_match( '/^ \* Requires PHP: 7\.4$/m', $plugin ) ) {
+if ( false === $plugin || ! preg_match( '/^ \* Version: 1\.3\.0$/m', $plugin ) || ! preg_match( '/^ \* Requires at least: 7\.1$/m', $plugin ) || ! preg_match( '/^ \* Requires PHP: 7\.4$/m', $plugin ) ) {
 	throw new RuntimeException( 'Plugin release version or platform minimum is incorrect.' );
 }
 
@@ -88,6 +88,12 @@ $expected_patterns = array(
 	'sci-design-blocks/stats',
 	'sci-design-blocks/icon-list',
 	'sci-design-blocks/accordion',
+	'sci-design-blocks/posts-featured-hero',
+	'sci-design-blocks/posts-editorial-lead',
+	'sci-design-blocks/posts-compact-list',
+	'sci-design-blocks/posts-editorial-grid',
+	'sci-design-blocks/posts-editorial-stack',
+	'sci-design-blocks/posts-editorial-sections',
 );
 $manifest       = require dirname( __DIR__ ) . '/icons/manifest.php';
 $expected_icons = array_map(
@@ -104,8 +110,29 @@ sort( $expected_patterns );
 sort( $icon_names );
 sort( $expected_icons );
 
-if ( 1 !== count( $GLOBALS['sci_test_categories'] ) || $pattern_names !== $expected_patterns ) {
-	throw new RuntimeException( 'The original single category and nine patterns must remain registered.' );
+if ( 1 !== count( $GLOBALS['sci_test_categories'] ) || $pattern_names !== $expected_patterns || isset( $GLOBALS['sci_test_patterns']['sci-design-blocks/posts-visual-grid'] ) ) {
+	throw new RuntimeException( 'Expected the original category, nine historical patterns, six editorial patterns, and no stale Visual Grid.' );
+}
+$editorial_source = file_get_contents( dirname( __DIR__ ) . '/includes/editorial-query-patterns.php' );
+if ( false === $editorial_source || false !== strpos( $editorial_source, 'posts-visual-grid' ) || ! preg_match_all( "/^\t\t'(sci-design-blocks\/posts-[^']+)' => array\(/m", $editorial_source, $editorial_slug_matches ) ) {
+	throw new RuntimeException( 'Editorial source must not contain stale Visual Grid registration and must expose six unique pattern slugs.' );
+}
+$editorial_slugs = $editorial_slug_matches[1];
+$unique_slugs    = array_unique( $editorial_slugs );
+sort( $editorial_slugs );
+sort( $unique_slugs );
+if (
+	array(
+		'sci-design-blocks/posts-compact-list',
+		'sci-design-blocks/posts-editorial-grid',
+		'sci-design-blocks/posts-editorial-lead',
+		'sci-design-blocks/posts-editorial-sections',
+		'sci-design-blocks/posts-editorial-stack',
+		'sci-design-blocks/posts-featured-hero',
+	) !== $editorial_slugs ||
+	$editorial_slugs !== $unique_slugs
+) {
+	throw new RuntimeException( 'Expected exactly six unique final editorial pattern slugs.' );
 }
 if (
 	1 !== count( $GLOBALS['sci_test_collections'] ) ||
@@ -125,11 +152,12 @@ if ( array( 'sci-bordered', 'sci-minimal' ) !== $style_names ) {
 	throw new RuntimeException( 'Expected exactly the opt-in Minimal and Bordered Core Accordion styles.' );
 }
 if (
-	2 !== count( $GLOBALS['sci_test_stylesheets'] ) ||
+	3 !== count( $GLOBALS['sci_test_stylesheets'] ) ||
 	! isset( $GLOBALS['sci_test_stylesheets']['sci-design-blocks-accordion-styles'] ) ||
-	! isset( $GLOBALS['sci_test_stylesheets']['sci-design-blocks-tabs-styles'] )
+	! isset( $GLOBALS['sci_test_stylesheets']['sci-design-blocks-tabs-styles'] ) ||
+	! isset( $GLOBALS['sci_test_stylesheets']['sci-design-blocks-editorial-image-styles'] )
 ) {
-	throw new RuntimeException( 'Expected one registered stylesheet handle for Accordion and one for Tabs.' );
+	throw new RuntimeException( 'Expected one stylesheet handle each for Accordion, Tabs, and editorial image styles.' );
 }
 foreach ( array( 'sci-minimal' => 'Minimal', 'sci-bordered' => 'Bordered' ) as $name => $label ) {
 	$style = $accordion_styles[ $name ];
@@ -156,6 +184,24 @@ if ( false === $tabs_registration_source || 4 !== substr_count( $tabs_registrati
 }
 if ( 'plugin-assets/assets/css/tabs-styles.css' !== $GLOBALS['sci_test_stylesheets']['sci-design-blocks-tabs-styles']['src'] ) {
 	throw new RuntimeException( 'Tabs style handle must point to the local SCI stylesheet.' );
+}
+
+$image_styles = $GLOBALS['sci_test_block_styles']['core/post-featured-image'] ?? array();
+if ( array( 'sci-hover-zoom' ) !== array_keys( $image_styles ) ) {
+	throw new RuntimeException( 'Expected exactly one opt-in Hover Zoom style on Core Post Featured Image.' );
+}
+$hover_style = $image_styles['sci-hover-zoom'];
+if (
+	'SCI — Hover Zoom' !== $hover_style['label'] ||
+	'sci-design-blocks-editorial-image-styles' !== $hover_style['style_handle'] ||
+	isset( $hover_style['is_default'] ) ||
+	'plugin-assets/assets/css/editorial-image-styles.css' !== $GLOBALS['sci_test_stylesheets']['sci-design-blocks-editorial-image-styles']['src']
+) {
+	throw new RuntimeException( 'Hover Zoom must be opt-in and use its local block style stylesheet.' );
+}
+$hover_css = file_get_contents( dirname( __DIR__ ) . '/assets/css/editorial-image-styles.css' );
+if ( false === $hover_css || false === strpos( $hover_css, 'scale(1.05)' ) || false === strpos( $hover_css, 'prefers-reduced-motion: reduce' ) || false !== strpos( $hover_css, '!important' ) ) {
+	throw new RuntimeException( 'Hover Zoom CSS must use a subtle scale, reduced-motion handling, and no important overrides.' );
 }
 foreach ( array( 'sci-underline' => 'Underline', 'sci-pills' => 'Pills', 'sci-connected' => 'Connected', 'sci-filled' => 'Filled' ) as $name => $label ) {
 	$style = $tabs_styles[ $name ];
@@ -209,4 +255,4 @@ if ( false === $notice || false === strpos( $notice, 'Bootstrap Icons' ) || fals
 	throw new RuntimeException( 'Bootstrap MIT third-party notice is missing or incomplete.' );
 }
 
-fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one SCI collection, 83 icons, two Core Accordion styles, four opt-in Core Tabs styles, nine unchanged patterns, provenance and MIT notice.\n" );
+fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one SCI collection, 83 icons, two Core Accordion styles, four opt-in Core Tabs styles, six final editorial Query patterns (15 total), and opt-in Post Featured Image Hover Zoom.\n" );
