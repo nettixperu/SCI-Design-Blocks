@@ -14,7 +14,7 @@ Lightweight Gutenberg-native design extensions for WordPress. SCI Design Blocks 
 - SCI Icon Library with 83 curated icons
 - Core Accordion styles: Minimal and Bordered
 - Core Tabs styles: Underline, Pills, Connected and Filled
-- Editorial Query patterns: Featured Hero, Editorial Lead, Compact List, Editorial Grid and Visual Grid
+- Editorial Query patterns: Featured Hero, Editorial Lead, Compact List, Editorial Grid and Editorial Stack
 - Opt-in Core Post Featured Image style: SCI — Hover Zoom
 
 The four SCI Tabs styles keep labels on one line and use horizontal overflow on narrow viewports. They are optional styles for WordPress Core Tabs; SCI does not add a Tabs block or frontend JavaScript. Colors derive from Core and theme styles.
@@ -29,6 +29,8 @@ The icon set uses Bootstrap Icons v1.13.1 under the MIT license. SCI Design Bloc
 - Editorial Query patterns serialize as WordPress Core blocks and remain editable when the plugin is inactive.
 
 Editorial Lead uses two coordinated Core Query Loops. Its default offsets avoid duplicate posts when both loops retain equivalent filters, ordering and sticky behavior. If you change one query, maintain equivalent settings in the other to preserve the sequence; SCI does not synchronize the two queries.
+
+Editorial Grid presents three horizontal cards with compact title typography, excerpt and metadata. Editorial Stack presents three posts vertically with larger featured images, excerpts and metadata.
 
 SCI — Hover Zoom is an optional style on Core Post Featured Image. It is off unless selected on an image block and respects reduced-motion preferences.
 

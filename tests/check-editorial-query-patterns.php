@@ -50,6 +50,20 @@ function sci_collect_editorial_blocks( array $blocks, array &$names, array &$que
 	}
 }
 
+/**
+ * Collect block names inside one Query subtree.
+ *
+ * @param array $block Parsed Query block.
+ * @param array $names Collected descendant names.
+ * @return void
+ */
+function sci_collect_query_descendant_names( array $block, array &$names ): void {
+	foreach ( $block['innerBlocks'] as $inner_block ) {
+		$names[] = $inner_block['blockName'];
+		sci_collect_query_descendant_names( $inner_block, $names );
+	}
+}
+
 $expected = array(
 	'sci-design-blocks/posts-featured-hero' => array(
 		'per_page' => array( 1 ),
@@ -67,14 +81,14 @@ $expected = array(
 		'required' => array( 'core/post-featured-image', 'core/post-title', 'core/post-terms', 'core/post-date', 'core/separator' ),
 	),
 	'sci-design-blocks/posts-editorial-grid' => array(
-		'per_page' => array( 6 ),
+		'per_page' => array( 3 ),
 		'offsets'  => array( 0 ),
-		'required' => array( 'core/post-featured-image', 'core/post-title', 'core/post-terms', 'core/post-date' ),
+		'required' => array( 'core/post-featured-image', 'core/post-title', 'core/post-excerpt', 'core/post-terms', 'core/post-date' ),
 	),
-	'sci-design-blocks/posts-visual-grid' => array(
-		'per_page' => array( 6 ),
+	'sci-design-blocks/posts-editorial-stack' => array(
+		'per_page' => array( 3 ),
 		'offsets'  => array( 0 ),
-		'required' => array( 'core/post-featured-image', 'core/post-title' ),
+		'required' => array( 'core/post-featured-image', 'core/post-title', 'core/post-excerpt', 'core/post-terms', 'core/post-date', 'core/separator' ),
 	),
 );
 
@@ -124,23 +138,65 @@ foreach ( $expected as $pattern_name => $expectation ) {
 	if ( in_array( 'core/query-pagination', $names, true ) ) {
 		throw new RuntimeException( "Pagination must not be included in {$pattern_name}." );
 	}
+	if ( 'sci-design-blocks/posts-editorial-lead' === $pattern_name ) {
+		$primary_blocks   = array();
+		$secondary_blocks = array();
+		sci_collect_query_descendant_names( $queries[0], $primary_blocks );
+		sci_collect_query_descendant_names( $queries[1], $secondary_blocks );
+		if (
+			! in_array( 'core/post-featured-image', $primary_blocks, true ) ||
+			in_array( 'core/post-featured-image', $secondary_blocks, true ) ||
+			in_array( 'core/post-excerpt', $secondary_blocks, true ) ||
+			array_slice( $expectation['per_page'], 0, 2 ) !== array( 1, 3 )
+		) {
+			throw new RuntimeException( 'Editorial Lead must have an image only in its 1-post primary query and three text-first secondary posts.' );
+		}
+		$fixture_ids = array( 'post-1', 'post-2', 'post-3', 'post-4', 'post-5' );
+		$primary_ids = array_slice( $fixture_ids, $expectation['offsets'][0], $expectation['per_page'][0] );
+		$secondary_ids = array_slice( $fixture_ids, $expectation['offsets'][1], $expectation['per_page'][1] );
+		if ( array( 'post-1' ) !== $primary_ids || array( 'post-2', 'post-3', 'post-4' ) !== $secondary_ids || array_intersect( $primary_ids, $secondary_ids ) ) {
+			throw new RuntimeException( 'Editorial Lead static offset fixture does not represent posts 1 then posts 2–4.' );
+		}
+	}
 	if ( 'sci-design-blocks/posts-compact-list' === $pattern_name ) {
 		$pattern = $GLOBALS['sci_test_patterns'][ $pattern_name ]['content'];
 		if ( false === strpos( $pattern, '"scale":"contain"' ) || false === strpos( $pattern, '"aspectRatio":"16/9"' ) ) {
 			throw new RuntimeException( 'Compact List must preserve the Core contain fit and 16:9 image ratio.' );
 		}
 	}
-	if ( in_array( $pattern_name, array( 'sci-design-blocks/posts-editorial-grid', 'sci-design-blocks/posts-visual-grid' ), true ) ) {
+	if ( in_array( $pattern_name, array( 'sci-design-blocks/posts-editorial-grid' ), true ) ) {
 		$pattern = $GLOBALS['sci_test_patterns'][ $pattern_name ]['content'];
 		if ( false === strpos( $pattern, '"columns":3' ) || false === strpos( $pattern, '"type":"flex"' ) ) {
 			throw new RuntimeException( "Grid pattern must use the three-column Core Query layout: {$pattern_name}." );
 		}
 	}
-	if ( 'sci-design-blocks/posts-editorial-grid' === $pattern_name && false === strpos( $GLOBALS['sci_test_patterns'][ $pattern_name ]['content'], '"aspectRatio":"4/3"' ) ) {
-		throw new RuntimeException( 'Editorial Grid must retain its 4:3 Core image ratio.' );
+	if ( 'sci-design-blocks/posts-editorial-grid' === $pattern_name ) {
+		$pattern = $GLOBALS['sci_test_patterns'][ $pattern_name ]['content'];
+		if ( false === strpos( $pattern, '"aspectRatio":"4/3"' ) || false === strpos( $pattern, '"fontSize":"medium"' ) || false === strpos( $pattern, '"excerptLength":20' ) ) {
+			throw new RuntimeException( 'Editorial Grid must use a balanced image, compact Core title preset and concise excerpt.' );
+		}
 	}
-	if ( 'sci-design-blocks/posts-visual-grid' === $pattern_name && false === strpos( $GLOBALS['sci_test_patterns'][ $pattern_name ]['content'], '"aspectRatio":"16/9"' ) ) {
-		throw new RuntimeException( 'Visual Grid must retain its image-led 16:9 ratio.' );
+	if ( 'sci-design-blocks/posts-compact-list' === $pattern_name && false === strpos( $GLOBALS['sci_test_patterns'][ $pattern_name ]['content'], '"fontSize":"small"' ) ) {
+		throw new RuntimeException( 'Compact List title and metadata must use a compact Core typography preset.' );
+	}
+	if ( 'sci-design-blocks/posts-editorial-stack' === $pattern_name ) {
+		$pattern = $GLOBALS['sci_test_patterns'][ $pattern_name ]['content'];
+		if ( false === strpos( $pattern, '"perPage":3' ) || false === strpos( $pattern, '"type":"list"' ) || false === strpos( $pattern, '"excerptLength":40' ) ) {
+			throw new RuntimeException( 'Editorial Stack must be a three-post vertical Core list with excerpts.' );
+		}
+	}
+	$pattern_titles = array(
+		'CAPEX vs OPEX en infraestructura TI: comprar servidores o consumir nube',
+		'Housing, servidor dedicado o nube privada: ¿qué opción conviene para una empresa?',
+		'VPN propia vs VPN administrada: costos, operación y responsabilidades',
+	);
+	foreach ( $pattern_titles as $title ) {
+		if ( 60 > strlen( $title ) ) {
+			throw new RuntimeException( 'Long-title visual fixtures must use realistic technical headlines.' );
+		}
+	}
+	if ( false !== strpos( $GLOBALS['sci_test_patterns'][ $pattern_name ]['content'], 'text-overflow' ) || false !== strpos( $GLOBALS['sci_test_patterns'][ $pattern_name ]['content'], 'line-clamp' ) ) {
+		throw new RuntimeException( "Pattern must not truncate titles: {$pattern_name}." );
 	}
 
 	fwrite( STDOUT, "Core parser structural check PASS: {$pattern_name} (WordPress {$wp_version}).\n" );

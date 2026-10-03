@@ -92,7 +92,7 @@ $expected_patterns = array(
 	'sci-design-blocks/posts-editorial-lead',
 	'sci-design-blocks/posts-compact-list',
 	'sci-design-blocks/posts-editorial-grid',
-	'sci-design-blocks/posts-visual-grid',
+	'sci-design-blocks/posts-editorial-stack',
 );
 $manifest       = require dirname( __DIR__ ) . '/icons/manifest.php';
 $expected_icons = array_map(
@@ -109,8 +109,28 @@ sort( $expected_patterns );
 sort( $icon_names );
 sort( $expected_icons );
 
-if ( 1 !== count( $GLOBALS['sci_test_categories'] ) || $pattern_names !== $expected_patterns ) {
-	throw new RuntimeException( 'The original category and nine existing plus five editorial patterns through M3 must be registered.' );
+if ( 1 !== count( $GLOBALS['sci_test_categories'] ) || $pattern_names !== $expected_patterns || isset( $GLOBALS['sci_test_patterns']['sci-design-blocks/posts-visual-grid'] ) ) {
+	throw new RuntimeException( 'Expected the original category, nine historical patterns, five refined editorial patterns, and no stale Visual Grid.' );
+}
+$editorial_source = file_get_contents( dirname( __DIR__ ) . '/includes/editorial-query-patterns.php' );
+if ( false === $editorial_source || false !== strpos( $editorial_source, 'posts-visual-grid' ) || ! preg_match_all( "/^\t\t'(sci-design-blocks\/posts-[^']+)' => array\(/m", $editorial_source, $editorial_slug_matches ) ) {
+	throw new RuntimeException( 'Editorial source must not contain stale Visual Grid registration and must expose five unique pattern slugs.' );
+}
+$editorial_slugs = $editorial_slug_matches[1];
+$unique_slugs    = array_unique( $editorial_slugs );
+sort( $editorial_slugs );
+sort( $unique_slugs );
+if (
+	array(
+		'sci-design-blocks/posts-compact-list',
+		'sci-design-blocks/posts-editorial-grid',
+		'sci-design-blocks/posts-editorial-lead',
+		'sci-design-blocks/posts-editorial-stack',
+		'sci-design-blocks/posts-featured-hero',
+	) !== $editorial_slugs ||
+	$editorial_slugs !== $unique_slugs
+) {
+	throw new RuntimeException( 'Expected exactly five unique final editorial pattern slugs.' );
 }
 if (
 	1 !== count( $GLOBALS['sci_test_collections'] ) ||
@@ -233,4 +253,4 @@ if ( false === $notice || false === strpos( $notice, 'Bootstrap Icons' ) || fals
 	throw new RuntimeException( 'Bootstrap MIT third-party notice is missing or incomplete.' );
 }
 
-fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one SCI collection, 83 icons, two Core Accordion styles, four opt-in Core Tabs styles, five Core Query patterns, and opt-in Post Featured Image Hover Zoom.\n" );
+fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one SCI collection, 83 icons, two Core Accordion styles, four opt-in Core Tabs styles, five final editorial Query patterns (14 total), and opt-in Post Featured Image Hover Zoom.\n" );

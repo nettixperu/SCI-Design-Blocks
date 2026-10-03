@@ -39,7 +39,7 @@ HTML,
 		),
 		'sci-design-blocks/posts-editorial-lead' => array(
 			'title'       => __( 'SCI Posts — Editorial Lead', 'sci-design-blocks' ),
-			'description' => __( 'A leading post followed by a coordinated list of three secondary posts.', 'sci-design-blocks' ),
+			'description' => __( 'A featured lead story followed by three text-first editorial headlines.', 'sci-design-blocks' ),
 			'content'     => <<<'HTML'
 <!-- wp:columns {"verticalAlignment":"top"} -->
 <div class="wp-block-columns are-vertically-aligned-top"><!-- wp:column {"width":"60%"} -->
@@ -57,7 +57,7 @@ HTML,
 <!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:query {"query":{"perPage":3,"pages":0,"offset":1,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"ignore","inherit":false},"displayLayout":{"type":"list"}} -->
 <div class="wp-block-query"><!-- wp:post-template -->
-<!-- wp:post-title {"level":2,"isLink":true} /-->
+<!-- wp:post-title {"level":2,"isLink":true,"fontSize":"medium"} /-->
 <!-- wp:post-terms {"term":"category"} /-->
 <!-- wp:post-date /-->
 <!-- wp:separator {"className":"is-style-wide"} -->
@@ -71,7 +71,7 @@ HTML,
 		),
 		'sci-design-blocks/posts-compact-list' => array(
 			'title'       => __( 'SCI Posts — Compact List', 'sci-design-blocks' ),
-			'description' => __( 'A compact post list with a linked, uncropped featured image and Core metadata.', 'sci-design-blocks' ),
+			'description' => __( 'A compact thumbnail-and-headline list with Core metadata.', 'sci-design-blocks' ),
 			'content'     => <<<'HTML'
 <!-- wp:query {"query":{"perPage":5,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"ignore","inherit":false},"displayLayout":{"type":"list"}} -->
 <div class="wp-block-query"><!-- wp:post-template -->
@@ -82,11 +82,11 @@ HTML,
 
 <!-- wp:column {"width":"70%"} -->
 <div class="wp-block-column" style="flex-basis:70%"><!-- wp:group {"layout":{"type":"flex","orientation":"vertical"}} -->
-<div class="wp-block-group"><!-- wp:post-title {"level":2,"isLink":true} /-->
+<div class="wp-block-group"><!-- wp:post-title {"level":2,"isLink":true,"fontSize":"small"} /-->
 
-<!-- wp:post-terms {"term":"category"} /-->
+<!-- wp:post-terms {"term":"category","fontSize":"small"} /-->
 
-<!-- wp:post-date /--></div>
+<!-- wp:post-date {"fontSize":"small"} /--></div>
 <!-- /wp:group --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns -->
@@ -100,26 +100,33 @@ HTML,
 		),
 		'sci-design-blocks/posts-editorial-grid' => array(
 			'title'       => __( 'SCI Posts — Editorial Grid', 'sci-design-blocks' ),
-			'description' => __( 'A balanced three-column editorial grid with images and concise post metadata.', 'sci-design-blocks' ),
+			'description' => __( 'Three horizontal editorial cards with image, compact title, excerpt and metadata.', 'sci-design-blocks' ),
 			'content'     => <<<'HTML'
-<!-- wp:query {"query":{"perPage":6,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"ignore","inherit":false},"displayLayout":{"type":"flex","columns":3}} -->
+<!-- wp:query {"query":{"perPage":3,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"ignore","inherit":false},"displayLayout":{"type":"flex","columns":3}} -->
 <div class="wp-block-query"><!-- wp:post-template -->
 <!-- wp:post-featured-image {"isLink":true,"aspectRatio":"4/3","scale":"cover"} /-->
-<!-- wp:post-title {"level":2,"isLink":true} /-->
-<!-- wp:post-terms {"term":"category"} /-->
-<!-- wp:post-date /-->
+<!-- wp:post-title {"level":2,"isLink":true,"fontSize":"medium"} /-->
+<!-- wp:post-excerpt {"excerptLength":20,"fontSize":"small"} /-->
+<!-- wp:post-terms {"term":"category","fontSize":"small"} /-->
+<!-- wp:post-date {"fontSize":"small"} /-->
 <!-- /wp:post-template --></div>
 <!-- /wp:query -->
 HTML,
 		),
-		'sci-design-blocks/posts-visual-grid' => array(
-			'title'       => __( 'SCI Posts — Visual Grid', 'sci-design-blocks' ),
-			'description' => __( 'An image-led three-column post grid with linked titles and minimal metadata.', 'sci-design-blocks' ),
+		'sci-design-blocks/posts-editorial-stack' => array(
+			'title'       => __( 'SCI Posts — Editorial Stack', 'sci-design-blocks' ),
+			'description' => __( 'A vertical editorial sequence with a large image, title, excerpt and metadata for each post.', 'sci-design-blocks' ),
 			'content'     => <<<'HTML'
-<!-- wp:query {"query":{"perPage":6,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"ignore","inherit":false},"displayLayout":{"type":"flex","columns":3}} -->
+<!-- wp:query {"query":{"perPage":3,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"ignore","inherit":false},"displayLayout":{"type":"list"}} -->
 <div class="wp-block-query"><!-- wp:post-template -->
 <!-- wp:post-featured-image {"isLink":true,"aspectRatio":"16/9","scale":"cover"} /-->
-<!-- wp:post-title {"level":2,"isLink":true} /-->
+<!-- wp:post-title {"level":2,"isLink":true,"fontSize":"medium"} /-->
+<!-- wp:post-excerpt {"excerptLength":40} /-->
+<!-- wp:post-terms {"term":"category","fontSize":"small"} /-->
+<!-- wp:post-date {"fontSize":"small"} /-->
+<!-- wp:separator {"className":"is-style-wide"} -->
+<hr class="wp-block-separator has-alpha-channel-opacity is-style-wide" />
+<!-- /wp:separator -->
 <!-- /wp:post-template --></div>
 <!-- /wp:query -->
 HTML,
