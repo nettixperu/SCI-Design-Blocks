@@ -78,7 +78,7 @@ $expected = array(
 	'sci-design-blocks/posts-compact-list' => array(
 		'per_page' => array( 5 ),
 		'offsets'  => array( 0 ),
-		'required' => array( 'core/post-featured-image', 'core/post-title', 'core/post-terms', 'core/post-date', 'core/separator' ),
+		'required' => array( 'core/post-template', 'core/group', 'core/post-featured-image', 'core/post-title', 'core/post-terms', 'core/separator' ),
 	),
 	'sci-design-blocks/posts-editorial-grid' => array(
 		'per_page' => array( 3 ),
@@ -89,6 +89,11 @@ $expected = array(
 		'per_page' => array( 3 ),
 		'offsets'  => array( 0 ),
 		'required' => array( 'core/post-featured-image', 'core/post-title', 'core/post-excerpt', 'core/post-terms', 'core/post-date', 'core/separator' ),
+	),
+	'sci-design-blocks/posts-editorial-sections' => array(
+		'per_page' => array( 1, 2, 1, 2, 1, 2 ),
+		'offsets'  => array( 0, 1, 0, 1, 0, 1 ),
+		'required' => array( 'core/columns', 'core/column', 'core/heading', 'core/post-featured-image', 'core/post-title', 'core/separator' ),
 	),
 );
 
@@ -117,7 +122,7 @@ foreach ( $expected as $pattern_name => $expectation ) {
 	foreach ( $queries as $query_block ) {
 		$query = $query_block['attrs']['query'] ?? array();
 		if (
-			true === ( $query['inherit'] ?? null ) ||
+			false !== ( $query['inherit'] ?? null ) ||
 			'ignore' !== ( $query['sticky'] ?? null ) ||
 			'desc' !== ( $query['order'] ?? null ) ||
 			'date' !== ( $query['orderBy'] ?? null )
@@ -159,9 +164,85 @@ foreach ( $expected as $pattern_name => $expectation ) {
 		}
 	}
 	if ( 'sci-design-blocks/posts-compact-list' === $pattern_name ) {
-		$pattern = $GLOBALS['sci_test_patterns'][ $pattern_name ]['content'];
-		if ( false === strpos( $pattern, '"scale":"contain"' ) || false === strpos( $pattern, '"aspectRatio":"16/9"' ) ) {
-			throw new RuntimeException( 'Compact List must preserve the Core contain fit and 16:9 image ratio.' );
+		$query      = $queries[0];
+		$post_list  = $query['innerBlocks'][0] ?? array();
+		$row        = $post_list['innerBlocks'][0] ?? array();
+		$image      = $row['innerBlocks'][0] ?? array();
+		$group      = $row['innerBlocks'][1] ?? array();
+		$group_names = array_column( $group['innerBlocks'] ?? array(), 'blockName' );
+		if (
+			'core/post-template' !== ( $post_list['blockName'] ?? '' ) ||
+			array( 'core/group', 'core/separator' ) !== array_column( $post_list['innerBlocks'] ?? array(), 'blockName' ) ||
+			'core/group' !== ( $row['blockName'] ?? '' ) ||
+			array( 'core/post-featured-image', 'core/group' ) !== array_column( $row['innerBlocks'] ?? array(), 'blockName' ) ||
+			'flex' !== ( $row['attrs']['layout']['type'] ?? '' ) ||
+			'nowrap' !== ( $row['attrs']['layout']['flexWrap'] ?? '' ) ||
+			'center' !== ( $row['attrs']['layout']['verticalAlignment'] ?? '' ) ||
+			'var:preset|spacing|20' !== ( $row['attrs']['style']['spacing']['blockGap'] ?? '' ) ||
+			'core/post-featured-image' !== ( $image['blockName'] ?? '' ) ||
+			'160px' !== ( $image['attrs']['width'] ?? '' ) ||
+			'16/9' !== ( $image['attrs']['aspectRatio'] ?? '' ) ||
+			'contain' !== ( $image['attrs']['scale'] ?? '' ) ||
+			'core/group' !== ( $group['blockName'] ?? '' ) ||
+			array( 'core/post-title', 'core/post-terms' ) !== array_column( $group['innerBlocks'] ?? array(), 'blockName' ) ||
+			'flex' !== ( $group['attrs']['layout']['type'] ?? '' ) ||
+			'vertical' !== ( $group['attrs']['layout']['orientation'] ?? '' ) ||
+			'var:preset|spacing|20' !== ( $group['attrs']['style']['spacing']['blockGap'] ?? '' ) ||
+			array( 'core/post-title', 'core/post-terms' ) !== $group_names ||
+			'small' !== ( $group['innerBlocks'][0]['attrs']['fontSize'] ?? '' ) ||
+			'600' !== ( $group['innerBlocks'][0]['attrs']['style']['typography']['fontWeight'] ?? '' ) ||
+			'small' !== ( $group['innerBlocks'][1]['attrs']['fontSize'] ?? '' ) ||
+			in_array( 'core/post-date', $names, true ) ||
+			in_array( 'core/post-excerpt', $names, true ) ||
+			! in_array( 'core/separator', $names, true )
+		) {
+			throw new RuntimeException( 'Compact List must use a Core Row with 160px contained 16:9 image, compact title/category stack, separator, and no date or excerpt.' );
+		}
+	}
+	if ( 'sci-design-blocks/posts-editorial-sections' === $pattern_name ) {
+		$root_columns = $parsed[0];
+		if ( 'core/columns' !== $root_columns['blockName'] || 3 !== count( $root_columns['innerBlocks'] ) ) {
+			throw new RuntimeException( 'Editorial Sections must use exactly three top-level Core columns.' );
+		}
+		$expected_labels = array( 'Section One', 'Section Two', 'Section Three' );
+		foreach ( $root_columns['innerBlocks'] as $section_index => $section ) {
+			$section_children = $section['innerBlocks'];
+			if (
+				'core/column' !== $section['blockName'] ||
+			4 !== count( $section_children ) ||
+			'core/heading' !== $section_children[0]['blockName'] ||
+			false === strpos( $section_children[0]['innerHTML'], $expected_labels[ $section_index ] ) ||
+			'core/query' !== $section_children[1]['blockName'] ||
+			'core/separator' !== $section_children[2]['blockName'] ||
+			'core/query' !== $section_children[3]['blockName'] ||
+			'var:preset|spacing|20' !== ( $section['attrs']['style']['spacing']['blockGap'] ?? '' )
+		) {
+			throw new RuntimeException( 'Each section must have a generic label, primary Query, Core divider, and secondary Query.' );
+		}
+		$primary_names   = array();
+		$secondary_names = array();
+		sci_collect_query_descendant_names( $section_children[1], $primary_names );
+		sci_collect_query_descendant_names( $section_children[3], $secondary_names );
+		if (
+			array( 'core/post-template', 'core/post-featured-image', 'core/post-title' ) !== $primary_names ||
+			array( 'core/post-template', 'core/post-title', 'core/separator' ) !== $secondary_names
+		) {
+			throw new RuntimeException( 'Primary template must contain only image/title; secondary template must contain only generated title/separator blocks.' );
+		}
+	}
+		$fixture_ids = array( 'post-1', 'post-2', 'post-3' );
+		for ( $section_index = 0; $section_index < 3; $section_index++ ) {
+			$primary_ids   = array_slice( $fixture_ids, $expectation['offsets'][ $section_index * 2 ], $expectation['per_page'][ $section_index * 2 ] );
+			$secondary_ids = array_slice( $fixture_ids, $expectation['offsets'][ $section_index * 2 + 1 ], $expectation['per_page'][ $section_index * 2 + 1 ] );
+			$primary_query = $section_children[1]['attrs']['query'];
+			$secondary_query = $section_children[3]['attrs']['query'];
+			unset( $primary_query['perPage'], $primary_query['offset'], $secondary_query['perPage'], $secondary_query['offset'] );
+			if ( array( 'post-1' ) !== $primary_ids || array( 'post-2', 'post-3' ) !== $secondary_ids || array_intersect( $primary_ids, $secondary_ids ) ) {
+				throw new RuntimeException( 'Editorial Sections static pair fixture must represent the lead post followed by two secondary posts.' );
+			}
+			if ( $primary_query !== $secondary_query ) {
+				throw new RuntimeException( 'Primary and secondary Queries in each Editorial Section must use identical settings apart from perPage and offset.' );
+			}
 		}
 	}
 	if ( in_array( $pattern_name, array( 'sci-design-blocks/posts-editorial-grid' ), true ) ) {
@@ -186,9 +267,9 @@ foreach ( $expected as $pattern_name => $expectation ) {
 		}
 	}
 	$pattern_titles = array(
+		'VPN Site-to-Site vs Client-to-Site: qué tipo de VPN necesita tu empresa',
 		'CAPEX vs OPEX en infraestructura TI: comprar servidores o consumir nube',
 		'Housing, servidor dedicado o nube privada: ¿qué opción conviene para una empresa?',
-		'VPN propia vs VPN administrada: costos, operación y responsabilidades',
 	);
 	foreach ( $pattern_titles as $title ) {
 		if ( 60 > strlen( $title ) ) {
@@ -200,4 +281,24 @@ foreach ( $expected as $pattern_name => $expectation ) {
 	}
 
 	fwrite( STDOUT, "Core parser structural check PASS: {$pattern_name} (WordPress {$wp_version}).\n" );
+}
+
+if ( 15 !== count( $GLOBALS['sci_test_patterns'] ) ) {
+	throw new RuntimeException( 'Expected nine historical and six editorial patterns (15 total).' );
+}
+
+$sections_content = $GLOBALS['sci_test_patterns']['sci-design-blocks/posts-editorial-sections']['content'] ?? '';
+$sections_parsed  = $parser->parse( $sections_content );
+$sections_names   = array();
+$sections_queries = array();
+sci_collect_editorial_blocks( $sections_parsed, $sections_names, $sections_queries );
+if (
+	6 !== count( $sections_queries ) ||
+	3 !== count( array_filter( $sections_names, static fn( $name ) => 'core/post-featured-image' === $name ) ) ||
+	6 !== count( array_filter( $sections_names, static fn( $name ) => 'core/post-title' === $name ) ) ||
+	in_array( 'core/post-date', $sections_names, true ) ||
+	in_array( 'core/post-terms', $sections_names, true ) ||
+	in_array( 'core/post-excerpt', $sections_names, true )
+) {
+	throw new RuntimeException( 'Editorial Sections must serialize three primary images and six Query-generated title blocks, with no date, terms, or excerpt.' );
 }

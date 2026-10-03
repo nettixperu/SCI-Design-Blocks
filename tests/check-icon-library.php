@@ -66,7 +66,7 @@ function wp_register_icon( $name, $args ) {
 
 $plugin_file = dirname( __DIR__ ) . '/sci-design-blocks.php';
 $plugin      = file_get_contents( $plugin_file );
-if ( false === $plugin || ! preg_match( '/^ \* Version: 1\.3\.0-dev$/m', $plugin ) || ! preg_match( '/^ \* Requires at least: 7\.1$/m', $plugin ) || ! preg_match( '/^ \* Requires PHP: 7\.4$/m', $plugin ) ) {
+if ( false === $plugin || ! preg_match( '/^ \* Version: 1\.3\.0$/m', $plugin ) || ! preg_match( '/^ \* Requires at least: 7\.1$/m', $plugin ) || ! preg_match( '/^ \* Requires PHP: 7\.4$/m', $plugin ) ) {
 	throw new RuntimeException( 'Plugin release version or platform minimum is incorrect.' );
 }
 
@@ -93,6 +93,7 @@ $expected_patterns = array(
 	'sci-design-blocks/posts-compact-list',
 	'sci-design-blocks/posts-editorial-grid',
 	'sci-design-blocks/posts-editorial-stack',
+	'sci-design-blocks/posts-editorial-sections',
 );
 $manifest       = require dirname( __DIR__ ) . '/icons/manifest.php';
 $expected_icons = array_map(
@@ -110,11 +111,11 @@ sort( $icon_names );
 sort( $expected_icons );
 
 if ( 1 !== count( $GLOBALS['sci_test_categories'] ) || $pattern_names !== $expected_patterns || isset( $GLOBALS['sci_test_patterns']['sci-design-blocks/posts-visual-grid'] ) ) {
-	throw new RuntimeException( 'Expected the original category, nine historical patterns, five refined editorial patterns, and no stale Visual Grid.' );
+	throw new RuntimeException( 'Expected the original category, nine historical patterns, six editorial patterns, and no stale Visual Grid.' );
 }
 $editorial_source = file_get_contents( dirname( __DIR__ ) . '/includes/editorial-query-patterns.php' );
 if ( false === $editorial_source || false !== strpos( $editorial_source, 'posts-visual-grid' ) || ! preg_match_all( "/^\t\t'(sci-design-blocks\/posts-[^']+)' => array\(/m", $editorial_source, $editorial_slug_matches ) ) {
-	throw new RuntimeException( 'Editorial source must not contain stale Visual Grid registration and must expose five unique pattern slugs.' );
+	throw new RuntimeException( 'Editorial source must not contain stale Visual Grid registration and must expose six unique pattern slugs.' );
 }
 $editorial_slugs = $editorial_slug_matches[1];
 $unique_slugs    = array_unique( $editorial_slugs );
@@ -125,12 +126,13 @@ if (
 		'sci-design-blocks/posts-compact-list',
 		'sci-design-blocks/posts-editorial-grid',
 		'sci-design-blocks/posts-editorial-lead',
+		'sci-design-blocks/posts-editorial-sections',
 		'sci-design-blocks/posts-editorial-stack',
 		'sci-design-blocks/posts-featured-hero',
 	) !== $editorial_slugs ||
 	$editorial_slugs !== $unique_slugs
 ) {
-	throw new RuntimeException( 'Expected exactly five unique final editorial pattern slugs.' );
+	throw new RuntimeException( 'Expected exactly six unique final editorial pattern slugs.' );
 }
 if (
 	1 !== count( $GLOBALS['sci_test_collections'] ) ||
@@ -253,4 +255,4 @@ if ( false === $notice || false === strpos( $notice, 'Bootstrap Icons' ) || fals
 	throw new RuntimeException( 'Bootstrap MIT third-party notice is missing or incomplete.' );
 }
 
-fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one SCI collection, 83 icons, two Core Accordion styles, four opt-in Core Tabs styles, five final editorial Query patterns (14 total), and opt-in Post Featured Image Hover Zoom.\n" );
+fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one SCI collection, 83 icons, two Core Accordion styles, four opt-in Core Tabs styles, six final editorial Query patterns (15 total), and opt-in Post Featured Image Hover Zoom.\n" );

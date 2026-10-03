@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SCI Design Blocks
  * Description: Reusable editorial and corporate compositions built from WordPress Core blocks.
- * Version: 1.3.0-dev
+ * Version: 1.3.0
  * Requires at least: 7.1
  * Requires PHP: 7.4
  * Author: Martín
