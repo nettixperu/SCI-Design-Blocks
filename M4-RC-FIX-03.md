@@ -1,7 +1,7 @@
 # SCI Design Blocks 1.2 — M4 RC Fix 03
 
 **Bug:** long tab labels wrap within a tab on mobile.
-**Status:** targeted static/package PASS; Product Owner mobile retest pending.
+**Status:** targeted static/package PASS; Product Owner mobile retest PASS (Product Owner-reported in final release authorization).
 **Plugin metadata:** 1.1.0 (unchanged).
 
 ## Root cause
@@ -47,4 +47,4 @@ Static tests establish selector scope and serialization but cannot prove browser
 
 Use a narrow viewport and these labels: `PRUEBA`, `PRUEBA2`, `MARTIN GARCIA SALAZAR`, plus one longer label. Confirm all remain single-line in one horizontal row, full text is readable by scrolling the tablist, and the page itself does not gain horizontal overflow. The shared selector statically covers all four SCI styles; one representative style is sufficient unless visual differences appear.
 
-**Release status:** blocked until the mobile retest passes. No stable 1.2.0 ZIP, tag, or GitHub Release was created.
+**At RC Fix 03 completion:** release was blocked pending the Product Owner retest; no stable 1.2.0 ZIP, tag, or GitHub Release existed at that point. The Product Owner later reported the targeted mobile retest PASS; final release evidence is in `RELEASE-TEST-MATRIX-1.2.md`.

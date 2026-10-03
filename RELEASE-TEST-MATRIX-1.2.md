@@ -1,11 +1,11 @@
-# SCI Design Blocks 1.2 — Release Candidate Gate
+# SCI Design Blocks 1.2 — Release Certification
 
-**Fase:** M4 Phase A — RC preparado para revisión manual
+**Fase:** M4 — Final Release
 
-**Estado:** M4 RC Fix 02 static/package PASS · manual visual gate pending
+**Estado:** FINAL RELEASE PASS — Product Owner manual gate PASS; stable package and publication recorded below.
 
 **Branch:** `feature/tabs-styles-1.2`
-**Baselines:** WP 7.1.2 files available; PHP CLI 8.5.4; metadata remains plugin 1.1.0 until manual PASS.
+**Baselines:** WordPress Core 7.1.2 source; PHP CLI 8.5.4; plugin metadata 1.2.0; WordPress minimum 7.1; PHP minimum 7.4.
 
 ## Precheck / product inventory
 
@@ -145,3 +145,29 @@
 | Manual mobile retest | PENDING Product Owner; no browser/editor visual test claimed. |
 
 **RC Fix 03 path:** `/home/mgarcia/projects/php/SCI Design Blocks/sci-design-blocks-1.2-rc-fix-03.zip`
+
+## M4 Final Release — source and extracted ZIP certification
+
+**Manual gate:** PASS, as reported by the Product Owner in the release authorization. Default Core Tabs remain unaffected (PASS / expected). Underline, Pills, Connected and Filled pass the reported mobile behavior: single-line labels and horizontal overflow/scroll. Codex did not perform an additional live browser/editor test.
+
+| Final release gate | Result | Evidence |
+|---|---|---|
+| Release identity | PASS | Plugin metadata and README identify 1.2.0. WordPress minimum 7.1; PHP minimum 7.4; license GPL-2.0-or-later. |
+| Product inventory | PASS | Registration smoke: 9 patterns, 1 icon collection / 83 icons, 2 Accordion styles, exactly 4 Tabs styles (`sci-underline`, `sci-pills`, `sci-connected`, `sci-filled`). No custom SCI blocks. |
+| PHP / registration / i18n | PASS | Source and extracted PHP lint; `php tests/check-icon-library.php` validates registrations, labels/text domain, icon manifest/provenance, and platform metadata. |
+| Tabs / Core compatibility | PASS | `php tests/check-tabs-roundtrip.php /home/mgarcia/dev01/nettix-proposal-lab/wordpress`: all four styles parse/serialize/parse with five long-label panels and nested Core content on WordPress 7.1.2. Responsive CSS check confirms scoped `white-space: nowrap`, `flex-shrink: 0`, horizontal overflow; Default has no SCI rule. |
+| CSS | PASS | Tabs 2,202 bytes / 12 rules / 18 selectors; 0 `!important`, 0 media queries, 0 hardcoded brand colors. Accordion 1,076 bytes / 6 rules / 0 `!important`. Total production CSS: 3,278 bytes. |
+| Icon assets / security inventory | PASS | All 83 bundled SVGs match the manifest and source checks. No AJAX, REST route, remote request, eval, frontend JS, package manifest, Composer manifest or external runtime dependency found in product runtime files. |
+| PHP/runtime compatibility evidence | PASS with limit | PHP CLI 8.5.4 lint passes; WordPress Core 7.1.2 source/parser checks pass. PHP 7.4 runtime was unavailable, so no execution on PHP 7.4 is claimed. |
+| ZIP integrity and structure | PASS | `zip -T` passes. 93 files / 99 entries under exactly one `sci-design-blocks/` root. Runtime PHP/includes, CSS, icon manifest/SVGs, README, LICENSE and third-party notice included; tests, PoC, internal docs, previous ZIPs, caches and development tooling excluded. No nested ZIP or path outside the root. |
+| Extracted artifact | PASS | ZIP extracted to a clean temporary directory; PHP lint, registration, icon, CSS and four Core roundtrip checks pass against the extracted plugin. Test harness was copied for validation and is not packaged. LICENSE bytes match source. |
+| Final ZIP size / SHA-256 | PASS | 64,670 bytes; `8e2b7ababbcbb793b7eed82f07f387fa10ea113381a3cd89bb627db0dd19a803`. |
+| RC immutability | PASS | RC Fix 03 remains SHA-256 `6f28037c3d1b40ae7d7681f37df9959b8e2c1cc8b0c73d7500581c74d20c0589`. |
+
+**Final ZIP:** `/home/mgarcia/projects/php/SCI Design Blocks/sci-design-blocks-1.2.0.zip`
+
+**Manual gate record:** Default Core Tabs preserve Core behavior and intentionally do not acquire SCI no-wrap; Underline, Pills, Connected and Filled pass the Product Owner's mobile check for no-wrap labels and horizontal overflow/scroll. The observation that Default differs is expected, not a defect. No WCAG certification claim is made.
+
+## Publication record
+
+Publication is performed only after the final release commit, `main` integration, annotated tag, and GitHub Release/asset are verified. Commit, tag target, push results, release URL, and remote asset checksum are recorded here after publication.

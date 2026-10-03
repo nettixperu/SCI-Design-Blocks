@@ -376,6 +376,13 @@ Certificación manual en WordPress 7.1.x como versión mínima (preferir 7.1.2 s
 - RC Fix 02 se preserva sin cambios; replacement RC Fix 03 y su checksum se documentan en `M4-RC-FIX-03.md` y abajo. Manual retest requerido: viewport móvil y labels largos; no repetir el gate visual completo salvo regresión.
 - Plugin version permanece 1.1.0. Release 1.2.0 queda bloqueado hasta que el Product Owner confirme PASS móvil.
 
+#### M4 Final Release — 1.2.0 — 2026-10-03
+
+- El Product Owner confirmó el gate manual final: Underline, Pills, Connected y Filled mantienen labels en una sola línea y permiten overflow/scroll horizontal en móvil; Core Default conserva su comportamiento nativo, sin no-wrap SCI. El resultado se registra como PASS / EXPECTED, respectivamente. Esta evidencia manual procede del Product Owner; no se atribuye a una prueba de navegador realizada por Codex.
+- Se actualizó únicamente la versión del plugin a 1.2.0, README de release, la aserción de versión del smoke test y documentación de certificación. Requisitos permanecen WordPress 7.1+ y PHP 7.4+; las capacidades de 1.1 se mantienen.
+- Certificación source y del ZIP final, checksum, integración `main`, tag anotado y GitHub Release se consignan en `RELEASE-TEST-MATRIX-1.2.md` al completarse cada gate.
+- El ZIP/tag/release/checksum de v1.1.0 y todos los RC ZIPs permanecen inmutables.
+
 ## 13. Asset y release policy
 
 Mantener CSS Tabs en `assets/css/tabs-styles.css` y registro en un include PHP pequeño siguiendo `SCI\DesignBlocks`. No editar CSS del Accordion salvo que una colisión concreta esté reproducida y aprobada. No añadir Node, npm, Composer ni dependencia de build para una hoja CSS pequeña.

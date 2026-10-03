@@ -66,7 +66,7 @@ function wp_register_icon( $name, $args ) {
 
 $plugin_file = dirname( __DIR__ ) . '/sci-design-blocks.php';
 $plugin      = file_get_contents( $plugin_file );
-if ( false === $plugin || ! preg_match( '/^ \* Version: 1\.1\.0$/m', $plugin ) || ! preg_match( '/^ \* Requires at least: 7\.1$/m', $plugin ) || ! preg_match( '/^ \* Requires PHP: 7\.4$/m', $plugin ) ) {
+if ( false === $plugin || ! preg_match( '/^ \* Version: 1\.2\.0$/m', $plugin ) || ! preg_match( '/^ \* Requires at least: 7\.1$/m', $plugin ) || ! preg_match( '/^ \* Requires PHP: 7\.4$/m', $plugin ) ) {
 	throw new RuntimeException( 'Plugin release version or platform minimum is incorrect.' );
 }
 
