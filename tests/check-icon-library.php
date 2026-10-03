@@ -91,6 +91,8 @@ $expected_patterns = array(
 	'sci-design-blocks/posts-featured-hero',
 	'sci-design-blocks/posts-editorial-lead',
 	'sci-design-blocks/posts-compact-list',
+	'sci-design-blocks/posts-editorial-grid',
+	'sci-design-blocks/posts-visual-grid',
 );
 $manifest       = require dirname( __DIR__ ) . '/icons/manifest.php';
 $expected_icons = array_map(
@@ -108,7 +110,7 @@ sort( $icon_names );
 sort( $expected_icons );
 
 if ( 1 !== count( $GLOBALS['sci_test_categories'] ) || $pattern_names !== $expected_patterns ) {
-	throw new RuntimeException( 'The original category and all nine existing plus three M1-M2 editorial patterns must be registered.' );
+	throw new RuntimeException( 'The original category and nine existing plus five editorial patterns through M3 must be registered.' );
 }
 if (
 	1 !== count( $GLOBALS['sci_test_collections'] ) ||
@@ -212,4 +214,4 @@ if ( false === $notice || false === strpos( $notice, 'Bootstrap Icons' ) || fals
 	throw new RuntimeException( 'Bootstrap MIT third-party notice is missing or incomplete.' );
 }
 
-fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one SCI collection, 83 icons, two Core Accordion styles, four opt-in Core Tabs styles, nine original patterns, and three editorial Query patterns through M2.\n" );
+fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one SCI collection, 83 icons, two Core Accordion styles, four opt-in Core Tabs styles, nine original patterns, and five editorial Query patterns through M3.\n" );

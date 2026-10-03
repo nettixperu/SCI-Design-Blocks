@@ -98,6 +98,32 @@ HTML,
 <!-- /wp:query -->
 HTML,
 		),
+		'sci-design-blocks/posts-editorial-grid' => array(
+			'title'       => __( 'SCI Posts — Editorial Grid', 'sci-design-blocks' ),
+			'description' => __( 'A balanced three-column editorial grid with images and concise post metadata.', 'sci-design-blocks' ),
+			'content'     => <<<'HTML'
+<!-- wp:query {"query":{"perPage":6,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"ignore","inherit":false},"displayLayout":{"type":"flex","columns":3}} -->
+<div class="wp-block-query"><!-- wp:post-template -->
+<!-- wp:post-featured-image {"isLink":true,"aspectRatio":"4/3","scale":"cover"} /-->
+<!-- wp:post-title {"level":2,"isLink":true} /-->
+<!-- wp:post-terms {"term":"category"} /-->
+<!-- wp:post-date /-->
+<!-- /wp:post-template --></div>
+<!-- /wp:query -->
+HTML,
+		),
+		'sci-design-blocks/posts-visual-grid' => array(
+			'title'       => __( 'SCI Posts — Visual Grid', 'sci-design-blocks' ),
+			'description' => __( 'An image-led three-column post grid with linked titles and minimal metadata.', 'sci-design-blocks' ),
+			'content'     => <<<'HTML'
+<!-- wp:query {"query":{"perPage":6,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"ignore","inherit":false},"displayLayout":{"type":"flex","columns":3}} -->
+<div class="wp-block-query"><!-- wp:post-template -->
+<!-- wp:post-featured-image {"isLink":true,"aspectRatio":"16/9","scale":"cover"} /-->
+<!-- wp:post-title {"level":2,"isLink":true} /-->
+<!-- /wp:post-template --></div>
+<!-- /wp:query -->
+HTML,
+		),
 	);
 
 	foreach ( $patterns as $name => $pattern ) {

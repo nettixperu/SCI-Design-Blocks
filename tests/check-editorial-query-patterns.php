@@ -66,6 +66,16 @@ $expected = array(
 		'offsets'  => array( 0 ),
 		'required' => array( 'core/post-featured-image', 'core/post-title', 'core/post-terms', 'core/post-date', 'core/separator' ),
 	),
+	'sci-design-blocks/posts-editorial-grid' => array(
+		'per_page' => array( 6 ),
+		'offsets'  => array( 0 ),
+		'required' => array( 'core/post-featured-image', 'core/post-title', 'core/post-terms', 'core/post-date' ),
+	),
+	'sci-design-blocks/posts-visual-grid' => array(
+		'per_page' => array( 6 ),
+		'offsets'  => array( 0 ),
+		'required' => array( 'core/post-featured-image', 'core/post-title' ),
+	),
 );
 
 foreach ( $expected as $pattern_name => $expectation ) {
@@ -119,6 +129,18 @@ foreach ( $expected as $pattern_name => $expectation ) {
 		if ( false === strpos( $pattern, '"scale":"contain"' ) || false === strpos( $pattern, '"aspectRatio":"16/9"' ) ) {
 			throw new RuntimeException( 'Compact List must preserve the Core contain fit and 16:9 image ratio.' );
 		}
+	}
+	if ( in_array( $pattern_name, array( 'sci-design-blocks/posts-editorial-grid', 'sci-design-blocks/posts-visual-grid' ), true ) ) {
+		$pattern = $GLOBALS['sci_test_patterns'][ $pattern_name ]['content'];
+		if ( false === strpos( $pattern, '"columns":3' ) || false === strpos( $pattern, '"type":"flex"' ) ) {
+			throw new RuntimeException( "Grid pattern must use the three-column Core Query layout: {$pattern_name}." );
+		}
+	}
+	if ( 'sci-design-blocks/posts-editorial-grid' === $pattern_name && false === strpos( $GLOBALS['sci_test_patterns'][ $pattern_name ]['content'], '"aspectRatio":"4/3"' ) ) {
+		throw new RuntimeException( 'Editorial Grid must retain its 4:3 Core image ratio.' );
+	}
+	if ( 'sci-design-blocks/posts-visual-grid' === $pattern_name && false === strpos( $GLOBALS['sci_test_patterns'][ $pattern_name ]['content'], '"aspectRatio":"16/9"' ) ) {
+		throw new RuntimeException( 'Visual Grid must retain its image-led 16:9 ratio.' );
 	}
 
 	fwrite( STDOUT, "Core parser structural check PASS: {$pattern_name} (WordPress {$wp_version}).\n" );
