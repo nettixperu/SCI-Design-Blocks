@@ -66,7 +66,7 @@ function wp_register_icon( $name, $args ) {
 
 $plugin_file = dirname( __DIR__ ) . '/sci-design-blocks.php';
 $plugin      = file_get_contents( $plugin_file );
-if ( false === $plugin || ! preg_match( '/^ \* Version: 1\.2\.0$/m', $plugin ) || ! preg_match( '/^ \* Requires at least: 7\.1$/m', $plugin ) || ! preg_match( '/^ \* Requires PHP: 7\.4$/m', $plugin ) ) {
+if ( false === $plugin || ! preg_match( '/^ \* Version: 1\.3\.0-dev$/m', $plugin ) || ! preg_match( '/^ \* Requires at least: 7\.1$/m', $plugin ) || ! preg_match( '/^ \* Requires PHP: 7\.4$/m', $plugin ) ) {
 	throw new RuntimeException( 'Plugin release version or platform minimum is incorrect.' );
 }
 
@@ -88,6 +88,7 @@ $expected_patterns = array(
 	'sci-design-blocks/stats',
 	'sci-design-blocks/icon-list',
 	'sci-design-blocks/accordion',
+	'sci-design-blocks/posts-featured-hero',
 );
 $manifest       = require dirname( __DIR__ ) . '/icons/manifest.php';
 $expected_icons = array_map(
@@ -105,7 +106,7 @@ sort( $icon_names );
 sort( $expected_icons );
 
 if ( 1 !== count( $GLOBALS['sci_test_categories'] ) || $pattern_names !== $expected_patterns ) {
-	throw new RuntimeException( 'The original single category and nine patterns must remain registered.' );
+	throw new RuntimeException( 'The original single category, nine existing patterns, and M1 Featured Hero must be registered.' );
 }
 if (
 	1 !== count( $GLOBALS['sci_test_collections'] ) ||
@@ -209,4 +210,4 @@ if ( false === $notice || false === strpos( $notice, 'Bootstrap Icons' ) || fals
 	throw new RuntimeException( 'Bootstrap MIT third-party notice is missing or incomplete.' );
 }
 
-fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one SCI collection, 83 icons, two Core Accordion styles, four opt-in Core Tabs styles, nine unchanged patterns, provenance and MIT notice.\n" );
+fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one SCI collection, 83 icons, two Core Accordion styles, four opt-in Core Tabs styles, nine original patterns, M1 Featured Hero, provenance and MIT notice.\n" );
