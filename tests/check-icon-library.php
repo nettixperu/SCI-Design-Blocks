@@ -130,11 +130,12 @@ if ( array( 'sci-bordered', 'sci-minimal' ) !== $style_names ) {
 	throw new RuntimeException( 'Expected exactly the opt-in Minimal and Bordered Core Accordion styles.' );
 }
 if (
-	2 !== count( $GLOBALS['sci_test_stylesheets'] ) ||
+	3 !== count( $GLOBALS['sci_test_stylesheets'] ) ||
 	! isset( $GLOBALS['sci_test_stylesheets']['sci-design-blocks-accordion-styles'] ) ||
-	! isset( $GLOBALS['sci_test_stylesheets']['sci-design-blocks-tabs-styles'] )
+	! isset( $GLOBALS['sci_test_stylesheets']['sci-design-blocks-tabs-styles'] ) ||
+	! isset( $GLOBALS['sci_test_stylesheets']['sci-design-blocks-editorial-image-styles'] )
 ) {
-	throw new RuntimeException( 'Expected one registered stylesheet handle for Accordion and one for Tabs.' );
+	throw new RuntimeException( 'Expected one stylesheet handle each for Accordion, Tabs, and editorial image styles.' );
 }
 foreach ( array( 'sci-minimal' => 'Minimal', 'sci-bordered' => 'Bordered' ) as $name => $label ) {
 	$style = $accordion_styles[ $name ];
@@ -161,6 +162,24 @@ if ( false === $tabs_registration_source || 4 !== substr_count( $tabs_registrati
 }
 if ( 'plugin-assets/assets/css/tabs-styles.css' !== $GLOBALS['sci_test_stylesheets']['sci-design-blocks-tabs-styles']['src'] ) {
 	throw new RuntimeException( 'Tabs style handle must point to the local SCI stylesheet.' );
+}
+
+$image_styles = $GLOBALS['sci_test_block_styles']['core/post-featured-image'] ?? array();
+if ( array( 'sci-hover-zoom' ) !== array_keys( $image_styles ) ) {
+	throw new RuntimeException( 'Expected exactly one opt-in Hover Zoom style on Core Post Featured Image.' );
+}
+$hover_style = $image_styles['sci-hover-zoom'];
+if (
+	'SCI — Hover Zoom' !== $hover_style['label'] ||
+	'sci-design-blocks-editorial-image-styles' !== $hover_style['style_handle'] ||
+	isset( $hover_style['is_default'] ) ||
+	'plugin-assets/assets/css/editorial-image-styles.css' !== $GLOBALS['sci_test_stylesheets']['sci-design-blocks-editorial-image-styles']['src']
+) {
+	throw new RuntimeException( 'Hover Zoom must be opt-in and use its local block style stylesheet.' );
+}
+$hover_css = file_get_contents( dirname( __DIR__ ) . '/assets/css/editorial-image-styles.css' );
+if ( false === $hover_css || false === strpos( $hover_css, 'scale(1.05)' ) || false === strpos( $hover_css, 'prefers-reduced-motion: reduce' ) || false !== strpos( $hover_css, '!important' ) ) {
+	throw new RuntimeException( 'Hover Zoom CSS must use a subtle scale, reduced-motion handling, and no important overrides.' );
 }
 foreach ( array( 'sci-underline' => 'Underline', 'sci-pills' => 'Pills', 'sci-connected' => 'Connected', 'sci-filled' => 'Filled' ) as $name => $label ) {
 	$style = $tabs_styles[ $name ];
@@ -214,4 +233,4 @@ if ( false === $notice || false === strpos( $notice, 'Bootstrap Icons' ) || fals
 	throw new RuntimeException( 'Bootstrap MIT third-party notice is missing or incomplete.' );
 }
 
-fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one SCI collection, 83 icons, two Core Accordion styles, four opt-in Core Tabs styles, nine original patterns, and five editorial Query patterns through M3.\n" );
+fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one SCI collection, 83 icons, two Core Accordion styles, four opt-in Core Tabs styles, five Core Query patterns, and opt-in Post Featured Image Hover Zoom.\n" );

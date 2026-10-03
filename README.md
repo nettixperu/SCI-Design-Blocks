@@ -1,4 +1,4 @@
-# SCI Design Blocks 1.2.0
+# SCI Design Blocks 1.3.0-dev
 
 Lightweight Gutenberg-native design extensions for WordPress. SCI Design Blocks follows Core-first, reuse-first, theme-native and content-first principles.
 
@@ -10,10 +10,12 @@ Lightweight Gutenberg-native design extensions for WordPress. SCI Design Blocks 
 
 ## Included
 
-- 9 patterns built from WordPress Core blocks
+- 14 patterns built from WordPress Core blocks, including five editorial Query patterns
 - SCI Icon Library with 83 curated icons
 - Core Accordion styles: Minimal and Bordered
 - Core Tabs styles: Underline, Pills, Connected and Filled
+- Editorial Query patterns: Featured Hero, Editorial Lead, Compact List, Editorial Grid and Visual Grid
+- Opt-in Core Post Featured Image style: SCI — Hover Zoom
 
 The four SCI Tabs styles keep labels on one line and use horizontal overflow on narrow viewports. They are optional styles for WordPress Core Tabs; SCI does not add a Tabs block or frontend JavaScript. Colors derive from Core and theme styles.
 
@@ -23,7 +25,14 @@ The icon set uses Bootstrap Icons v1.13.1 under the MIT license. SCI Design Bloc
 
 - Patterns remain ordinary WordPress Core blocks.
 - No custom SCI blocks, SCI frontend JavaScript or external runtime dependencies.
-- Small, scoped CSS provides optional Accordion and Core Tabs appearances.
+- Small, scoped CSS provides optional Accordion, Core Tabs and Post Featured Image appearances.
+- Editorial Query patterns serialize as WordPress Core blocks and remain editable when the plugin is inactive.
+
+Editorial Lead uses two coordinated Core Query Loops. Its default offsets avoid duplicate posts when both loops retain equivalent filters, ordering and sticky behavior. If you change one query, maintain equivalent settings in the other to preserve the sequence; SCI does not synchronize the two queries.
+
+SCI — Hover Zoom is an optional style on Core Post Featured Image. It is off unless selected on an image block and respects reduced-motion preferences.
+
+The 1.3 development series does not remove or modify site-level editorial CSS. CSS replacement requires a separate visual migration review.
 
 ## When the plugin is inactive
 
