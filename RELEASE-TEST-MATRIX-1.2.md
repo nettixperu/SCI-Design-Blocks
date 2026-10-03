@@ -179,6 +179,6 @@
 | GitHub Release | PASS | [SCI Design Blocks 1.2.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.2.0), published, not draft/prerelease. |
 | Release asset | PASS | Exactly `sci-design-blocks-1.2.0.zip` uploaded (64,670 bytes). |
 | Downloaded asset checksum | MATCH | Local and downloaded SHA-256: `8e2b7ababbcbb793b7eed82f07f387fa10ea113381a3cd89bb627db0dd19a803`. |
-| v1.1.0 immutability | PASS | Remote tag still peels to `424aa1bb82b13a24dcfe842587d7435a4cad3205`; no prior tag/release/ZIP was modified. |
+| Historical release immutability | PASS | Remote tags remain `v1.0.0` → `6212feea3aec695630c825984f7100b49ce32e6a` and `v1.1.0` → `424aa1bb82b13a24dcfe842587d7435a4cad3205`. Downloaded release ZIPs match recorded SHA-256 values: 1.0.0 `4543bb7446a3ea83e4dae7ba9c69895f0abbe36795ee6f938ea9ab9860185afc`; 1.1.0 `d43d97cca7689e42ff7f8d101e5497bb2953a737810e9d271d14e4a24150098f`. No historical tag, release or asset was modified. |
 
 The certification update is documentation-only and follows publication. The annotated release tag remains on the source/package commit above; no source or package bytes changed after release.
