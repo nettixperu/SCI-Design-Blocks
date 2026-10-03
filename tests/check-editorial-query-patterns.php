@@ -51,10 +51,24 @@ function sci_collect_editorial_blocks( array $blocks, array &$names, array &$que
 }
 
 $expected = array(
-	'sci-design-blocks/posts-featured-hero',
+	'sci-design-blocks/posts-featured-hero' => array(
+		'per_page' => array( 1 ),
+	'offsets'  => array( 0 ),
+	'required' => array( 'core/post-featured-image', 'core/post-title', 'core/post-excerpt' ),
+	),
+	'sci-design-blocks/posts-editorial-lead' => array(
+		'per_page' => array( 1, 3 ),
+		'offsets'  => array( 0, 1 ),
+		'required' => array( 'core/post-featured-image', 'core/post-title', 'core/post-terms', 'core/post-date', 'core/post-excerpt' ),
+	),
+	'sci-design-blocks/posts-compact-list' => array(
+		'per_page' => array( 5 ),
+		'offsets'  => array( 0 ),
+		'required' => array( 'core/post-featured-image', 'core/post-title', 'core/post-terms', 'core/post-date', 'core/separator' ),
+	),
 );
 
-foreach ( $expected as $pattern_name ) {
+foreach ( $expected as $pattern_name => $expectation ) {
 	$content = $GLOBALS['sci_test_patterns'][ $pattern_name ]['content'] ?? '';
 	if ( '' === $content ) {
 		throw new RuntimeException( "Missing registered pattern {$pattern_name}." );
@@ -70,16 +84,41 @@ foreach ( $expected as $pattern_name ) {
 			throw new RuntimeException( "Non-Core block found in {$pattern_name}." );
 		}
 	}
-	if ( 1 !== count( $parsed ) || 1 !== count( $queries ) ) {
-		throw new RuntimeException( "Expected one Core Query root in {$pattern_name}." );
+	if ( 1 !== count( $parsed ) || count( $expectation['per_page'] ) !== count( $queries ) ) {
+		throw new RuntimeException( "Unexpected Core Query count or pattern root in {$pattern_name}." );
 	}
 
-	$query = $queries[0]['attrs']['query'] ?? array();
-	if ( 1 !== ( $query['perPage'] ?? null ) || 0 !== ( $query['offset'] ?? null ) || false !== ( $query['inherit'] ?? null ) || 'ignore' !== ( $query['sticky'] ?? null ) ) {
-		throw new RuntimeException( "Unexpected M1 query defaults in {$pattern_name}." );
+	$per_page = array();
+	$offsets  = array();
+	foreach ( $queries as $query_block ) {
+		$query = $query_block['attrs']['query'] ?? array();
+		if (
+			true === ( $query['inherit'] ?? null ) ||
+			'ignore' !== ( $query['sticky'] ?? null ) ||
+			'desc' !== ( $query['order'] ?? null ) ||
+			'date' !== ( $query['orderBy'] ?? null )
+		) {
+			throw new RuntimeException( "Unexpected query defaults in {$pattern_name}: " . json_encode( $query ) );
+		}
+		$per_page[] = $query['perPage'] ?? null;
+		$offsets[]  = $query['offset'] ?? null;
+	}
+	if ( $expectation['per_page'] !== $per_page || $expectation['offsets'] !== $offsets ) {
+		throw new RuntimeException( "Unexpected perPage/offset sequencing in {$pattern_name}." );
+	}
+	foreach ( $expectation['required'] as $required_block ) {
+		if ( ! in_array( $required_block, $names, true ) ) {
+			throw new RuntimeException( "Missing {$required_block} in {$pattern_name}." );
+		}
 	}
 	if ( in_array( 'core/query-pagination', $names, true ) ) {
 		throw new RuntimeException( "Pagination must not be included in {$pattern_name}." );
+	}
+	if ( 'sci-design-blocks/posts-compact-list' === $pattern_name ) {
+		$pattern = $GLOBALS['sci_test_patterns'][ $pattern_name ]['content'];
+		if ( false === strpos( $pattern, '"scale":"contain"' ) || false === strpos( $pattern, '"aspectRatio":"16/9"' ) ) {
+			throw new RuntimeException( 'Compact List must preserve the Core contain fit and 16:9 image ratio.' );
+		}
 	}
 
 	fwrite( STDOUT, "Core parser structural check PASS: {$pattern_name} (WordPress {$wp_version}).\n" );
