@@ -1,13 +1,13 @@
 # SCI Design Blocks 1.4.0 — Software Design Document
 
-**Status:** M1–M4 COMPLETE — M5 certification and stable release in progress
+**Status:** M1–M5 COMPLETE — 1.4.0 stable release published
 **Product:** SCI Design Blocks
 **Baseline release:** 1.3.0 (`v1.3.0`, immutable)
 **Release target:** 1.4.0
 **WordPress:** 7.1 or later
 **PHP:** 7.4 or later
 
-This document is the implementation contract for the 1.4 Pricing + Comparison feature family. M5 stable release has been explicitly authorized and is in progress. Final release evidence is recorded in `M5-RELEASE-1.4.0.md`.
+This document is the implementation contract for the 1.4 Pricing + Comparison feature family. M5 stable release was explicitly authorized and completed. Final release evidence is recorded in `M5-RELEASE-1.4.0.md`.
 
 ## 1. Purpose and scope
 
@@ -135,7 +135,7 @@ This is manually reported evidence, not Codex browser automation. Browser QA by 
 | M2 | Register Featured and Compact; add invalid-markup regression and Core round-trip checks. | Complete in this candidate. |
 | M3 | Register Comparison 2 Options and Feature Table; verify semantics and Core round-trip. | Complete in this candidate. |
 | M4 | Hardening, complete static checks, archive validation, compact manual gate. | Complete for RC review; manual PO gate already reported complete. |
-| M5 | Product Owner final gate, final certification, and stable 1.4.0 release. | In progress; final result recorded in `M5-RELEASE-1.4.0.md`. |
+| M5 | Product Owner final gate, final certification, and stable 1.4.0 release. | PASS; public release published and recorded in `M5-RELEASE-1.4.0.md`. |
 
 ## 10. Decision log
 

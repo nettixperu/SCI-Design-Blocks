@@ -1,6 +1,6 @@
 # SCI Design Blocks 1.4.0 — Final Certification and Release
 
-**Status:** Release certification in progress
+**Status:** COMPLETE — stable release published
 **Stable version:** 1.4.0
 **Requirements:** WordPress 7.1+; PHP 7.4+
 **Baseline:** v1.3.0 (historical release immutable)
@@ -48,16 +48,22 @@ Environment: PHP 8.5.4; WordPress Core parser source 7.1.2. No PHP 7.4 runtime o
 
 ## Git and remote publication
 
-- Release commit: pending.
-- Main integration: pending.
-- Annotated tag `v1.4.0`: pending.
-- GitHub Release: pending.
-- Exact uploaded asset: pending.
-- Downloaded remote ZIP SHA-256 and `zip -T`: pending.
-- Historical tags/releases v1.0.0–v1.3.0: verified present before publication; remote tag target hashes are recorded in the final closeout below.
+- Release commit: `6fd1c4093cdfb91c0f4a0c28be7702a37dd662fa` (`Release SCI Design Blocks 1.4.0`).
+- Main integration: fast-forward from `7fe5ea16f7dbfeb248b44f92584a7e323aa0a25c`; pushed to `origin/main`, which points to the release commit.
+- Annotated tag `v1.4.0`: tag object `039a2b9b6c918870633665e9843a53347bf000ac`, peeled target `6fd1c4093cdfb91c0f4a0c28be7702a37dd662fa`; pushed successfully.
+- GitHub Release: [SCI Design Blocks 1.4.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0), public, non-draft, non-prerelease.
+- Exact uploaded asset: [sci-design-blocks-1.4.0.zip](https://github.com/nettixperu/SCI-Design-Blocks/releases/download/v1.4.0/sci-design-blocks-1.4.0.zip); the Release contains exactly one uploaded asset.
+- Downloaded remote ZIP SHA-256: `1d8e81f2da031413a10ae5551152c1597bfda8f8a90a9d5ace2e27ef3ed68d93` — MATCH. Remote `zip -T`: PASS.
+- Historical remote tag targets unchanged: v1.0.0 `6212feea3aec695630c825984f7100b49ce32e6a`; v1.1.0 `424aa1bb82b13a24dcfe842587d7435a4cad3205`; v1.2.0 `cba30a1a768fdcc6a8901f8cb901f2670afb97d0`; v1.3.0 `7fe5ea16f7dbfeb248b44f92584a7e323aa0a25c`. Releases v1.0.0–v1.3.0 remain present.
 
 The Product Owner manual visual gate is distinct from Codex evidence. Codex browser QA and database-backed WordPress activation QA were not performed.
 
 ## Final closeout
 
-This document will record the final commit/tag, artifact hash, GitHub Release and asset URLs, local/remote checksum match, historical release integrity, and final working tree after publication.
+The release ZIP was built before the release commit from the approved runtime whitelist. All 102 files in the ZIP match byte-for-byte with the corresponding release source files. The release commit/tag contains that source. This closeout is a documentation-only commit made after the tag; it does not change the release source or ZIP.
+
+- Closeout documentation commit: recorded in Git after publication; `v1.4.0` remains at the release commit above.
+- Final working tree: tracked files clean; pre-existing untracked PoC and audit documents remain local and were not staged or published.
+- Codex browser QA and database-backed WordPress activation QA: NOT PERFORMED. Product Owner visual evidence and Codex static/artifact evidence are reported separately above.
+
+**M5 result: PASS — SCI Design Blocks 1.4.0 stable release published.**
