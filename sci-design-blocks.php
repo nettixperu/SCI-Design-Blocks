@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SCI Design Blocks
  * Description: Reusable editorial and corporate compositions built from WordPress Core blocks.
- * Version: 1.3.0
+ * Version: 1.4.0
  * Requires at least: 7.1
  * Requires PHP: 7.4
  * Author: Martín
@@ -19,9 +19,11 @@ require_once __DIR__ . '/includes/accordion-styles.php';
 require_once __DIR__ . '/includes/tabs-styles.php';
 require_once __DIR__ . '/includes/editorial-query-patterns.php';
 require_once __DIR__ . '/includes/editorial-image-styles.php';
+require_once __DIR__ . '/includes/pricing-comparison-patterns.php';
 
 add_action( 'init', __NAMESPACE__ . '\register_feature_patterns' );
 add_action( 'init', __NAMESPACE__ . '\register_editorial_query_patterns', 11 );
+add_action( 'init', __NAMESPACE__ . '\register_pricing_comparison_patterns', 12 );
 
 /**
  * Register the M1 Feature patterns using WordPress Core blocks only.

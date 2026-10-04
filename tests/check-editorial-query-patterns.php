@@ -283,8 +283,8 @@ foreach ( $expected as $pattern_name => $expectation ) {
 	fwrite( STDOUT, "Core parser structural check PASS: {$pattern_name} (WordPress {$wp_version}).\n" );
 }
 
-if ( 15 !== count( $GLOBALS['sci_test_patterns'] ) ) {
-	throw new RuntimeException( 'Expected nine historical and six editorial patterns (15 total).' );
+if ( 20 !== count( $GLOBALS['sci_test_patterns'] ) ) {
+	throw new RuntimeException( 'Expected nine historical, six editorial, and five pricing/comparison patterns (20 total).' );
 }
 
 $sections_content = $GLOBALS['sci_test_patterns']['sci-design-blocks/posts-editorial-sections']['content'] ?? '';
