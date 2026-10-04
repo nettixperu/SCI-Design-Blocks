@@ -10,7 +10,7 @@
 - Source inspected: `includes/editorial-query-patterns.php`, especially the `sci-design-blocks/posts-compact-list` registration and markup (lines 72–90).
 - Product Owner evidence in the request says the staging homepage's new compositions are visually accepted and Compact List replaces the previous latest-news presentation. This audit did not connect to staging or inspect other staging pages.
 
-The CSS proposed copy is not an edit to the live/staging Additional CSS. It is a candidate for Product Owner review and application. The existing historical M2 `CSS-MIGRATION-MATRIX.md` remains untouched.
+The CSS proposed copy is not an edit to the live/staging Additional CSS. It is a candidate for Product Owner review and application. The earlier M2 CSS migration matrix is an ignored, local audit artifact and is not part of the public repository; it was not modified.
 
 The source and proposed CSS copies are local audit evidence under the repository's ignored `audit-input/` path because they contain site-specific staging CSS. They are intentionally not committed or included in the release ZIP.
 

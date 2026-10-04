@@ -85,6 +85,8 @@ The latest stable release is **SCI Design Blocks 1.4.0**.
 
 Report bugs and request features through [GitHub Issues](https://github.com/nettixperu/SCI-Design-Blocks/issues). See [Contributing](CONTRIBUTING.md) before opening a pull request. For security reports, follow [SECURITY.md](SECURITY.md) and do not disclose vulnerabilities in public issues.
 
+Engineering history and architecture references are organized in the [documentation index](docs/README.md).
+
 ## License
 
 SCI Design Blocks is licensed under [GPL-2.0-or-later](LICENSE). See [Third-Party Notices](THIRD-PARTY-NOTICES.md) for third-party icon attribution.

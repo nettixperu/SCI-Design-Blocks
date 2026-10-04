@@ -40,7 +40,7 @@ The Product Owner's final report also confirms Tabs regression PASS and Tabs mob
 
 ## Evidence attribution
 
-- **Codex static QA:** performed and recorded in `PRE-SDD-1.4-PRICING-COMPARISON-SPIKE.md` and `M1-M4-PRICING-COMPARISON-RC.md`.
+- **Codex static QA:** performed and recorded in `PRE-SDD-1.4-PRICING-COMPARISON-SPIKE.md` and `../releases/1.4/M1-M4-PRICING-COMPARISON-RC.md`.
 - **Product Owner visual QA:** performed; results above are the Product Owner's reported observations.
 - **Codex browser QA:** not performed.
 

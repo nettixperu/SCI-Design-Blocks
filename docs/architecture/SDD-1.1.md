@@ -54,7 +54,7 @@ Approved trade-off: **CONTENT-FIRST NO-LOCK-IN**.
 
 ## 5. Licensing and asset provenance
 
-The plugin remains GPL-2.0-or-later. The 83 redistributed Bootstrap Icons files retain their source/version/name and MIT provenance in the manifest. `THIRD-PARTY-NOTICES.md` includes the complete MIT text. The plugin’s principal `LICENSE` is unchanged; no library license is mixed into that file.
+The plugin remains GPL-2.0-or-later. The 83 redistributed Bootstrap Icons files retain their source/version/name and MIT provenance in the manifest. [THIRD-PARTY-NOTICES.md](../../THIRD-PARTY-NOTICES.md) includes the complete MIT text. The plugin’s principal `LICENSE` is unchanged; no library license is mixed into that file.
 
 Catalog growth is a manually reviewed, pinned snapshot. There are no runtime downloads, CDN assets, npm/composer runtime packages, or automatic upstream updates.
 
@@ -97,7 +97,7 @@ The PHP static smoke test stubs Core registration and checks one collection, 83 
 | --- | --- |
 | A. Catalog integrity | PASS — 83 names, unique local names/handles, valid categories, manifest/SVG one-to-one. |
 | B. Registration | PASS — one `SCI` collection and 83 Core icon registrations; nine patterns still register. |
-| C. Picker/search | Pending at M2; the Product Owner’s completed M4 picker/search gate is recorded in `RELEASE-TEST-MATRIX-1.1.md`. |
+| C. Picker/search | Pending at M2; the Product Owner’s completed M4 picker/search gate is recorded in `../releases/1.1/RELEASE-TEST-MATRIX-1.1.md`. |
 | D. Core controls and accessibility | Static PASS — `core/icon` declares width, color, alignment, and `ariaLabel` support. Core `wp_get_icon()` marks unlabeled decorative icons hidden and labeled icons as `role="img"` with `aria-label`. UI sample remains for M4. |
 | E. Feature compatibility | Static PASS — patterns unchanged and retain Core `core/icon`; editor save/reopen sample remains for M4. |
 | F. Icon List compatibility | Static PASS — pattern unchanged; editor replacement/layout sample remains for M4. |
@@ -149,7 +149,7 @@ python3 tests/check-icon-svg.py
 python3 tests/check-accordion-css.py
 ```
 
-Static registration checks assert exactly two opt-in Core styles, translated labels, the shared local style handle, the original nine patterns, and the Accordion pattern’s unchanged `autoclose: true` markup. The CSS check validates syntax shape, six scoped rules, allowed structural properties, and zero `!important`. Browser validation was not available during M3; the Product Owner’s M4 manual gate result is recorded in `RELEASE-TEST-MATRIX-1.1.md`.
+Static registration checks assert exactly two opt-in Core styles, translated labels, the shared local style handle, the original nine patterns, and the Accordion pattern’s unchanged `autoclose: true` markup. The CSS check validates syntax shape, six scoped rules, allowed structural properties, and zero `!important`. Browser validation was not available during M3; the Product Owner’s M4 manual gate result is recorded in `../releases/1.1/RELEASE-TEST-MATRIX-1.1.md`.
 
 ## 12. Release boundaries
 

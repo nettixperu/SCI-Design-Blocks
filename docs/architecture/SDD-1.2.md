@@ -161,7 +161,7 @@ Boxed se evaluó y se descarta como redundante con Pills. Mantenerlo fuera del r
 - No esconder scrollbars.
 - No añadir media queries salvo necesidad demostrada; no introducir JS responsive.
 - Preservar flex justification y auto width de Core; no forzar full width.
-- La hoja de estilos Tabs se mantiene pequeña y legible; métricas actuales del RC Fix 02 quedan registradas en `M4-RC-FIX-02.md`. No imponer un límite artificial de bytes.
+- La hoja de estilos Tabs se mantiene pequeña y legible; métricas actuales del RC Fix 02 quedan registradas en `../releases/1.2/M4-RC-FIX-02.md`. No imponer un límite artificial de bytes.
 
 ### 6.7 Registro y asset
 
@@ -347,14 +347,14 @@ Certificación manual en WordPress 7.1.x como versión mínima (preferir 7.1.2 s
 
 - Certificación estática, regresión 1.1, documentación RC y validación del ZIP RC completadas; versión del plugin se mantiene en 1.1.0 mientras el gate visual esté pendiente.
 - WordPress/editor/browser real no estuvo disponible para completar las seis pruebas manuales. El RC queda para evaluación del Product Owner; no se crea ni publica tag/release 1.2.0 ni ZIP estable hasta recibir confirmación manual PASS.
-- Evidencia detallada: `RELEASE-TEST-MATRIX-1.2.md`.
+- Evidencia detallada: `../releases/1.2/RELEASE-TEST-MATRIX-1.2.md`.
 
 #### M4 RC Fix 01 — visual amendment — 2026-10-03
 
 - Product Owner aprueba `Connected` como tercer Core Block Style y autoriza evaluar `Boxed`. Se implementa `sci-connected`; `sci-boxed` se declara redundante con Pills y queda fuera.
 - Connected aplica borde contextual, elimina el borde inferior solo al botón activo, une visualmente con el borde de `.wp-block-tab-panels` y usa una sombra neutral muy sutil. Core mantiene interacción, estados, foco, ARIA y deep linking.
 - Boxed no se añade porque solo cuadrar el radio de Pills sería una variante redundante. No cambia arquitectura, versión, mínimo de plataforma, cantidad de patterns, custom blocks ni JS.
-- RC anterior preservado; reemplazo: `sci-design-blocks-1.2-rc-fix-01.zip`. SHA-256 y targeted validation se registran en `M4-RC-FIX-01.md`.
+- RC anterior preservado; reemplazo: `sci-design-blocks-1.2-rc-fix-01.zip`. SHA-256 y targeted validation se registran en `../releases/1.2/M4-RC-FIX-01.md`.
 - El manual gate del Product Owner sigue pendiente; no publicar ni etiquetar versión estable 1.2.0 antes del PASS manual.
 - Reemplaza el RC previo `sci-design-blocks-1.2-rc-test.zip`; el ZIP previo se conserva sin modificar.
 
@@ -365,7 +365,7 @@ Certificación manual en WordPress 7.1.x como versión mínima (preferir 7.1.2 s
 - Filled presenta una superficie tenue en el tablist y segmento activo con borde y fill derivado de `currentColor`. Usa `background-image` para conservar debajo el `background-color` que Core aplica. Sin JS, controles propios, palette de marca, igual ancho forzado ni styling de paneles.
 - Boxed permanece `REDUNDANT — NOT INCLUDED`; Segmented no se registra; iconos deferred e imágenes fuera de scope. CSS/responsive sigue scoped y compartido.
 - El nuevo RC se valida estáticamente y desde extracción; WordPress visual/editor gate queda para el Product Owner. Plugin metadata permanece 1.1.0; no se crea stable ZIP/tag/release sin PASS manual.
-- Evidencia, métricas y checksum: `M4-RC-FIX-02.md` y `RELEASE-TEST-MATRIX-1.2.md`.
+- Evidencia, métricas y checksum: `../releases/1.2/M4-RC-FIX-02.md` y `../releases/1.2/RELEASE-TEST-MATRIX-1.2.md`.
 
 #### M4 RC Fix 03 — long labels in mobile tablist — 2026-10-03
 
@@ -373,14 +373,14 @@ Certificación manual en WordPress 7.1.x como versión mínima (preferir 7.1.2 s
 - Root cause inspeccionada en Core 7.1.2: `tab-list/block.json` guarda labels como texto RichText de cada `button`; `tab-list/style.css` da a esos botones `width: max-content`, pero no cambia `flex-shrink` (su valor flex inicial sigue siendo `1`) ni `white-space` (wrapping normal). El tablist horizontal puede comprimir un botón y partir su label.
 - Fix mínimo compartido: en botones descendientes de los cuatro wrappers SCI, `white-space: nowrap` y `flex-shrink: 0`. No se aplica a Core Default; no añade width/min-width, truncation, font adjustment, breakpoint ni JavaScript.
 - Test fixture usa cinco labels representativos y verifica roundtrip Core 7.1.2 en los cuatro estilos. Static test verifica selector compartido, propiedades, scope y ausencia de truncation/global leakage.
-- RC Fix 02 se preserva sin cambios; replacement RC Fix 03 y su checksum se documentan en `M4-RC-FIX-03.md` y abajo. Manual retest requerido: viewport móvil y labels largos; no repetir el gate visual completo salvo regresión.
+- RC Fix 02 se preserva sin cambios; replacement RC Fix 03 y su checksum se documentan en `../releases/1.2/M4-RC-FIX-03.md` y abajo. Manual retest requerido: viewport móvil y labels largos; no repetir el gate visual completo salvo regresión.
 - Plugin version permanece 1.1.0. Release 1.2.0 queda bloqueado hasta que el Product Owner confirme PASS móvil.
 
 #### M4 Final Release — 1.2.0 — 2026-10-03
 
 - El Product Owner confirmó el gate manual final: Underline, Pills, Connected y Filled mantienen labels en una sola línea y permiten overflow/scroll horizontal en móvil; Core Default conserva su comportamiento nativo, sin no-wrap SCI. El resultado se registra como PASS / EXPECTED, respectivamente. Esta evidencia manual procede del Product Owner; no se atribuye a una prueba de navegador realizada por Codex.
 - Se actualizó únicamente la versión del plugin a 1.2.0, README de release, la aserción de versión del smoke test y documentación de certificación. Requisitos permanecen WordPress 7.1+ y PHP 7.4+; las capacidades de 1.1 se mantienen.
-- Certificación source y del ZIP final, checksum, integración `main`, tag anotado y GitHub Release se consignan en `RELEASE-TEST-MATRIX-1.2.md` al completarse cada gate.
+- Certificación source y del ZIP final, checksum, integración `main`, tag anotado y GitHub Release se consignan en `../releases/1.2/RELEASE-TEST-MATRIX-1.2.md` al completarse cada gate.
 - El ZIP/tag/release/checksum de v1.1.0 y todos los RC ZIPs permanecen inmutables.
 
 ## 13. Asset y release policy

@@ -21,3 +21,5 @@ Thanks for helping improve SCI Design Blocks. Before proposing a change, check t
 ## Pull requests
 
 Open a pull request against `main`, summarize the change and validation, and link related issues. Maintainers review scope, Core compatibility, accessibility, and content portability before merging.
+
+By contributing, you submit your contributions under the project license, GPL-2.0-or-later. No separate Contributor License Agreement is required.

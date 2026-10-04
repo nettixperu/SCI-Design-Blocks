@@ -13,7 +13,7 @@
 
 ## M5 staging evidence
 
-The Product Owner reports manually applying the proposed M5 CSS copy to staging: sections 4–5 were removed, sections 1–3 retained, the result passed visual review, and no breakage was observed. The reduction was 211 physical lines (365 to 154, approximately 58%); editorial layout CSS moved into the plugin: 0 bytes. Codex did not access or modify staging. See [`M5-CSS-MIGRATION-MATRIX.md`](M5-CSS-MIGRATION-MATRIX.md).
+The Product Owner reports manually applying the proposed M5 CSS copy to staging: sections 4–5 were removed, sections 1–3 retained, the result passed visual review, and no breakage was observed. The reduction was 211 physical lines (365 to 154, approximately 58%); editorial layout CSS moved into the plugin: 0 bytes. Codex did not access or modify staging. See [`../../migration/M5-CSS-MIGRATION-MATRIX.md`](../../migration/M5-CSS-MIGRATION-MATRIX.md).
 
 ## Final validation
 

@@ -263,4 +263,4 @@ Labels are concise, translation-ready names selected to help Core’s name/label
 
 - Core inventory source: `wp-includes/assets/icon-library-manifest.php` and `wp-includes/images/icon-library/` in the local WordPress 7.1.2 tree; 88 manifest entries.
 - Proposed external icon names/bytes: official Bootstrap Icons repository tree at tag `v1.13.1`; each name was checked against that pinned tree.
-- Full registration, Core API, sanitization, picker search and runtime behavior are documented in [ICON-LIBRARY-SPIKE-1.1.md](ICON-LIBRARY-SPIKE-1.1.md).
+- The separate icon-library API spike was an untracked working document and is not part of the published repository documentation. This inventory and its linked release evidence are the maintained records.

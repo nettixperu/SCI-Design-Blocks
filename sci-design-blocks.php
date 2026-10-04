@@ -7,7 +7,8 @@
  * Requires PHP: 7.4
  * Author: Martín
  * Text Domain: sci-design-blocks
- * License: GPL-2.0-or-later
+ * License: GPL v2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  *
  * @package SCI\DesignBlocks
  */

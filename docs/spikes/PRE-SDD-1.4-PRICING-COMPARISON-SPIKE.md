@@ -163,7 +163,7 @@ Static source inspection confirms declared Core support and markup behavior, but
 
 ## 14. Pre-SDD 02 PoC closure (sections 7–57)
 
-Detailed isolated artifacts and evidence are in [`poc/pricing-comparison-1.4/README.md`](poc/pricing-comparison-1.4/README.md), [`pricing-featured.html`](poc/pricing-comparison-1.4/pricing-featured.html), and [`comparison-feature-table.html`](poc/pricing-comparison-1.4/comparison-feature-table.html).
+Detailed isolated artifacts were local PoC files under `poc/pricing-comparison-1.4/` and are not included in the public repository. Their filenames included `README.md`, `pricing-featured.html`, and `comparison-feature-table.html`.
 
 - Pricing fixture uses three cards with unequal feature counts (4/7/5), Core text badge, optional setup-price copy, Core Grid, and vertical Flex Groups with `space-between`; it uses no Spacer hack. The CTA alignment mechanism is statically present, while actual rendered equality remains pending browser/editor QA.
 - Comparison fixture is one Core Table with caption, column/row headers, and long content. WordPress 7.1.2 Core CSS confirms an `overflow-x:auto` wrapper; it does not ensure this copy overflows or guarantee mobile legibility. Browser validation remains required.
@@ -174,7 +174,7 @@ Detailed isolated artifacts and evidence are in [`poc/pricing-comparison-1.4/REA
 
 ## 15. Pre-SDD 03 manual visual package
 
-An isolated installable package has been prepared at [`sci-design-blocks-pricing-comparison-poc-0.1.0.zip`](poc/pricing-comparison-1.4/sci-design-blocks-pricing-comparison-poc-0.1.0.zip). It registers only the three experimental patterns in a unique `SCI PoC — Pricing & Comparison` category. It is not a 1.4 release and is not published. See [`PRE-SDD-1.4-MANUAL-VISUAL-GATE.md`](PRE-SDD-1.4-MANUAL-VISUAL-GATE.md) for the Product Owner's checklist.
+An isolated installable package was prepared locally at `poc/pricing-comparison-1.4/sci-design-blocks-pricing-comparison-poc-0.1.0.zip`. It registered only the three experimental patterns in a unique `SCI PoC — Pricing & Comparison` category. It was not a 1.4 release and was not published; the local PoC files are intentionally excluded from this repository. See [PRE-SDD-1.4-MANUAL-VISUAL-GATE.md](PRE-SDD-1.4-MANUAL-VISUAL-GATE.md) for the Product Owner's checklist.
 
 The extracted ZIP passed PHP lint, isolated pattern registration smoke (one category, exactly three expected unique pattern slugs), Core 7.1.2 parser round-trip for all three fixtures, `zip -T`, one-root/content checks, and static absence checks for CSS, JS, inline script/style elements, remote media, and remote CTA URLs. The ZIP contains seven files: bootstrap, registration PHP, three pattern fixtures, README, and GPL license. It has no collision with the 1.3.0 plugin slug/namespace/pattern category/pattern slugs. Stable production inventory remains 15 patterns, 83 icons, two Accordion styles, four Tabs styles, one Hover Zoom style, and zero custom SCI blocks.
 
@@ -261,4 +261,4 @@ The exact earlier invalid block/root cause was not recorded. The corrected PoC w
 
 ## 19. Final certification evidence update
 
-The Product Owner's M5 message reconfirmed the RC visual gate PASS, Cards scalability through six plans, Core Grid reflow, Featured and its invalid-block regression result, Compact, both Comparison patterns, Tabs regression, Tabs mobile horizontal scrolling, and no reported visual regression in tested editorial behavior. This is Product Owner evidence. Codex browser QA remains NOT PERFORMED. Final static/artifact certification and stable release details are recorded in `M5-RELEASE-1.4.0.md`.
+The Product Owner's M5 message reconfirmed the RC visual gate PASS, Cards scalability through six plans, Core Grid reflow, Featured and its invalid-block regression result, Compact, both Comparison patterns, Tabs regression, Tabs mobile horizontal scrolling, and no reported visual regression in tested editorial behavior. This is Product Owner evidence. Codex browser QA remains NOT PERFORMED. Final static/artifact certification and stable release details are recorded in `../releases/1.4/M5-RELEASE-1.4.0.md`.

@@ -7,7 +7,7 @@
 
 ## Scope
 
-SCI Design Blocks 1.4.0 adds exactly five Core-only patterns: SCI Pricing — Cards, SCI Pricing — Featured, SCI Pricing — Compact, SCI Comparison — 2 Options, and SCI Comparison — Feature Table. All other scope limits are documented in `SDD-1.4.md`; no monthly/annual toggle, pricing engine, checkout, calculator, custom pricing block, or highlighted table column was added.
+SCI Design Blocks 1.4.0 adds exactly five Core-only patterns: SCI Pricing — Cards, SCI Pricing — Featured, SCI Pricing — Compact, SCI Comparison — 2 Options, and SCI Comparison — Feature Table. All other scope limits are documented in `../../architecture/SDD-1.4.md`; no monthly/annual toggle, pricing engine, checkout, calculator, custom pricing block, or highlighted table column was added.
 
 ## Product Owner manual visual QA
 
