@@ -1,47 +1,90 @@
-# SCI Design Blocks 1.4.0
+# SCI Design Blocks
 
-Lightweight Gutenberg-native design patterns and optional Core Block Styles for WordPress.
+Lightweight Gutenberg-native design patterns, icons, and Core Block Styles for WordPress.
 
-## Requirements
+Build editorial, commercial, and interface layouts from WordPress Core blocks—without a page builder or proprietary content blocks. Patterns insert editable Core content; selected Core blocks can also use optional SCI styles.
 
-- WordPress 7.1 or later
-- PHP 7.4 or later
-- WordPress Block Editor
+[![Latest release](https://img.shields.io/github/v/release/nettixperu/SCI-Design-Blocks?label=release)](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0)
+[![WordPress 7.1+](https://img.shields.io/badge/WordPress-7.1%2B-21759B?logo=wordpress&logoColor=white)](https://wordpress.org/)
+[![PHP 7.4+](https://img.shields.io/badge/PHP-7.4%2B-777BB4?logo=php&logoColor=white)](https://www.php.net/supported-versions.php)
+[![License: GPL-2.0-or-later](https://img.shields.io/badge/License-GPL--2.0--or--later-blue.svg)](LICENSE)
 
-## Included
+**[Download SCI Design Blocks 1.4.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/download/v1.4.0/sci-design-blocks-1.4.0.zip)** · **[View release notes](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0)**
 
-- 20 patterns: 9 established, 6 editorial Core Query, and 5 Pricing/Comparison patterns
-- 83 curated icons
-- Core Accordion styles: Minimal and Bordered
-- Core Tabs styles: Underline, Pills, Connected and Filled
-- Core Post Featured Image style: optional SCI — Hover Zoom
+## What’s included
 
-New Pricing and Comparison patterns:
+20 patterns, 83 icons, two Accordion styles, four Tabs styles, and an optional Featured Image Hover Zoom style.
 
-- SCI Pricing — Cards
-- SCI Pricing — Featured
-- SCI Pricing — Compact
-- SCI Comparison — 2 Options
-- SCI Comparison — Feature Table
+| Family | Included |
+| --- | --- |
+| General and content | Feature — Icon Vertical, Feature — Image Vertical, Feature — Icon Left, Feature — Image Left, CTA, Testimonial, Stats, Icon List, Accordion |
+| Editorial | Featured Hero, Editorial Lead, Compact List, Editorial Grid, Editorial Stack, Editorial Sections |
+| Pricing | Pricing Cards, Pricing Featured, Pricing Compact |
+| Comparison | Comparison — 2 Options, Comparison — Feature Table |
+| Core Block Styles | Accordion: Minimal and Bordered; Tabs: Underline, Pills, Connected, Filled, with horizontal scrolling on narrow screens; Featured Image: optional Hover Zoom |
 
-## Architecture
+The 83 curated icons are available from the **SCI** collection in the Core Icon block workflow. See [Third-Party Notices](THIRD-PARTY-NOTICES.md) for icon licensing details.
 
-SCI Design Blocks is Core-first and theme-native. Patterns are unsynced insertion templates composed from WordPress Core blocks. Pricing Cards use Core Group Grid for responsive reflow; three plans are the default, and the Product Owner reports visual validation through six plans. The plan count is not enforced in code. Pricing values and all sample comparison copy are illustrative editable content, not a pricing data model.
+Pricing patterns use Core Group Grid and start with three plans. Duplicate or remove plan Groups with normal Gutenberg editing; the Product Owner reports validating up to six plans. Six is not a software limit. Comparison Feature Table uses the semantic Core Table block; narrow-screen horizontal scrolling remains within the table.
 
-Comparison Feature Table uses the semantic Core Table block with a caption and table headers. The plugin adds no custom SCI blocks, frontend JavaScript, Pricing/Comparison CSS, or external runtime dependencies. It adds no pricing entities, REST routes, settings, database schema, checkout behavior, or synchronized monthly/annual toggle.
+## Download and install
 
-The six editorial patterns use Core Query compositions. Editorial Lead and each Editorial Sections pair use independent Query blocks. SCI does not synchronize their filters or guarantee that separate sections avoid overlapping posts.
+**Latest stable release: 1.4.0**
+[Download the plugin ZIP](https://github.com/nettixperu/SCI-Design-Blocks/releases/download/v1.4.0/sci-design-blocks-1.4.0.zip) · [Release notes](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0)
 
-Hover Zoom is opt-in and off by default. It respects `prefers-reduced-motion`. Accordion and Tabs styles are optional Core Block Styles that inherit Core/theme colors and content behavior.
+SHA-256:
 
-## Validation
+```text
+1d8e81f2da031413a10ae5551152c1597bfda8f8a90a9d5ace2e27ef3ed68d93
+```
 
-The Product Owner reports manual Gutenberg/editor and frontend PASS for the new Pricing/Comparison patterns, Pricing Cards scalability through six plans, Tabs regression, and mobile Tabs horizontal scrolling. Codex static and artifact checks passed. Codex browser QA and database-backed WordPress activation QA were not performed. The repository release record distinguishes Product Owner manual evidence from Codex static checks and any browser QA.
+1. Download `sci-design-blocks-1.4.0.zip`.
+2. In WordPress, open **Plugins → Add New Plugin → Upload Plugin**.
+3. Upload the ZIP, install, and activate SCI Design Blocks.
+4. Open the block inserter and choose a pattern from the **SCI Design Blocks** category.
 
-## When the plugin is inactive
+Requirements: WordPress 7.1+, PHP 7.4+, and the WordPress Block Editor. No npm or build tools are required to install or use the release.
 
-Inserted patterns remain ordinary Core blocks and their content remains editable. SCI-specific registered icons and optional visual styles require the plugin to be active; see [Third-Party Notices](THIRD-PARTY-NOTICES.md) for icon licensing details.
+## Quick start
+
+1. Insert an SCI pattern from the Gutenberg inserter.
+2. Edit its text, images, colors, and spacing with the normal block controls and your active theme’s settings.
+3. Save or publish your post or template.
+
+There is no proprietary builder workflow.
+
+## Core-first and theme-native
+
+SCI Design Blocks favors reusable compositions of WordPress Core blocks. Patterns insert ordinary Core content; selected Core blocks receive optional Block Styles; and the SCI icon collection is integrated into Gutenberg’s icon workflow.
+
+- **No custom SCI blocks.** Inserted pattern content remains editable WordPress Core blocks.
+- **Theme-native.** Patterns use Core controls and respect theme.json and Global Styles.
+- **No SCI frontend JavaScript** and no external runtime dependencies.
+- The five Pricing and Comparison patterns add no SCI CSS. The plugin does include CSS for selected opt-in Core Block Styles, including Accordion, Tabs, and Hover Zoom.
+- When the plugin is inactive, inserted pattern content remains Core content. Registered SCI icons and optional visual styles may no longer be available.
+
+Editorial patterns use Core Query and Post blocks to display posts. Query settings in separate patterns are independent; SCI does not synchronize their filters or guarantee non-overlapping results.
+
+## Visual showcase
+
+No approved product screenshots are currently included in the repository. We do not use mock screenshots. The showcase is ready for real captures of Featured Hero, Editorial Sections, Pricing Featured, Pricing Cards, Comparison 2 Options, Comparison Feature Table, Tabs, and an icon/feature pattern. Recommended filenames and README placement are documented in [`docs/assets/README.md`](docs/assets/README.md).
+
+## Accessibility and performance
+
+Patterns rely on Core block semantics and interactions where available, including Core Table semantics and Core Accordion/Tabs behavior. Hover Zoom is opt-in and respects `prefers-reduced-motion`. This project does not claim formal WCAG certification. SCI adds no frontend JavaScript or external runtime dependencies; no performance benchmark claims are made.
+
+## Releases
+
+The latest stable release is **SCI Design Blocks 1.4.0**.
+
+- [Download SCI Design Blocks 1.4.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/download/v1.4.0/sci-design-blocks-1.4.0.zip)
+- [Read the 1.4.0 release notes](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0)
+- SHA-256: `1d8e81f2da031413a10ae5551152c1597bfda8f8a90a9d5ace2e27ef3ed68d93`
+
+## Support and contributions
+
+Report bugs and request features through [GitHub Issues](https://github.com/nettixperu/SCI-Design-Blocks/issues). See [Contributing](CONTRIBUTING.md) before opening a pull request. For security reports, follow [SECURITY.md](SECURITY.md) and do not disclose vulnerabilities in public issues.
 
 ## License
 
-SCI Design Blocks is licensed under [GPL-2.0-or-later](LICENSE).
+SCI Design Blocks is licensed under [GPL-2.0-or-later](LICENSE). See [Third-Party Notices](THIRD-PARTY-NOTICES.md) for third-party icon attribution.
