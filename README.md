@@ -7,7 +7,7 @@ Build editorial, commercial, and interface layouts from WordPress Core blocks—
 [![Latest release](https://img.shields.io/github/v/release/nettixperu/SCI-Design-Blocks?label=release)](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0)
 [![WordPress 7.1+](https://img.shields.io/badge/WordPress-7.1%2B-21759B?logo=wordpress&logoColor=white)](https://wordpress.org/)
 [![PHP 7.4+](https://img.shields.io/badge/PHP-7.4%2B-777BB4?logo=php&logoColor=white)](https://www.php.net/supported-versions.php)
-[![License: GPL-2.0-or-later](https://img.shields.io/badge/License-GPL--2.0--or--later-blue.svg)](LICENSE)
+[![License: GPL-2.0-or-later](https://img.shields.io/badge/License-GPL--2.0--or--later-blue.svg)](COPYING.md)
 
 **[Download SCI Design Blocks 1.4.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/download/v1.4.0/sci-design-blocks-1.4.0.zip)** · **[View release notes](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0)**
 
@@ -89,4 +89,4 @@ Engineering history and architecture references are organized in the [documentat
 
 ## License
 
-SCI Design Blocks is licensed under [GPL-2.0-or-later](LICENSE). See [Third-Party Notices](THIRD-PARTY-NOTICES.md) for third-party icon attribution.
+SCI Design Blocks is licensed under [GPL-2.0-or-later](COPYING.md); the canonical GNU GPL version 2 text is in [LICENSE](LICENSE). See [Third-Party Notices](THIRD-PARTY-NOTICES.md) for third-party icon attribution.
