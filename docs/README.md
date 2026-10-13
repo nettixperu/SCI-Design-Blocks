@@ -10,6 +10,10 @@ The approved architecture, accepted M5 evidence, and M6 QA/RC status are recorde
 
 The latest RC.5 QA outcome, open M6 limitations, source-versus-distribution version reconciliation, and final exit checklist are in [M6-FINAL-EXIT-REPORT.md](architecture/M6-FINAL-EXIT-REPORT.md). Candidate reports retain historical results; host-specific paths are represented with local environment placeholders and no credentials.
 
+The M7/M8 branch's M0 equivalence analysis and pattern contracts are in [M7-PATTERN-EXPANSION-DECISIONS.md](architecture/M7-PATTERN-EXPANSION-DECISIONS.md), with implementation, M8-FIX-01 serialization repair, full-width/responsive visual evidence, and QA limitations in [M8-IMPLEMENTATION-REPORT.md](architecture/M8-IMPLEMENTATION-REPORT.md), [M8-FIX-01-REPORT.md](architecture/M8-FIX-01-REPORT.md), and [M8-FULL-WIDTH-REPORT.md](architecture/M8-FULL-WIDTH-REPORT.md); the unreleased additions are described in the [1.5.0 development pattern preview](patterns/1.5.0-preview.md). They do not alter the published 1.4.0 ZIP.
+
+The M9 final QA report consolidates candidate identity, automated and runtime evidence, responsive results, installation/upgrade and no-lock-in checks, accessibility/security limitations, and remaining Product Owner gates: [M9-FINAL-QA-REPORT.md](architecture/M9-FINAL-QA-REPORT.md). RC ZIPs and checksum manifests in `release-candidates/` remain local QA artifacts and are ignored by Git.
+
 ## Release engineering
 
 Release gates, test matrices, RC fixes, and closeout records are grouped by release:

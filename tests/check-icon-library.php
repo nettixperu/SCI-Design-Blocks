@@ -111,6 +111,11 @@ $expected_patterns = array(
 	'sci-design-blocks/comparison-feature-table',
 	'sci-design-blocks/hero-cover',
 	'sci-design-blocks/hero-split',
+	'sci-design-blocks/section-intro',
+	'sci-design-blocks/benefits-grid',
+	'sci-design-blocks/service-cards',
+	'sci-design-blocks/pricing-split',
+	'sci-design-blocks/cta-horizontal',
 );
 $manifest       = require $plugin_root . '/icons/manifest.php';
 $expected_icons = array_map(
@@ -128,7 +133,7 @@ sort( $icon_names );
 sort( $expected_icons );
 
 if ( 1 !== count( $GLOBALS['sci_test_categories'] ) || $pattern_names !== $expected_patterns || isset( $GLOBALS['sci_test_patterns']['sci-design-blocks/posts-visual-grid'] ) ) {
-	throw new RuntimeException( 'Expected the original category, 9 historical patterns, 6 editorial patterns, 5 pricing/comparison patterns, 2 Heroes, and no stale Visual Grid.' );
+	throw new RuntimeException( 'Expected the original category, 9 general patterns, 6 editorial patterns, 5 pricing/comparison patterns, 2 Heroes, 5 M7 patterns, and no stale Visual Grid.' );
 }
 $editorial_source = file_get_contents( $plugin_root . '/includes/editorial-query-patterns.php' );
 if ( false === $editorial_source || false !== strpos( $editorial_source, 'posts-visual-grid' ) || ! preg_match_all( "/^\t\t'(sci-design-blocks\/posts-[^']+)' => array\(/m", $editorial_source, $editorial_slug_matches ) ) {
@@ -243,6 +248,9 @@ if ( false === strpos( $accordion_pattern, '<!-- wp:accordion {"autoclose":true}
 	throw new RuntimeException( 'The original SCI Accordion pattern must keep Core markup and autoclose unchanged.' );
 }
 
+if ( 27 !== count( $GLOBALS['sci_test_patterns'] ) ) {
+	throw new RuntimeException( 'Expected 27 patterns after adding five M7 compositions.' );
+}
 if ( 83 !== count( $manifest ) ) {
 	throw new RuntimeException( 'Expected exactly 83 curated manifest entries.' );
 }
@@ -280,4 +288,4 @@ if ( false === $notice || false === strpos( $notice, 'Bootstrap Icons' ) || fals
 	throw new RuntimeException( 'Bootstrap MIT third-party notice is missing or incomplete.' );
 }
 
-fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one SCI collection, 83 icons, seven Core Block Styles, six editorial Query, five Pricing/Comparison, and two Hero patterns (22 total).\n" );
+fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one SCI collection, 83 icons, seven Core Block Styles, six editorial Query, five Pricing/Comparison, two Heroes and five M7 patterns (27 total).\n" );

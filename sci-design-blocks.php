@@ -22,11 +22,13 @@ require_once __DIR__ . '/includes/editorial-query-patterns.php';
 require_once __DIR__ . '/includes/editorial-image-styles.php';
 require_once __DIR__ . '/includes/pricing-comparison-patterns.php';
 require_once __DIR__ . '/includes/hero-patterns.php';
+require_once __DIR__ . '/includes/commercial-patterns.php';
 
 add_action( 'init', __NAMESPACE__ . '\register_feature_patterns' );
 add_action( 'init', __NAMESPACE__ . '\register_editorial_query_patterns', 11 );
 add_action( 'init', __NAMESPACE__ . '\register_pricing_comparison_patterns', 12 );
 add_action( 'init', __NAMESPACE__ . '\register_hero_patterns', 13 );
+add_action( 'init', __NAMESPACE__ . '\register_commercial_patterns', 14 );
 
 /**
  * Register the M1 Feature patterns using WordPress Core blocks only.
