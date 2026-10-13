@@ -283,9 +283,21 @@ foreach ( $expected as $pattern_name => $expectation ) {
 	fwrite( STDOUT, "Core parser structural check PASS: {$pattern_name} (WordPress {$wp_version}).\n" );
 }
 
-if ( 20 !== count( $GLOBALS['sci_test_patterns'] ) ) {
-	throw new RuntimeException( 'Expected nine historical, six editorial, and five pricing/comparison patterns (20 total).' );
+if ( 22 !== count( $GLOBALS['sci_test_patterns'] ) ) {
+	throw new RuntimeException( 'Expected nine historical, six editorial, five pricing/comparison, and two Hero patterns (22 total).' );
 }
+
+$hero_cover_content = $GLOBALS['sci_test_patterns']['sci-design-blocks/hero-cover']['content'] ?? '';
+$hero_cover_blocks  = $parser->parse( $hero_cover_content );
+if (
+	'core/cover' !== ( $hero_cover_blocks[0]['blockName'] ?? '' ) ||
+	70 !== ( $hero_cover_blocks[0]['attrs']['dimRatio'] ?? null ) ||
+	'#1e1e1e' !== ( $hero_cover_blocks[0]['attrs']['customOverlayColor'] ?? '' ) ||
+	false === strpos( $hero_cover_content, 'has-background-dim-70' )
+) {
+	throw new RuntimeException( 'Hero Cover must retain the Core Cover block and 70% dark overlay required by the contrast regression.' );
+}
+fwrite( STDOUT, "Hero Cover dark-overlay contrast regression PASS (70% #1e1e1e; WordPress {$wp_version}).\n" );
 
 $sections_content = $GLOBALS['sci_test_patterns']['sci-design-blocks/posts-editorial-sections']['content'] ?? '';
 $sections_parsed  = $parser->parse( $sections_content );

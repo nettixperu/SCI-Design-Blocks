@@ -35,4 +35,11 @@ function register_editorial_image_styles(): void {
 			'style_handle' => $style_handle,
 		)
 	);
+
+	wp_enqueue_block_style(
+		'core/post-featured-image',
+		array(
+			'handle' => $style_handle,
+		)
+	);
 }

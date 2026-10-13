@@ -7,7 +7,7 @@ Thanks for helping improve SCI Design Blocks. Before proposing a change, check t
 - Prefer WordPress Core blocks, APIs, patterns, and styles.
 - Prefer patterns before introducing a custom block; custom blocks require a clear user need.
 - Avoid frontend JavaScript, dependencies, and CSS that Core or the active theme already provides.
-- Preserve the supported baseline: WordPress 7.1+ and PHP 7.4+.
+- For the unreleased 1.5.0 development line, preserve WordPress 7.1+ and PHP 8.3+ (approved PO decision, 2026-10-13). Stable 1.4.0 remains unchanged at PHP 7.4+.
 - Keep inserted content editable and portable as Core blocks.
 
 ## Changes and checks

@@ -11,6 +11,7 @@ $GLOBALS['sci_test_collections']  = array();
 $GLOBALS['sci_test_icons']        = array();
 $GLOBALS['sci_test_block_styles'] = array();
 $GLOBALS['sci_test_stylesheets']  = array();
+$GLOBALS['sci_test_block_style_assets'] = array();
 $GLOBALS['sci_test_translations'] = array();
 
 function add_action( $hook, $callback, $priority = 10 ) {
@@ -43,6 +44,11 @@ function wp_register_style( $handle, $src, $deps = array(), $ver = false, $media
 	return true;
 }
 
+function wp_enqueue_block_style( $block_name, $args ) {
+	$GLOBALS['sci_test_block_style_assets'][ $block_name ][] = $args;
+	return true;
+}
+
 function register_block_style( $block_name, $properties ) {
 	$GLOBALS['sci_test_block_styles'][ $block_name ][ $properties['name'] ] = $properties;
 	return true;
@@ -67,7 +73,10 @@ function wp_register_icon( $name, $args ) {
 $plugin_root = getenv( 'SCI_PLUGIN_ROOT' ) ? rtrim( getenv( 'SCI_PLUGIN_ROOT' ), '/' ) : dirname( __DIR__ );
 $plugin_file = $plugin_root . '/sci-design-blocks.php';
 $plugin      = file_get_contents( $plugin_file );
-if ( false === $plugin || ! preg_match( '/^ \* Version: 1\.4\.0$/m', $plugin ) || ! preg_match( '/^ \* Requires at least: 7\.1$/m', $plugin ) || ! preg_match( '/^ \* Requires PHP: 7\.4$/m', $plugin ) ) {
+if ( PHP_VERSION_ID < 80300 ) {
+	throw new RuntimeException( 'PHP 8.3 or newer is required to run the current 1.5.0 test suite.' );
+}
+if ( false === $plugin || ! preg_match( '/^ \* Version: 1\.5\.0-rc\.3$/m', $plugin ) || ! preg_match( '/^ \* Requires at least: 7\.1$/m', $plugin ) || ! preg_match( '/^ \* Requires PHP: 8\.3$/m', $plugin ) ) {
 	throw new RuntimeException( 'Plugin release version or platform minimum is incorrect.' );
 }
 
@@ -100,6 +109,8 @@ $expected_patterns = array(
 	'sci-design-blocks/pricing-compact',
 	'sci-design-blocks/comparison-2-options',
 	'sci-design-blocks/comparison-feature-table',
+	'sci-design-blocks/hero-cover',
+	'sci-design-blocks/hero-split',
 );
 $manifest       = require $plugin_root . '/icons/manifest.php';
 $expected_icons = array_map(
@@ -117,7 +128,7 @@ sort( $icon_names );
 sort( $expected_icons );
 
 if ( 1 !== count( $GLOBALS['sci_test_categories'] ) || $pattern_names !== $expected_patterns || isset( $GLOBALS['sci_test_patterns']['sci-design-blocks/posts-visual-grid'] ) ) {
-	throw new RuntimeException( 'Expected the original category, 9 historical patterns, 6 editorial patterns, 5 pricing/comparison patterns, and no stale Visual Grid.' );
+	throw new RuntimeException( 'Expected the original category, 9 historical patterns, 6 editorial patterns, 5 pricing/comparison patterns, 2 Heroes, and no stale Visual Grid.' );
 }
 $editorial_source = file_get_contents( $plugin_root . '/includes/editorial-query-patterns.php' );
 if ( false === $editorial_source || false !== strpos( $editorial_source, 'posts-visual-grid' ) || ! preg_match_all( "/^\t\t'(sci-design-blocks\/posts-[^']+)' => array\(/m", $editorial_source, $editorial_slug_matches ) ) {
@@ -164,6 +175,14 @@ if (
 	! isset( $GLOBALS['sci_test_stylesheets']['sci-design-blocks-editorial-image-styles'] )
 ) {
 	throw new RuntimeException( 'Expected one stylesheet handle each for Accordion, Tabs, and editorial image styles.' );
+}
+$expected_block_style_assets = array(
+	'core/accordion'         => array( array( 'handle' => 'sci-design-blocks-accordion-styles' ) ),
+	'core/tabs'              => array( array( 'handle' => 'sci-design-blocks-tabs-styles' ) ),
+	'core/post-featured-image' => array( array( 'handle' => 'sci-design-blocks-editorial-image-styles' ) ),
+);
+if ( $expected_block_style_assets !== $GLOBALS['sci_test_block_style_assets'] ) {
+	throw new RuntimeException( 'Expected exactly one type-level Core stylesheet association per existing style asset.' );
 }
 foreach ( array( 'sci-minimal' => 'Minimal', 'sci-bordered' => 'Bordered' ) as $name => $label ) {
 	$style = $accordion_styles[ $name ];
@@ -261,4 +280,4 @@ if ( false === $notice || false === strpos( $notice, 'Bootstrap Icons' ) || fals
 	throw new RuntimeException( 'Bootstrap MIT third-party notice is missing or incomplete.' );
 }
 
-fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one SCI collection, 83 icons, two Core Accordion styles, four opt-in Core Tabs styles, six editorial Query and five Pricing/Comparison patterns (20 total), and opt-in Post Featured Image Hover Zoom.\n" );
+fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one SCI collection, 83 icons, seven Core Block Styles, six editorial Query, five Pricing/Comparison, and two Hero patterns (22 total).\n" );

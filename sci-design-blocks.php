@@ -2,9 +2,9 @@
 /**
  * Plugin Name: SCI Design Blocks
  * Description: Reusable editorial and corporate compositions built from WordPress Core blocks.
- * Version: 1.4.0
+ * Version: 1.5.0-rc.3
  * Requires at least: 7.1
- * Requires PHP: 7.4
+ * Requires PHP: 8.3
  * Author: Martín
  * Text Domain: sci-design-blocks
  * License: GPL v2 or later
@@ -21,10 +21,12 @@ require_once __DIR__ . '/includes/tabs-styles.php';
 require_once __DIR__ . '/includes/editorial-query-patterns.php';
 require_once __DIR__ . '/includes/editorial-image-styles.php';
 require_once __DIR__ . '/includes/pricing-comparison-patterns.php';
+require_once __DIR__ . '/includes/hero-patterns.php';
 
 add_action( 'init', __NAMESPACE__ . '\register_feature_patterns' );
 add_action( 'init', __NAMESPACE__ . '\register_editorial_query_patterns', 11 );
 add_action( 'init', __NAMESPACE__ . '\register_pricing_comparison_patterns', 12 );
+add_action( 'init', __NAMESPACE__ . '\register_hero_patterns', 13 );
 
 /**
  * Register the M1 Feature patterns using WordPress Core blocks only.

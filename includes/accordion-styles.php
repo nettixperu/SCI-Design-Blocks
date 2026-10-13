@@ -42,4 +42,11 @@ function register_accordion_styles(): void {
 			'style_handle' => $style_handle,
 		)
 	);
+
+	wp_enqueue_block_style(
+		'core/accordion',
+		array(
+			'handle' => $style_handle,
+		)
+	);
 }

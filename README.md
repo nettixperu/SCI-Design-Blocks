@@ -13,7 +13,7 @@ Build editorial, commercial, and interface layouts from WordPress Core blocks—
 
 ## What’s included
 
-20 patterns, 83 icons, two Accordion styles, four Tabs styles, and an optional Featured Image Hover Zoom style.
+Stable release 1.4.0 contains 20 patterns, 83 icons, two Accordion styles, four Tabs styles, and an optional Featured Image Hover Zoom style. The implementation branch described below adds two unreleased Hero patterns and improves Block Style CSS delivery; it does not change the frozen release ZIP or its checksum.
 
 | Family | Included |
 | --- | --- |
@@ -22,6 +22,8 @@ Build editorial, commercial, and interface layouts from WordPress Core blocks—
 | Pricing | Pricing Cards, Pricing Featured, Pricing Compact |
 | Comparison | Comparison — 2 Options, Comparison — Feature Table |
 | Core Block Styles | Accordion: Minimal and Bordered; Tabs: Underline, Pills, Connected, Filled, with horizontal scrolling on narrow screens; Featured Image: optional Hover Zoom |
+
+The `feature/sci-hero-patterns-css-compat` development branch contains two additional Core-only patterns (Hero Cover and Hero Split). These changes are unreleased and are not included in the 1.4.0 download. By an approved Product Owner decision dated 2026-10-13, the planned 1.5.0 minimum is WordPress 7.1+ and PHP 8.3+; stable 1.4.0 remains unchanged at PHP 7.4+. See the [M6 PHP 8.3 decision](docs/architecture/M6-PHP83-PO-DECISION.md), [M5 implementation report](docs/architecture/M5-IMPLEMENTATION-REPORT.md), and [M6 QA report](docs/architecture/M6-QA-FINAL-REPORT.md).
 
 The 83 curated icons are available from the **SCI** collection in the Core Icon block workflow. See [Third-Party Notices](THIRD-PARTY-NOTICES.md) for icon licensing details.
 
@@ -43,7 +45,7 @@ SHA-256:
 3. Upload the ZIP, install, and activate SCI Design Blocks.
 4. Open the block inserter and choose a pattern from the **SCI Design Blocks** category.
 
-Requirements: WordPress 7.1+, PHP 7.4+, and the WordPress Block Editor. No npm or build tools are required to install or use the release.
+Stable release 1.4.0 requirements: WordPress 7.1+, PHP 7.4+, and the WordPress Block Editor. The unreleased 1.5.0 development candidate requires PHP 8.3+. No npm or build tools are required to install or use the release.
 
 ## Quick start
 

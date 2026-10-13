@@ -62,4 +62,11 @@ function register_tabs_styles(): void {
 			'style_handle' => $style_handle,
 		)
 	);
+
+	wp_enqueue_block_style(
+		'core/tabs',
+		array(
+			'handle' => $style_handle,
+		)
+	);
 }

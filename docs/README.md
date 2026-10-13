@@ -6,6 +6,10 @@ This index organizes the project’s engineering history without removing it. Hi
 
 The latest stable feature architecture is [SDD 1.4](architecture/SDD-1.4.md). Earlier specifications remain as versioned history: [SDD 1.2](architecture/SDD-1.2.md) and [SDD 1.1](architecture/SDD-1.1.md). The [1.1 icon inventory](architecture/ICON-INVENTORY-1.1.md) records the curated icon set.
 
+The approved architecture, accepted M5 evidence, and M6 QA/RC status are recorded in [SDD — Astra/Spectra migration](architecture/SDD-ASTRA-MIGRATION.md), the [M5 implementation report](architecture/M5-IMPLEMENTATION-REPORT.md), the [M6 certification report](architecture/M6-CERTIFICATION-REPORT.md), the [M6-FINAL readiness report](architecture/M6-FINAL-REPORT.md), the [M6-FIX-01 Gutenberg repair report](architecture/M6-FIX-01-REPORT.md), the [M6-CLOSE certification report](architecture/M6-CLOSE-REPORT.md), the [M6-CERT-FINAL gate assessment](architecture/M6-CERT-FINAL-REPORT.md), the [M6 responsive/accessibility report](architecture/M6-QA-FINAL-REPORT.md), and the current [M6 Master Close assessment](architecture/M6-MASTER-CLOSE-REPORT.md). The Product Owner's 2026-10-13 decision to raise the 1.5.0 PHP minimum to 8.3 is recorded in [M6-PHP83-PO-DECISION.md](architecture/M6-PHP83-PO-DECISION.md); it supersedes only the PHP 7.4 gate for 1.5.0 and leaves the stable 1.4.0 artifact and historical reports unchanged. The [RC.2 Product Owner QA checklist](architecture/PO-QA-CHECKLIST.md) remains historical; use the [RC.3 checklist](architecture/PO-QA-CHECKLIST-rc.3.md) for the new candidate.
+
+The latest RC.5 QA outcome, open M6 limitations, source-versus-distribution version reconciliation, and final exit checklist are in [M6-FINAL-EXIT-REPORT.md](architecture/M6-FINAL-EXIT-REPORT.md). Candidate reports retain historical results; host-specific paths are represented with local environment placeholders and no credentials.
+
 ## Release engineering
 
 Release gates, test matrices, RC fixes, and closeout records are grouped by release:
