@@ -461,12 +461,12 @@ if (
 	620 !== ( $cover_blocks[0]['attrs']['minHeight'] ?? 0 ) ||
 	2 !== ( $cover_blocks[0]['innerBlocks'][0]['innerBlocks'][1]['attrs']['level'] ?? 0 ) ||
 	! in_array( 'core/buttons', $cover_names, true ) ||
-	false === strpos( $cover_content, 'href="#example-details"' ) ||
-	false === strpos( $cover_content, 'href="#example-start"' ) ||
+	false === strpos( $cover_content, 'configure link before publishing' ) ||
+	false !== strpos( $cover_content, 'href=' ) ||
 	false !== strpos( $cover_content, 'http://' ) ||
 	false !== strpos( $cover_content, 'https://' )
 ) {
-	throw new RuntimeException( 'Hero Cover must use full-width Core Cover settings, editable H2, local example CTAs, and no remote asset.' );
+	throw new RuntimeException( 'Hero Cover must use full-width Core Cover settings, editable H2, unlinked editor-placeholder CTAs, and no remote asset.' );
 }
 
 $split_name    = 'sci-design-blocks/hero-split';
@@ -491,12 +491,12 @@ if (
 	isset( $split_blocks[0]['innerBlocks'][1]['innerBlocks'][0]['attrs']['url'] ) ||
 	$expected_empty_image_markup !== serialize_blocks( array( $split_image ) ) ||
 	! in_array( 'core/buttons', $split_names, true ) ||
-	false === strpos( $split_content, 'href="#example-details"' ) ||
-	false === strpos( $split_content, 'href="#example-start"' ) ||
+	false === strpos( $split_content, 'configure link before publishing' ) ||
+	false !== strpos( $split_content, 'href=' ) ||
 	false !== strpos( $split_content, 'http://' ) ||
 	false !== strpos( $split_content, 'https://' )
 ) {
-	throw new RuntimeException( 'Hero Split must use stacked Core Columns, an empty editable Core Image, local example CTAs, and no remote asset.' );
+	throw new RuntimeException( 'Hero Split must use stacked Core Columns, an empty editable Core Image, unlinked editor-placeholder CTAs, and no remote asset.' );
 }
 
 fwrite( STDOUT, "Hero Split and service-card empty Image serialization regression PASS: explicit Core figure/img markup matches the confirmed WordPress 7.1.3 save output.\n" );

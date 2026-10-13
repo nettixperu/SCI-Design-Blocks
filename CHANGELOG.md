@@ -10,6 +10,13 @@ User-facing highlights for stable releases. For full release details, see [GitHu
 - Existing Pricing Cards, Pricing Featured, and Pricing Compact retain Core flex-based CTA alignment. Hero Cover receives a stronger dark overlay for text contrast.
 - Preserves the published 1.4.0 artifact and its requirements.
 
+## Unreleased — 1.5.0 final hardening
+
+- Removes example CTA fragment destinations that had no matching target and marks destination-free Core Button examples with an editor instruction to configure the link before publishing.
+- Uses local CSS file modification times consistently for cache invalidation across Accordion, Tabs, and Hover Zoom block styles.
+- Adds regression checks for unconfigured Core Button placeholders, unresolved in-pattern fragments, and stylesheet cache versions. No new blocks, JavaScript, dependencies, patterns, or CSS were added.
+- RC.10 is the final local verification candidate for this hardening pass; RC.9 is preserved and superseded, not a stable or published release.
+
 ## Unreleased — 1.5.0 M6 candidate
 
 - Added Core-only Hero Cover and Hero Split patterns. Existing Accordion, Tabs, and Featured Image Block Style CSS is associated with its Core block type for conditional delivery, retaining three CSS files and adding no frontend JavaScript or runtime dependencies.

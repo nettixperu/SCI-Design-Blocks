@@ -73,10 +73,11 @@ function wp_register_icon( $name, $args ) {
 $plugin_root = getenv( 'SCI_PLUGIN_ROOT' ) ? rtrim( getenv( 'SCI_PLUGIN_ROOT' ), '/' ) : dirname( __DIR__ );
 $plugin_file = $plugin_root . '/sci-design-blocks.php';
 $plugin      = file_get_contents( $plugin_file );
+$expected_plugin_version = getenv( 'SCI_EXPECTED_VERSION' ) ? getenv( 'SCI_EXPECTED_VERSION' ) : '1.5.0-rc.3';
 if ( PHP_VERSION_ID < 80300 ) {
 	throw new RuntimeException( 'PHP 8.3 or newer is required to run the current 1.5.0 test suite.' );
 }
-if ( false === $plugin || ! preg_match( '/^ \* Version: 1\.5\.0-rc\.3$/m', $plugin ) || ! preg_match( '/^ \* Requires at least: 7\.1$/m', $plugin ) || ! preg_match( '/^ \* Requires PHP: 8\.3$/m', $plugin ) ) {
+if ( false === $plugin || ! preg_match( '/^ \* Version: ' . preg_quote( $expected_plugin_version, '/' ) . '$/m', $plugin ) || ! preg_match( '/^ \* Requires at least: 7\.1$/m', $plugin ) || ! preg_match( '/^ \* Requires PHP: 8\.3$/m', $plugin ) ) {
 	throw new RuntimeException( 'Plugin release version or platform minimum is incorrect.' );
 }
 
@@ -251,6 +252,49 @@ if ( false === strpos( $accordion_pattern, '<!-- wp:accordion {"autoclose":true}
 if ( 27 !== count( $GLOBALS['sci_test_patterns'] ) ) {
 	throw new RuntimeException( 'Expected 27 patterns after adding five M7 compositions.' );
 }
+
+foreach ( $GLOBALS['sci_test_patterns'] as $pattern_name => $pattern ) {
+	preg_match_all( '/\bid=["\']([^"\']+)["\']/', $pattern['content'], $target_matches );
+	$targets = $target_matches[1];
+	preg_match_all( '/<!-- wp:button(?:\s+(\{.*?\}))?\s*-->(.*?)<!-- \/wp:button -->/s', $pattern['content'], $button_matches, PREG_SET_ORDER );
+	foreach ( $button_matches as $button ) {
+		$button_attributes = $button[1] ?? '';
+		if ( false === stripos( $button[2], 'href=' ) && preg_match( '/["\']url["\']\s*:/', $button_attributes ) ) {
+			throw new RuntimeException( 'Unlinked Core Button must not retain a stale URL attribute in ' . $pattern_name . '.' );
+		}
+	}
+
+	if ( ! preg_match_all( '/<a\b([^>]*)>(.*?)<\/a>/s', $pattern['content'], $anchor_matches, PREG_SET_ORDER ) ) {
+		continue;
+	}
+
+	foreach ( $anchor_matches as $anchor ) {
+		if ( preg_match( '/\bhref=["\']#([^"\']+)["\']/', $anchor[1], $fragment_match ) && ! in_array( $fragment_match[1], $targets, true ) ) {
+			throw new RuntimeException( 'Internal CTA fragment has no target in ' . $pattern_name . ': #' . $fragment_match[1] );
+		}
+
+		if ( preg_match( '/\bhref\s*=/', $anchor[1] ) ) {
+			continue;
+		}
+
+		$label = strtolower( strip_tags( $anchor[2] ) );
+		if ( false === strpos( $label, 'configure link before publishing' ) && false === strpos( $label, 'configurar enlace antes de publicar' ) ) {
+			throw new RuntimeException( 'Unlinked Core Button must be clearly marked as an editor placeholder in ' . $pattern_name . '.' );
+		}
+	}
+}
+
+$expected_css_versions = array(
+	'sci-design-blocks-accordion-styles'      => $plugin_root . '/assets/css/accordion-styles.css',
+	'sci-design-blocks-tabs-styles'           => $plugin_root . '/assets/css/tabs-styles.css',
+	'sci-design-blocks-editorial-image-styles' => $plugin_root . '/assets/css/editorial-image-styles.css',
+);
+foreach ( $expected_css_versions as $handle => $file ) {
+	if ( ! is_readable( $file ) || (string) filemtime( $file ) !== $GLOBALS['sci_test_stylesheets'][ $handle ]['ver'] ) {
+		throw new RuntimeException( 'CSS cache version must track the readable local asset for ' . $handle . '.' );
+	}
+}
+
 if ( 83 !== count( $manifest ) ) {
 	throw new RuntimeException( 'Expected exactly 83 curated manifest entries.' );
 }

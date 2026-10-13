@@ -1,5 +1,13 @@
 # Documentation
 
+## Current product references
+
+- [SCI Design Blocks 1.5.0 architecture, hardening, QA and release disposition](architecture/M9-FINAL-HARDENING-REPORT.md)
+- [1.5.0 pattern preview and inventory](patterns/1.5.0-preview.md)
+- [Contributor workflow and checks](../CONTRIBUTING.md)
+
+The remaining M0–M8 and earlier M9 reports below are historical evidence. Do not rewrite them to reflect later decisions; use the consolidated M9 report for the current engineering status.
+
 This index organizes the project’s engineering history without removing it. Historical documents describe the scope, evidence, and decisions for their respective releases; they are not all current implementation requirements.
 
 ## Architecture

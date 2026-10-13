@@ -23,7 +23,7 @@ Stable release 1.4.0 contains 20 patterns, 83 icons, two Accordion styles, four 
 | Comparison | Comparison — 2 Options, Comparison — Feature Table |
 | Core Block Styles | Accordion: Minimal and Bordered; Tabs: Underline, Pills, Connected, Filled, with horizontal scrolling on narrow screens; Featured Image: optional Hover Zoom |
 
-The M7/M8 development branch adds five Core-only compositions to those two Heroes: 27 patterns total, 83 icons, seven Core Block Styles, and three CSS files. These changes are unreleased and are not included in the 1.4.0 download. The 1.5.0 candidate targets WordPress 7.1+ and PHP 8.3+; stable 1.4.0 remains unchanged at PHP 7.4+. The 1.5.0 development branch is not a published release. See the [M7 equivalence and design decisions](docs/architecture/M7-PATTERN-EXPANSION-DECISIONS.md), the [M8 implementation report](docs/architecture/M8-IMPLEMENTATION-REPORT.md), the [M8-FIX-01 repair report](docs/architecture/M8-FIX-01-REPORT.md), the [M6 PHP 8.3 decision](docs/architecture/M6-PHP83-PO-DECISION.md), and the [pattern preview inventory](docs/patterns/1.5.0-preview.md).
+The M7/M8 development branch adds five Core-only compositions to those two Heroes: 27 patterns total, 83 icons, seven Core Block Styles, and three CSS files. These changes are unreleased and are not included in the 1.4.0 download. The 1.5.0 candidate targets WordPress 7.1+ and PHP 8.3+; stable 1.4.0 remains unchanged at PHP 7.4+. The 1.5.0 development branch is not a published release. See the [M7 equivalence and design decisions](docs/architecture/M7-PATTERN-EXPANSION-DECISIONS.md), the [M8 implementation report](docs/architecture/M8-IMPLEMENTATION-REPORT.md), the [M8-FIX-01 repair report](docs/architecture/M8-FIX-01-REPORT.md), the [M6 PHP 8.3 decision](docs/architecture/M6-PHP83-PO-DECISION.md), the [M9 final hardening report](docs/architecture/M9-FINAL-HARDENING-REPORT.md), and the [pattern preview inventory](docs/patterns/1.5.0-preview.md).
 
 The 83 curated icons are available from the **SCI** collection in the Core Icon block workflow. See [Third-Party Notices](THIRD-PARTY-NOTICES.md) for icon licensing details.
 
@@ -52,6 +52,8 @@ Stable release 1.4.0 requirements: WordPress 7.1+, PHP 7.4+, and the WordPress B
 1. Insert an SCI pattern from the Gutenberg inserter.
 2. Edit its text, images, colors, and spacing with the normal block controls and your active theme’s settings.
 3. Save or publish your post or template.
+
+CTA buttons in pattern examples are Core Button placeholders. Set and verify a real destination in the editor before publishing; the examples do not invent site-specific URLs.
 
 There is no proprietary builder workflow.
 
