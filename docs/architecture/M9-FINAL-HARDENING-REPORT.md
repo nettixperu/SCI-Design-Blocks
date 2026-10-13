@@ -4,13 +4,13 @@
 **Branch:** `feature/sci-pattern-library-expansion`
 **Source baseline:** `bb89a3bfb4138d4b8c5984c508594f0fb0549a6f`
 **Candidate:** `1.5.0-rc.10` (local only; not approved or published)
-**Disposition:** **TECHNICAL NO-GO — RC.9 clean-install/upgrade and interactive validation of the corrected CTA placeholders are not verified.**
+**Disposition:** **TECHNICAL NO-GO — clean install and upgrade pass for RC.10; interactive Gutenberg JavaScript validation and CTA save/reopen remain blocked.**
 
 ## 1. Executive summary
 
 M9 confirmed and corrected the nonfunctional CTA example destinations and made stylesheet cache-versioning consistent. The implementation remains Core-first: no feature, pattern, icon, Block Style, CSS selector, JavaScript, custom block, dependency, public slug, saved-content migration, or stable-release change was introduced. RC.10 passed source and extracted-package regression checks. The 27-pattern inventory and 83-icon/7-style/3-CSS contract remains intact.
 
-The Product Owner states that manual Gutenberg QA was performed on the new compositions. That evidence is acknowledged, but was not independently repeated here. The CTA labels/URLs changed afterward, and there is no authenticated editor/JavaScript-validator run against those exact changes. The isolated database service was not running, so RC.10 could not be installed into a fresh WordPress fixture or upgraded from 1.4.0. Those significant release gates remain open; RC.8's earlier install/upgrade evidence is not represented as RC.10 evidence.
+The Product Owner states that manual Gutenberg QA was performed on the new compositions. That evidence is acknowledged, but was not independently repeated here. RC.10 clean installation and upgrade from the official 1.4.0 ZIP now pass in isolated WordPress 7.1.3/PHP 8.3.35 fixtures. The exact Gutenberg JavaScript validation and interactive CTA URL assignment/save/reopen remain unverified because the documented QA administrator credential was not available in Keychain; the already-authenticated editor session was for RC.5 and was not used to certify RC.10.
 
 ## 2. Exact source and artifact baseline
 
@@ -75,11 +75,11 @@ Final inventory: **27 patterns, 83 icons, 7 Core Block Styles, 3 CSS files, 0 SC
 
 The earlier M9 report records actual RC.8 installation/activation, upgrade from the official 1.4.0 artifact, content hash preservation, responsive checks, and no-lock-in tests in isolated fixtures. These results are preserved as RC.8 evidence and are not repeated or relabelled for RC.10.
 
-RC.10 was tested from its actual extracted ZIP against the WordPress 7.1.3 Core parser and plugin registration smoke. A fresh RC.10 ZIP installation, RC.10 upgrade from 1.4.0, activation/database integrity, browser response, and CSS HTTP delivery remain **NOT VERIFIED**. The dedicated MariaDB socket was unavailable; historical fixture state was left intact rather than overwritten. This is a release-blocking limitation.
+RC.10 was installed from its exact ZIP into two new, isolated table-prefix fixtures on the recovered dedicated MariaDB instance; no shared service configuration or historical fixture was changed. Both run WordPress 7.1.3 under PHP 8.3.35, have RC.10 active, and pass `wp db check`. The clean install registers 27 SCI patterns. The upgrade fixture began with the official v1.4.0 ZIP (SHA-256 `1d8e81f2da031413a10ae5551152c1597bfda8f8a90a9d5ace2e27ef3ed68d93`) and 20 seeded pages. Their sorted aggregate post-content SHA-256 was `a9a37b8d56e0e70241707601e5fb54fc7e7eb976212a40c0f4c4f7cd5cdf3906` before and after RC.10 installation; all 20 remained. Both candidate sites and both login endpoints returned HTTP 200 on loopback. This verifies installation/activation, DB integrity, content persistence, and basic HTTP response, not visual or editor behavior.
 
 ## 10. Gutenberg and accessibility
 
-The Product Owner's instruction states that manual Gutenberg QA was completed on the new compositions. This report treats that as PO-supplied evidence for the unchanged compositions, not as an independently observed browser test. The candidate's PHP checks are not equivalent to Gutenberg JavaScript `validateBlock`. Because the CTA destination and label markup changed in RC.10, that exact output still needs one interactive validation/save/reopen check. No browser editor session or JavaScript validator was available in this run.
+The Product Owner's instruction states that manual Gutenberg QA was completed on the new compositions. This report treats that as PO-supplied evidence for unchanged compositions, not as an independently observed browser test. The candidate's PHP parser checks are not equivalent to Gutenberg JavaScript `validateBlock`. An authenticated editor session for RC.5 was available, but was not used to certify RC.10. The documented Keychain lookup for the isolated QA administrator returned no matching item. No credential reset, new privileged account, or session change was made. Therefore RC.10's exact Core Button validation, URL assignment, save/reopen, and serialization checks remain **NOT VERIFIED**. The core blocks appear in editor markup from prior PO testing, but that is not a substitute for this gate.
 
 CTA labels now identify that the author must configure a real destination before publishing. Core provides the button/link editing and keyboard behavior once a destination is configured; no custom interaction was introduced. Existing reduced-motion CSS remains tested. No formal WCAG audit, screen-reader test, or comprehensive contrast/touch-target certification was performed; this product does not claim WCAG conformance.
 
@@ -89,7 +89,7 @@ CTA labels now identify that the author must configure a real destination before
 
 **Deferred / not justified:** generic registration abstraction, persistent cache, direct-access guard framework, CSS/JS runtime expansion, and performance optimization without evidence. No code change was made to stable v1.4.0 or already-published content.
 
-**Open release risks:** no fresh RC.9 installation/upgrade/integration test, no actual browser HTTP/CSS delivery for RC.9, and no JavaScript Gutenberg validation after the CTA update. Accessibility has not been formally certified.
+**Open release risks:** no interactive Gutenberg JavaScript validation of RC.10's modified Core Buttons; URL assignment and save/reopen were not independently tested. Accessibility has not been formally certified. The HTTP checks covered the site and login endpoints only; they do not certify CSS asset delivery or editor rendering.
 
 ## 12. Release notes and conditional release procedure
 
@@ -114,9 +114,11 @@ This report was prepared from baseline `bb89a3bfb4138d4b8c5984c508594f0fb0549a6f
 | CSS cache versioning | PASS | All three source versions asserted against local filemtime |
 | Performance | PASS WITH LIMITATIONS | Equal 0.02 s medians at coarse timing resolution; no HTTP/RSS benchmark |
 | PO-reported manual QA | ACKNOWLEDGED | Not independently repeated; RC.9 CTA change postdates that evidence |
-| Fresh RC.10 clean install / v1.4.0 upgrade | **NOT VERIFIED** | Isolated MariaDB unavailable; RC.8 fixture preserved |
-| RC.10 Gutenberg JS validation / save-reopen | **NOT VERIFIED** | No authenticated browser editor session |
+| Fresh RC.10 clean install / v1.4.0 upgrade | **PASS** | WordPress 7.1.3/PHP 8.3.35; active RC.10; DB checks pass |
+| Upgrade content preservation | **PASS** | 20 pages; SHA-256 before/after identical (`a9a37b…cdf3906`) |
+| RC.10 site/login HTTP response | **PASS** | Clean and upgrade fixtures returned HTTP 200 on loopback |
+| RC.10 Gutenberg JS validation / CTA URL / save-reopen | **NOT VERIFIED** | QA admin Keychain item unavailable; RC.5 session not reused |
 | Accessibility | PARTIAL / NOT CERTIFIED | No WCAG, screen-reader, or full keyboard audit |
 | v1.4.0 integrity / remote publication | PASS | Stable artifact untouched; no remote operation |
 
-**Final disposition: TECHNICAL NO-GO — EXACT BLOCKERS:** (1) fresh install and upgrade tests of RC.10 have not run; (2) RC.10's changed CTA block output has not been checked by Gutenberg JavaScript/editor save-and-reopen. The candidate is prepared locally for those focused gates. **1.5.0 is NOT RELEASED.**
+**Final disposition: TECHNICAL NO-GO — EXACT BLOCKER:** RC.10's modified Core Buttons have not been validated by Gutenberg JavaScript through an authenticated editor, including assigning a URL and saving/reopening. Clean install, 1.4.0 upgrade, DB integrity, 20-page content-hash preservation, and loopback HTTP gates pass. Responsive, security, and accessibility evidence remains bounded by the earlier reports; no new general audit was performed, and accessibility is not formally certified. **1.5.0 is NOT RELEASED.**
