@@ -3,14 +3,14 @@
 **Date:** 2026-10-13
 **Branch:** `feature/sci-pattern-library-expansion`
 **Source baseline:** `bb89a3bfb4138d4b8c5984c508594f0fb0549a6f`
-**Candidate:** `1.5.0-rc.10` (local only; not approved or published)
-**Disposition:** **TECHNICAL NO-GO — clean install and upgrade pass for RC.10; interactive Gutenberg JavaScript validation and CTA save/reopen remain blocked.**
+**Candidate at this checkpoint:** `1.5.0-rc.10` (local; the later release authorization and PO QA confirmation are recorded below)
+**Disposition at M9 checkpoint:** **TECHNICAL NO-GO — RC.10 installation/upgrade passed; independent browser replay of the CTA edit remained unavailable.**
 
 ## 1. Executive summary
 
 M9 confirmed and corrected the nonfunctional CTA example destinations and made stylesheet cache-versioning consistent. The implementation remains Core-first: no feature, pattern, icon, Block Style, CSS selector, JavaScript, custom block, dependency, public slug, saved-content migration, or stable-release change was introduced. RC.10 passed source and extracted-package regression checks. The 27-pattern inventory and 83-icon/7-style/3-CSS contract remains intact.
 
-The Product Owner states that manual Gutenberg QA was performed on the new compositions. That evidence is acknowledged, but was not independently repeated here. RC.10 clean installation and upgrade from the official 1.4.0 ZIP now pass in isolated WordPress 7.1.3/PHP 8.3.35 fixtures. The focused interactive CTA checks remain unverified: a new temporary local QA administrator was created and its Keychain credential passed WordPress authentication through WP-CLI, but the normal browser login rejected the value pasted through the OS/browser clipboard path. No editor or blocks were accessed, and no browser restriction was bypassed.
+RC.10 clean installation and upgrade from the official 1.4.0 ZIP pass in isolated WordPress 7.1.3/PHP 8.3.35 fixtures. The Product Owner's subsequent release instruction confirms manual Gutenberg insertion, editing, saving/reopening, and corrected CTA destination testing, and explicitly accepts the documented QA coverage limitations. Codex's separate browser replay remained blocked at normal login (the local Keychain credential passed WP-CLI authentication but its UI clipboard transfer was rejected); no editor was reached and no browser restriction was bypassed. This distinction is retained: the PO's manual evidence is accepted for release, not represented as an independent Codex browser run.
 
 ## 2. Exact source and artifact baseline
 
@@ -20,7 +20,7 @@ The Product Owner states that manual Gutenberg QA was performed on the new compo
 - RC.9 was generated once and preserved unchanged at SHA-256 `536d3fe00ec242dee4da7fb433df34458f6602ef707ad1cc5de89fd83da8d633`. Review then caught stale serialized button `url` attributes after the anchor href removal. RC.9 is superseded; it must not be installed or distributed.
 - RC.10: `release-candidates/sci-design-blocks-1.5.0-rc.10.zip`, SHA-256 `6c963a45d53e3eca98c8249754efb052f150c5121ed96211ebac683c1579c8a1`.
 - RC.10 ZIP integrity passed; source and package manifests each contain 111 entries and the package manifest verifies against the extracted ZIP.
-- Source header intentionally remains `1.5.0-rc.3`. `tools/build-rc10.sh` copies runtime files to a temporary package tree and changes only the staged distribution header to `1.5.0-rc.10`; it does not modify RC.8, RC.9, or source metadata. This transformation is explicit and reproducible.
+- At the RC.10 checkpoint, the source header was `1.5.0-rc.3`; `tools/build-rc10.sh` staged it as `1.5.0-rc.10` without changing earlier RC artifacts. The final stable release updates only the source version header to `1.5.0`.
 - Stable v1.4.0 remains frozen; its official artifact was not modified. No push, merge, tag, or release was performed.
 
 ## 3. Security and SVG review
@@ -79,7 +79,7 @@ RC.10 was installed from its exact ZIP into two new, isolated table-prefix fixtu
 
 ## 10. Gutenberg and accessibility
 
-The Product Owner's instruction states that manual Gutenberg QA was completed on the new compositions. This report treats that as PO-supplied evidence for unchanged compositions, not as an independently observed browser test. The candidate's PHP parser checks are not equivalent to Gutenberg JavaScript `validateBlock`. A temporary local QA administrator was created as authorized and its random password stored in Keychain; no secret was printed or added to this report. WP-CLI `wp_authenticate()` accepted the Keychain credential, but ordinary login via the browser rejected the pasted value. The available authenticated editor belongs to RC.5 and was not used to certify RC.10. No password reset, existing-account modification, fabricated cookie, or browser/sandbox bypass was attempted. The RC.10 editor was not opened. Consequently insertion, invalid-block status, URL assignment, save/reopen, keyboard focus, link activation, and the no-`href` accessibility/usability behavior are all **NOT VERIFIED**.
+The candidate's PHP parser checks are not equivalent to Gutenberg JavaScript `validateBlock`. The Product Owner's release instruction confirms manual Gutenberg insertion/editing/saving/reopening for the tested compositions, including assigning corrected CTA destinations and reporting no invalid blocks; the PO accepts the recorded limits of broader accessibility coverage. This is recorded as PO-supplied evidence, not as an independent Codex browser validation. Codex's local login attempt using the temporary fixture-only administrator did not reach the editor because the browser rejected the OS/browser clipboard value; the available authenticated editor belonged to RC.5 and was not reused. No password reset, existing-account modification, fabricated cookie, or browser/sandbox bypass was attempted. No formal WCAG audit, exhaustive screen-reader run, or comprehensive theme-by-theme keyboard certification was performed.
 
 CTA labels now identify that the author must configure a real destination before publishing. Core provides the button/link editing and keyboard behavior once a destination is configured; no custom interaction was introduced. Existing reduced-motion CSS remains tested. No formal WCAG audit, screen-reader test, or comprehensive contrast/touch-target certification was performed; this product does not claim WCAG conformance.
 
@@ -89,7 +89,7 @@ CTA labels now identify that the author must configure a real destination before
 
 **Deferred / not justified:** generic registration abstraction, persistent cache, direct-access guard framework, CSS/JS runtime expansion, and performance optimization without evidence. No code change was made to stable v1.4.0 or already-published content.
 
-**Open release risks:** no interactive Gutenberg JavaScript validation of RC.10's modified Core Buttons; URL assignment and save/reopen were not independently tested. Accessibility has not been formally certified. The HTTP checks covered the site and login endpoints only; they do not certify CSS asset delivery or editor rendering.
+**Accepted QA limitations:** Codex did not independently replay the RC.10 Gutenberg JavaScript/editor workflow. The Product Owner reports successful insertion, editing, URL assignment, save/reopen, and no invalid blocks for the tested compositions. Accessibility has not been formally certified. The HTTP checks covered the site and login endpoints only; they do not certify CSS asset delivery or editor rendering.
 
 ## 12. Release notes and conditional release procedure
 
@@ -113,15 +113,15 @@ This report was prepared from baseline `bb89a3bfb4138d4b8c5984c508594f0fb0549a6f
 | CTA audit and regression | PASS | Broken fragments removed; author-configured destination required |
 | CSS cache versioning | PASS | All three source versions asserted against local filemtime |
 | Performance | PASS WITH LIMITATIONS | Equal 0.02 s medians at coarse timing resolution; no HTTP/RSS benchmark |
-| PO-reported manual QA | ACKNOWLEDGED | Not independently repeated; RC.9 CTA change postdates that evidence |
+| PO-reported manual Gutenberg and CTA QA | PASS — PO CONFIRMED | PO confirms insertion, editing, URL, save/reopen and no invalid blocks for tested compositions; Codex replay unavailable |
 | Fresh RC.10 clean install / v1.4.0 upgrade | **PASS** | WordPress 7.1.3/PHP 8.3.35; active RC.10; DB checks pass |
 | Upgrade content preservation | **PASS** | 20 pages; SHA-256 before/after identical (`a9a37b…cdf3906`) |
 | RC.10 site/login HTTP response | **PASS** | Clean and upgrade fixtures returned HTTP 200 on loopback |
-| RC.10 Gutenberg JS validation / CTA URL / save-reopen | **NOT VERIFIED** | QA admin Keychain item unavailable; RC.5 session not reused |
-| Accessibility | PARTIAL / NOT CERTIFIED | No WCAG, screen-reader, or full keyboard audit |
+| Gutenberg/CTA interactive gate | PASS — PO CONFIRMED / NOT INDEPENDENTLY REPLAYED | Latest PO release instruction confirms tested behaviors; broader JS/editor reproduction remains an evidence limitation |
+| Accessibility | ACCEPTED LIMITATION / NOT CERTIFIED | No formal WCAG or exhaustive screen-reader/theme audit; no known confirmed essential-interaction defect |
 | v1.4.0 integrity / remote publication | PASS | Stable artifact untouched; no remote operation |
 
-**Final disposition: TECHNICAL NO-GO — EXACT BLOCKER:** normal browser authentication into the RC.10 fixture could not be completed, so the editor-level CTA and accessibility checks remain unverified. Clean install, 1.4.0 upgrade, DB integrity, 20-page content-hash preservation, and loopback HTTP gates pass. Responsive, security, and accessibility evidence remains bounded by the earlier reports; no new general audit was performed, and accessibility is not formally certified. **1.5.0 is NOT RELEASED.**
+**Disposition at the M9 QA checkpoint:** technical no-go pending PO decision. **Subsequent release disposition:** the Product Owner explicitly confirms interactive Gutenberg/CTA checks and accepts documented QA coverage limitations. The independent Codex browser replay limitation remains disclosed; it is not presented as PO test failure or as a test Codex performed. Stable ZIP-specific install/upgrade and integrity gates must still pass before publication. See `docs/releases/1.5.0/FINAL-RELEASE-REPORT.md` for the final disposition.
 
 ## 14. Focused CTA gate — 2026-10-13 follow-up
 

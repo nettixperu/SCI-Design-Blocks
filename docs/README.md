@@ -30,8 +30,9 @@ Release gates, test matrices, RC fixes, and closeout records are grouped by rele
 - [1.2](releases/1.2/): Tabs responsive/theme work, Core regression QA, RC fixes, and final test matrix.
 - [1.3](releases/1.3/): Editorial Query RC and final release certification.
 - [1.4](releases/1.4/): Pricing/Comparison RC and final stable-release certification.
+- [1.5.0](releases/1.5.0/): Final release notes and release provenance/report.
 
-The 1.4.0 stable download and checksum are on the [GitHub Release](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0) and in [its release report](releases/1.4/M5-RELEASE-1.4.0.md). Published release assets are immutable; these repository reports provide engineering evidence.
+The 1.4.0 stable download and checksum are on the [GitHub Release](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0) and in [its release report](releases/1.4/M5-RELEASE-1.4.0.md). The 1.5.0 release notes are [here](releases/1.5.0/1.5.0-RELEASE-NOTES.md); final source/artifact provenance will be recorded in the [final release report](releases/1.5.0/FINAL-RELEASE-REPORT.md). Published release assets are immutable; these repository reports provide engineering evidence.
 
 ## Spikes and research
 

@@ -73,7 +73,7 @@ function wp_register_icon( $name, $args ) {
 $plugin_root = getenv( 'SCI_PLUGIN_ROOT' ) ? rtrim( getenv( 'SCI_PLUGIN_ROOT' ), '/' ) : dirname( __DIR__ );
 $plugin_file = $plugin_root . '/sci-design-blocks.php';
 $plugin      = file_get_contents( $plugin_file );
-$expected_plugin_version = getenv( 'SCI_EXPECTED_VERSION' ) ? getenv( 'SCI_EXPECTED_VERSION' ) : '1.5.0-rc.3';
+$expected_plugin_version = getenv( 'SCI_EXPECTED_VERSION' ) ? getenv( 'SCI_EXPECTED_VERSION' ) : '1.5.0';
 if ( PHP_VERSION_ID < 80300 ) {
 	throw new RuntimeException( 'PHP 8.3 or newer is required to run the current 1.5.0 test suite.' );
 }
