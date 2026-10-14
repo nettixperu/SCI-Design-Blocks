@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Security reports are accepted for the latest stable release of SCI Design Blocks. The current stable release is 1.4.0 and requires WordPress 7.1+ and PHP 7.4+.
+Security reports are accepted for the latest published stable release of SCI Design Blocks. At this release-preparation stage, 1.4.0 remains the latest published release and requires WordPress 7.1+ and PHP 7.4+. The prepared 1.5.0 source requires WordPress 7.1+ and PHP 8.3+; the published requirements will be reflected here when that release is available.
 
 ## Report a vulnerability
 

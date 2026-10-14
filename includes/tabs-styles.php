@@ -18,7 +18,7 @@ function register_tabs_styles(): void {
 	$style_handle  = 'sci-design-blocks-tabs-styles';
 	$plugin_file   = dirname( __DIR__ ) . '/sci-design-blocks.php';
 	$style_file    = dirname( __DIR__ ) . '/assets/css/tabs-styles.css';
-	$style_version = file_exists( $style_file ) ? (string) filemtime( $style_file ) : '1.1.0';
+	$style_version = is_readable( $style_file ) ? (string) filemtime( $style_file ) : '1.1.0';
 
 	wp_register_style(
 		$style_handle,
@@ -60,6 +60,13 @@ function register_tabs_styles(): void {
 			'name'         => 'sci-filled',
 			'label'        => __( 'Filled', 'sci-design-blocks' ),
 			'style_handle' => $style_handle,
+		)
+	);
+
+	wp_enqueue_block_style(
+		'core/tabs',
+		array(
+			'handle' => $style_handle,
 		)
 	);
 }

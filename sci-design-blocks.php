@@ -2,9 +2,9 @@
 /**
  * Plugin Name: SCI Design Blocks
  * Description: Reusable editorial and corporate compositions built from WordPress Core blocks.
- * Version: 1.4.0
+ * Version: 1.5.0
  * Requires at least: 7.1
- * Requires PHP: 7.4
+ * Requires PHP: 8.3
  * Author: Martín
  * Text Domain: sci-design-blocks
  * License: GPL v2 or later
@@ -21,10 +21,14 @@ require_once __DIR__ . '/includes/tabs-styles.php';
 require_once __DIR__ . '/includes/editorial-query-patterns.php';
 require_once __DIR__ . '/includes/editorial-image-styles.php';
 require_once __DIR__ . '/includes/pricing-comparison-patterns.php';
+require_once __DIR__ . '/includes/hero-patterns.php';
+require_once __DIR__ . '/includes/commercial-patterns.php';
 
 add_action( 'init', __NAMESPACE__ . '\register_feature_patterns' );
 add_action( 'init', __NAMESPACE__ . '\register_editorial_query_patterns', 11 );
 add_action( 'init', __NAMESPACE__ . '\register_pricing_comparison_patterns', 12 );
+add_action( 'init', __NAMESPACE__ . '\register_hero_patterns', 13 );
+add_action( 'init', __NAMESPACE__ . '\register_commercial_patterns', 14 );
 
 /**
  * Register the M1 Feature patterns using WordPress Core blocks only.
@@ -43,10 +47,10 @@ function register_feature_patterns() {
 		'feature_prefix'       => esc_html__( 'Feature', 'sci-design-blocks' ),
 		'feature_heading'      => esc_html__( 'Feature heading', 'sci-design-blocks' ),
 		'feature_description'  => esc_html__( 'Describe this feature.', 'sci-design-blocks' ),
-		'learn_more'           => esc_html__( 'Learn more', 'sci-design-blocks' ),
+		'learn_more'           => esc_html__( 'Learn more (configure link before publishing)', 'sci-design-blocks' ),
 		'cta_heading'          => esc_html__( 'Take the next step', 'sci-design-blocks' ),
 		'cta_description'      => esc_html__( 'Talk to our team about your infrastructure.', 'sci-design-blocks' ),
-		'cta_button'           => esc_html__( 'Contact us', 'sci-design-blocks' ),
+		'cta_button'           => esc_html__( 'Contact us (configure link before publishing)', 'sci-design-blocks' ),
 		'testimonial_quote'    => esc_html__( '“Working with the team simplified our infrastructure.”', 'sci-design-blocks' ),
 		'testimonial_citation' => esc_html__( 'Person Name — Role / Company', 'sci-design-blocks' ),
 		'stat_one'             => esc_html__( '+15', 'sci-design-blocks' ),

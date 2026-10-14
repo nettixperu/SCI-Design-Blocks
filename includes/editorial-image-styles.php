@@ -18,7 +18,7 @@ function register_editorial_image_styles(): void {
 	$style_handle = 'sci-design-blocks-editorial-image-styles';
 	$plugin_file  = dirname( __DIR__ ) . '/sci-design-blocks.php';
 	$style_file   = dirname( __DIR__ ) . '/assets/css/editorial-image-styles.css';
-	$version      = file_exists( $style_file ) ? (string) filemtime( $style_file ) : '1.4.0';
+	$version      = is_readable( $style_file ) ? (string) filemtime( $style_file ) : '1.4.0';
 
 	wp_register_style(
 		$style_handle,
@@ -33,6 +33,13 @@ function register_editorial_image_styles(): void {
 			'name'         => 'sci-hover-zoom',
 			'label'        => __( 'SCI — Hover Zoom', 'sci-design-blocks' ),
 			'style_handle' => $style_handle,
+		)
+	);
+
+	wp_enqueue_block_style(
+		'core/post-featured-image',
+		array(
+			'handle' => $style_handle,
 		)
 	);
 }

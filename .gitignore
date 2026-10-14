@@ -21,6 +21,7 @@ sci-design-blocks-m1-test-*.zip
 sci-design-blocks-m2-test-*.zip
 sci-design-blocks-m3-test-*.zip
 sci-design-blocks-m4-rc-test.zip
+release-candidates/*.sha256
 
 # Private site CSS audit input and internal QA history
 audit-input/

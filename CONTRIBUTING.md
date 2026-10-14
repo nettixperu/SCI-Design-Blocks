@@ -7,7 +7,7 @@ Thanks for helping improve SCI Design Blocks. Before proposing a change, check t
 - Prefer WordPress Core blocks, APIs, patterns, and styles.
 - Prefer patterns before introducing a custom block; custom blocks require a clear user need.
 - Avoid frontend JavaScript, dependencies, and CSS that Core or the active theme already provides.
-- Preserve the supported baseline: WordPress 7.1+ and PHP 7.4+.
+- For SCI Design Blocks 1.5.0, preserve WordPress 7.1+ and PHP 8.3+. Stable 1.4.0 remains unchanged at PHP 7.4+.
 - Keep inserted content editable and portable as Core blocks.
 
 ## Changes and checks
@@ -15,6 +15,8 @@ Thanks for helping improve SCI Design Blocks. Before proposing a change, check t
 - Keep pull requests focused and explain behavior, compatibility, and any user-facing changes.
 - Update README or CHANGELOG when behavior or release-facing information changes.
 - Run the relevant existing PHP and Python checks from `tests/`; state which checks you ran and any environment limitations.
+- Release packaging: run `tools/build-release.sh OUTPUT_DIRECTORY` from a clean, reviewed source commit. The script records a source/package SHA-256 manifest and build provenance; verify these before attaching the ZIP.
+- Rollback: if a serious issue is found, stop rollout and preserve evidence. Recommend returning to the previously stable 1.4.0 only after checking PHP compatibility and content implications; never auto-downgrade live sites or move published tags.
 - Do not commit generated release ZIPs, credentials, temporary files, or unrelated internal audit documents.
 - For visual/editor changes, include genuine before/after screenshots when available and identify the WordPress/theme environment. Do not present static checks as browser QA.
 
