@@ -18,6 +18,9 @@ function register_editorial_query_patterns(): void {
 			'title'       => __( 'SCI Posts — Featured Hero', 'sci-design-blocks' ),
 			'description' => __( 'A featured post with its image beside the title and excerpt.', 'sci-design-blocks' ),
 			'content'     => <<<'HTML'
+<!-- wp:group {"align":"full"} -->
+<div class="wp-block-group alignfull"><!-- wp:group {"align":"wide","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignwide">
 <!-- wp:query {"query":{"perPage":1,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"ignore","inherit":false},"displayLayout":{"type":"list"}} -->
 <div class="wp-block-query"><!-- wp:post-template -->
 <!-- wp:columns {"verticalAlignment":"center"} -->
@@ -35,12 +38,16 @@ function register_editorial_query_patterns(): void {
 <!-- /wp:columns -->
 <!-- /wp:post-template --></div>
 <!-- /wp:query -->
+</div><!-- /wp:group --></div><!-- /wp:group -->
 HTML,
 		),
 		'sci-design-blocks/posts-editorial-lead' => array(
 			'title'       => __( 'SCI Posts — Editorial Lead', 'sci-design-blocks' ),
 			'description' => __( 'A featured lead story followed by three text-first editorial headlines.', 'sci-design-blocks' ),
 			'content'     => <<<'HTML'
+<!-- wp:group {"align":"full"} -->
+<div class="wp-block-group alignfull"><!-- wp:group {"align":"wide","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignwide">
 <!-- wp:columns {"verticalAlignment":"top"} -->
 <div class="wp-block-columns are-vertically-aligned-top"><!-- wp:column {"width":"60%"} -->
 <div class="wp-block-column" style="flex-basis:60%"><!-- wp:query {"query":{"perPage":1,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"ignore","inherit":false},"displayLayout":{"type":"list"}} -->
@@ -67,12 +74,16 @@ HTML,
 <!-- /wp:query --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns -->
+</div><!-- /wp:group --></div><!-- /wp:group -->
 HTML,
 		),
 		'sci-design-blocks/posts-compact-list' => array(
 			'title'       => __( 'SCI Posts — Compact List', 'sci-design-blocks' ),
 			'description' => __( 'A compact editorial list with a prominent thumbnail, headline, category, and Core separators.', 'sci-design-blocks' ),
 			'content'     => <<<'HTML'
+<!-- wp:group {"align":"full"} -->
+<div class="wp-block-group alignfull"><!-- wp:group {"align":"wide","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignwide">
 <!-- wp:query {"query":{"perPage":5,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"ignore","inherit":false},"displayLayout":{"type":"list"}} -->
 <div class="wp-block-query"><!-- wp:post-template -->
 <!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|20"}},"layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"center"}} -->
@@ -89,12 +100,16 @@ HTML,
 <!-- /wp:separator -->
 <!-- /wp:post-template --></div>
 <!-- /wp:query -->
+</div><!-- /wp:group --></div><!-- /wp:group -->
 HTML,
 		),
 		'sci-design-blocks/posts-editorial-grid' => array(
 			'title'       => __( 'SCI Posts — Editorial Grid', 'sci-design-blocks' ),
 			'description' => __( 'Three horizontal editorial cards with image, compact title, excerpt and metadata.', 'sci-design-blocks' ),
 			'content'     => <<<'HTML'
+<!-- wp:group {"align":"full"} -->
+<div class="wp-block-group alignfull"><!-- wp:group {"align":"wide","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignwide">
 <!-- wp:query {"query":{"perPage":3,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"ignore","inherit":false},"displayLayout":{"type":"flex","columns":3}} -->
 <div class="wp-block-query"><!-- wp:post-template -->
 <!-- wp:post-featured-image {"isLink":true,"aspectRatio":"4/3","scale":"cover"} /-->
@@ -104,12 +119,16 @@ HTML,
 <!-- wp:post-date {"fontSize":"small"} /-->
 <!-- /wp:post-template --></div>
 <!-- /wp:query -->
+</div><!-- /wp:group --></div><!-- /wp:group -->
 HTML,
 		),
 		'sci-design-blocks/posts-editorial-stack' => array(
 			'title'       => __( 'SCI Posts — Editorial Stack', 'sci-design-blocks' ),
 			'description' => __( 'A vertical editorial sequence with a large image, title, excerpt and metadata for each post.', 'sci-design-blocks' ),
 			'content'     => <<<'HTML'
+<!-- wp:group {"align":"full"} -->
+<div class="wp-block-group alignfull"><!-- wp:group {"align":"wide","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignwide">
 <!-- wp:query {"query":{"perPage":3,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"ignore","inherit":false},"displayLayout":{"type":"list"}} -->
 <div class="wp-block-query"><!-- wp:post-template -->
 <!-- wp:post-featured-image {"isLink":true,"aspectRatio":"16/9","scale":"cover"} /-->
@@ -122,12 +141,16 @@ HTML,
 <!-- /wp:separator -->
 <!-- /wp:post-template --></div>
 <!-- /wp:query -->
+</div><!-- /wp:group --></div><!-- /wp:group -->
 HTML,
 		),
 		'sci-design-blocks/posts-editorial-sections' => array(
 			'title'       => __( 'SCI Posts — Editorial Sections', 'sci-design-blocks' ),
 			'description' => __( 'Three editable topic columns, each with one image-led story and two text-first headlines.', 'sci-design-blocks' ),
 			'content'     => <<<'HTML'
+<!-- wp:group {"align":"full"} -->
+<div class="wp-block-group alignfull"><!-- wp:group {"align":"wide","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignwide">
 <!-- wp:columns {"isStackedOnMobile":true,"style":{"spacing":{"blockGap":{"top":"var:preset|spacing|20","left":"var:preset|spacing|30"}}}} -->
 <div class="wp-block-columns"><!-- wp:column {"style":{"spacing":{"blockGap":"var:preset|spacing|20"}}} -->
 <div class="wp-block-column"><!-- wp:heading {"level":2,"fontSize":"small"} -->
@@ -207,6 +230,7 @@ HTML,
 <!-- /wp:query --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns -->
+</div><!-- /wp:group --></div><!-- /wp:group -->
 HTML,
 		),
 	);

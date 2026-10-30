@@ -2,6 +2,14 @@
 
 User-facing highlights for stable releases. For full release details, see [GitHub Releases](https://github.com/nettixperu/SCI-Design-Blocks/releases).
 
+## 1.5.1
+
+- Adds the responsive SCI Features Grid and Firefox-inspired SCI Product Story patterns.
+- Adds a sitewide page-title setting that removes generated page titles in the editor and on the front end.
+- Gives standalone editorial, hero, pricing, comparison, and product-story sections full-width roots with centered wide content.
+- Vertically centers the image/icon feature columns and centers the SCI Stats metrics.
+- Fixes malformed block JSON in six product-story cards that could trigger Gutenberg's invalid-content warning.
+
 ## 1.5.0
 
 - Adds seven Core-only patterns: Hero Cover, Hero Split, Section Intro, Benefits Grid, Services Image Cards, Pricing Split Offer, and CTA Horizontal; total inventory is 27 patterns, 83 curated icons, seven Core Block Styles, and three CSS files.

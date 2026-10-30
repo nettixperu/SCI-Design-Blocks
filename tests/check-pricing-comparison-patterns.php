@@ -110,8 +110,8 @@ foreach ( $expected as $name ) {
 	}
 }
 
-if ( 27 !== count( $GLOBALS['sci_test_patterns'] ) || 1 !== count( $GLOBALS['sci_test_categories'] ) ) {
-	throw new RuntimeException( 'Expected 27 total patterns registered under the single existing category.' );
+if ( 29 !== count( $GLOBALS['sci_test_patterns'] ) || 1 !== count( $GLOBALS['sci_test_categories'] ) ) {
+	throw new RuntimeException( 'Expected 29 total patterns registered under the single existing category.' );
 }
 
 $allowed_self_closing_blocks = array(
@@ -208,14 +208,14 @@ foreach ( $GLOBALS['sci_test_patterns'] as $pattern_name => $pattern ) {
 	sci_test_names( $reparsed );
 	++$all_pattern_count;
 }
-if ( 27 !== $all_pattern_count ) {
-	throw new RuntimeException( 'Expected Core parser/serializer regression coverage for all 27 registered patterns.' );
+if ( 29 !== $all_pattern_count ) {
+	throw new RuntimeException( 'Expected Core parser/serializer regression coverage for all 29 registered patterns.' );
 }
 
 // The permissive PHP parser can recover from unclosed block comments. Strictly
 // check block-comment nesting in each M8 addition so malformed parent/child
 // boundaries (for example, a second Column nested in the first) cannot pass.
-foreach ( array( 'section-intro', 'benefits-grid', 'service-cards', 'pricing-split', 'cta-horizontal' ) as $slug ) {
+foreach ( array( 'section-intro', 'benefits-grid', 'service-cards', 'pricing-split', 'cta-horizontal', 'features-grid' ) as $slug ) {
 	$content = $GLOBALS['sci_test_patterns'][ 'sci-design-blocks/' . $slug ]['content'];
 	preg_match_all( '~<!--\s+(/)?wp:([a-z0-9-]+(?:/[a-z0-9-]+)?)(?:\s+\{.*?\})?\s*(/)?-->~s', $content, $comment_tokens, PREG_SET_ORDER );
 	$open_blocks = array();
@@ -500,6 +500,6 @@ if (
 }
 
 fwrite( STDOUT, "Hero Split and service-card empty Image serialization regression PASS: explicit Core figure/img markup matches the confirmed WordPress 7.1.3 save output.\n" );
-fwrite( STDOUT, "Self-closing block review PASS: {$self_closing_count} instances across 27 patterns are limited to reviewed no-save/dynamic Core blocks; no self-closing core/image remains.\n" );
+fwrite( STDOUT, "Self-closing block review PASS: {$self_closing_count} instances across 29 patterns are limited to reviewed no-save/dynamic Core blocks; no self-closing core/image remains.\n" );
 
-fwrite( STDOUT, "Core parser and registration checks PASS: 5 new patterns, 27 total, Core-only, WordPress {$wp_version}.\n" );
+fwrite( STDOUT, "Core parser and registration checks PASS: 5 new patterns, 29 total, Core-only, WordPress {$wp_version}.\n" );

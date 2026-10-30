@@ -104,6 +104,17 @@ foreach ( $expected as $pattern_name => $expectation ) {
 	}
 
 	$parsed = $parser->parse( $content );
+	$full_section = $parsed[0] ?? array();
+	$wide_content = $full_section['innerBlocks'][0] ?? array();
+	if (
+		1 !== count( $parsed ) ||
+		'core/group' !== ( $full_section['blockName'] ?? '' ) ||
+		'full' !== ( $full_section['attrs']['align'] ?? '' ) ||
+		'core/group' !== ( $wide_content['blockName'] ?? '' ) ||
+		'wide' !== ( $wide_content['attrs']['align'] ?? '' )
+	) {
+		throw new RuntimeException( "{$pattern_name} must use a full-width section and centered wide content wrapper." );
+	}
 
 	$names  = array();
 	$queries = array();
@@ -113,7 +124,7 @@ foreach ( $expected as $pattern_name => $expectation ) {
 			throw new RuntimeException( "Non-Core block found in {$pattern_name}." );
 		}
 	}
-	if ( 1 !== count( $parsed ) || count( $expectation['per_page'] ) !== count( $queries ) ) {
+	if ( count( $expectation['per_page'] ) !== count( $queries ) ) {
 		throw new RuntimeException( "Unexpected Core Query count or pattern root in {$pattern_name}." );
 	}
 
@@ -200,7 +211,7 @@ foreach ( $expected as $pattern_name => $expectation ) {
 		}
 	}
 	if ( 'sci-design-blocks/posts-editorial-sections' === $pattern_name ) {
-		$root_columns = $parsed[0];
+		$root_columns = $wide_content['innerBlocks'][0] ?? array();
 		if ( 'core/columns' !== $root_columns['blockName'] || 3 !== count( $root_columns['innerBlocks'] ) ) {
 			throw new RuntimeException( 'Editorial Sections must use exactly three top-level Core columns.' );
 		}

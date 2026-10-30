@@ -10,6 +10,11 @@ namespace SCI\DesignBlocks;
 /** Register the M7 section, service, pricing and CTA patterns. */
 function register_commercial_patterns(): void {
 	$patterns = array(
+		'sci-design-blocks/product-story' => array(
+			'title'       => __( 'SCI Product — Story Page', 'sci-design-blocks' ),
+			'description' => __( 'Complete product landing page with hero, benefits, product story, and closing call to action.', 'sci-design-blocks' ),
+			'file'        => 'sci-product-story.html',
+		),
 		'sci-design-blocks/section-intro' => array(
 			'title'       => __( 'SCI Section — Intro', 'sci-design-blocks' ),
 			'description' => __( 'Centered static introduction for a page section using editable Core text blocks.', 'sci-design-blocks' ),

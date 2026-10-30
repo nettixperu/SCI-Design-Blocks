@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SCI Design Blocks
  * Description: Reusable editorial and corporate compositions built from WordPress Core blocks.
- * Version: 1.5.0
+ * Version: 1.5.1
  * Requires at least: 7.1
  * Requires PHP: 8.3
  * Author: Martín
@@ -23,6 +23,7 @@ require_once __DIR__ . '/includes/editorial-image-styles.php';
 require_once __DIR__ . '/includes/pricing-comparison-patterns.php';
 require_once __DIR__ . '/includes/hero-patterns.php';
 require_once __DIR__ . '/includes/commercial-patterns.php';
+require_once __DIR__ . '/includes/page-title-setting.php';
 
 add_action( 'init', __NAMESPACE__ . '\register_feature_patterns' );
 add_action( 'init', __NAMESPACE__ . '\register_editorial_query_patterns', 11 );
@@ -71,7 +72,54 @@ function register_feature_patterns() {
 	);
 
 	$patterns = array(
+		'sci-design-blocks/features-grid' => array(
+			'title'       => __( 'SCI Features — Grid', 'sci-design-blocks' ),
+			'description' => __( 'Four feature cards in a responsive grid: four columns on wide screens, fewer columns as space narrows, and no forced word breaks.', 'sci-design-blocks' ),
+			'content'     => <<<'HTML'
+<!-- wp:group {"align":"wide","className":"sci-features-grid","style":{"spacing":{"blockGap":"var:preset|spacing|30"}},"layout":{"type":"grid","minimumColumnWidth":"13rem","autoFit":true}} -->
+<div class="wp-block-group alignwide sci-features-grid">
+<!-- wp:group {"className":"sci-feature-card","style":{"color":{"background":"#ffffff","text":"#211832"},"spacing":{"padding":{"top":"var:preset|spacing|30","bottom":"var:preset|spacing|30","left":"var:preset|spacing|30","right":"var:preset|spacing|30"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group sci-feature-card has-text-color has-background" style="color:#211832;background-color:#ffffff;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><!-- wp:icon /-->
+<!-- wp:heading {"level":3,"fontSize":"medium"} -->
+<h3 class="wp-block-heading has-medium-font-size">Correo empresarial</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>Profesional, seguro y siempre disponible para tu empresa.</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->
+<!-- wp:group {"className":"sci-feature-card","style":{"color":{"background":"#ffffff","text":"#211832"},"spacing":{"padding":{"top":"var:preset|spacing|30","bottom":"var:preset|spacing|30","left":"var:preset|spacing|30","right":"var:preset|spacing|30"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group sci-feature-card has-text-color has-background" style="color:#211832;background-color:#ffffff;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><!-- wp:icon /-->
+<!-- wp:heading {"level":3,"fontSize":"medium"} -->
+<h3 class="wp-block-heading has-medium-font-size">WordPress administrado</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>Rápido, actualizado y protegido.</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->
+<!-- wp:group {"className":"sci-feature-card","style":{"color":{"background":"#ffffff","text":"#211832"},"spacing":{"padding":{"top":"var:preset|spacing|30","bottom":"var:preset|spacing|30","left":"var:preset|spacing|30","right":"var:preset|spacing|30"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group sci-feature-card has-text-color has-background" style="color:#211832;background-color:#ffffff;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><!-- wp:icon /-->
+<!-- wp:heading {"level":3,"fontSize":"medium"} -->
+<h3 class="wp-block-heading has-medium-font-size">Documentos privados</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>Comparte y sincroniza documentos con tu equipo.</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->
+<!-- wp:group {"className":"sci-feature-card","style":{"color":{"background":"#ffffff","text":"#211832"},"spacing":{"padding":{"top":"var:preset|spacing|30","bottom":"var:preset|spacing|30","left":"var:preset|spacing|30","right":"var:preset|spacing|30"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group sci-feature-card has-text-color has-background" style="color:#211832;background-color:#ffffff;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><!-- wp:icon /-->
+<!-- wp:heading {"level":3,"fontSize":"medium"} -->
+<h3 class="wp-block-heading has-medium-font-size">Gestión de dominios DNS</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>Tu dominio, custodiado y gestionado por especialistas.</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:group -->
+HTML,
+		),
 		'sci-design-blocks/feature-icon-vertical' => array(
+
 			'title'       => __( 'SCI Feature — Icon Vertical', 'sci-design-blocks' ),
 			'description' => __( 'A vertical feature composition with a Core icon, prefix, heading, description, and button.', 'sci-design-blocks' ),
 			'content'     => <<<HTML
@@ -136,13 +184,13 @@ HTML,
 <h6 class="wp-block-heading">{$example['feature_prefix']}</h6>
 <!-- /wp:heading -->
 
-<!-- wp:columns {"isStackedOnMobile":true} -->
-<div class="wp-block-columns"><!-- wp:column {"width":"14%"} -->
-<div class="wp-block-column" style="flex-basis:14%"><!-- wp:icon /--></div>
+<!-- wp:columns {"verticalAlignment":"center","isStackedOnMobile":true} -->
+<div class="wp-block-columns are-vertically-aligned-center"><!-- wp:column {"width":"14%","verticalAlignment":"center"} -->
+<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:14%"><!-- wp:icon /--></div>
 <!-- /wp:column -->
 
-<!-- wp:column {"width":"86%"} -->
-<div class="wp-block-column" style="flex-basis:86%"><!-- wp:group {"layout":{"type":"flex","orientation":"vertical","justifyContent":"left"}} -->
+<!-- wp:column {"width":"86%","verticalAlignment":"center"} -->
+<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:86%"><!-- wp:group {"layout":{"type":"flex","orientation":"vertical","justifyContent":"left"}} -->
 <div class="wp-block-group"><!-- wp:heading -->
 <h2 class="wp-block-heading">{$example['feature_heading']}</h2>
 <!-- /wp:heading -->
@@ -171,15 +219,15 @@ HTML,
 <h6 class="wp-block-heading">{$example['feature_prefix']}</h6>
 <!-- /wp:heading -->
 
-<!-- wp:columns {"isStackedOnMobile":true} -->
-<div class="wp-block-columns"><!-- wp:column {"width":"33%"} -->
-<div class="wp-block-column" style="flex-basis:33%"><!-- wp:image -->
+<!-- wp:columns {"verticalAlignment":"center","isStackedOnMobile":true} -->
+<div class="wp-block-columns are-vertically-aligned-center"><!-- wp:column {"width":"33%","verticalAlignment":"center"} -->
+<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:33%"><!-- wp:image -->
 <figure class="wp-block-image"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==" alt="" /></figure>
 <!-- /wp:image --></div>
 <!-- /wp:column -->
 
-<!-- wp:column {"width":"67%"} -->
-<div class="wp-block-column" style="flex-basis:67%"><!-- wp:group {"layout":{"type":"flex","orientation":"vertical","justifyContent":"left"}} -->
+<!-- wp:column {"width":"67%","verticalAlignment":"center"} -->
+<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:67%"><!-- wp:group {"layout":{"type":"flex","orientation":"vertical","justifyContent":"left"}} -->
 <div class="wp-block-group"><!-- wp:heading -->
 <h2 class="wp-block-heading">{$example['feature_heading']}</h2>
 <!-- /wp:heading -->
@@ -237,38 +285,38 @@ HTML,
 			'title'       => __( 'SCI Stats', 'sci-design-blocks' ),
 			'description' => __( 'A static three-column set of metrics using Core blocks.', 'sci-design-blocks' ),
 			'content'     => <<<HTML
-<!-- wp:columns {"isStackedOnMobile":true} -->
-<div class="wp-block-columns"><!-- wp:column -->
-<div class="wp-block-column"><!-- wp:group {"layout":{"type":"flex","orientation":"vertical","justifyContent":"left"}} -->
-<div class="wp-block-group"><!-- wp:paragraph {"fontSize":"large"} -->
+<!-- wp:columns {"verticalAlignment":"center","isStackedOnMobile":true} -->
+<div class="wp-block-columns are-vertically-aligned-center"><!-- wp:column {"verticalAlignment":"center"} -->
+<div class="wp-block-column is-vertically-aligned-center"><!-- wp:group {"layout":{"type":"flex","orientation":"vertical","justifyContent":"left"}} -->
+<div class="wp-block-group"><!-- wp:paragraph {"align":"center","fontSize":"large"} -->
 <p class="has-large-font-size">{$example['stat_one']}</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
+<!-- wp:paragraph {"align":"center"} -->
 <p>{$example['stat_one_label']}</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group --></div>
 <!-- /wp:column -->
 
-<!-- wp:column -->
-<div class="wp-block-column"><!-- wp:group {"layout":{"type":"flex","orientation":"vertical","justifyContent":"left"}} -->
-<div class="wp-block-group"><!-- wp:paragraph {"fontSize":"large"} -->
+<!-- wp:column {"verticalAlignment":"center"} -->
+<div class="wp-block-column is-vertically-aligned-center"><!-- wp:group {"layout":{"type":"flex","orientation":"vertical","justifyContent":"left"}} -->
+<div class="wp-block-group"><!-- wp:paragraph {"align":"center","fontSize":"large"} -->
 <p class="has-large-font-size">{$example['stat_two']}</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
+<!-- wp:paragraph {"align":"center"} -->
 <p>{$example['stat_two_label']}</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group --></div>
 <!-- /wp:column -->
 
-<!-- wp:column -->
-<div class="wp-block-column"><!-- wp:group {"layout":{"type":"flex","orientation":"vertical","justifyContent":"left"}} -->
-<div class="wp-block-group"><!-- wp:paragraph {"fontSize":"large"} -->
+<!-- wp:column {"verticalAlignment":"center"} -->
+<div class="wp-block-column is-vertically-aligned-center"><!-- wp:group {"layout":{"type":"flex","orientation":"vertical","justifyContent":"left"}} -->
+<div class="wp-block-group"><!-- wp:paragraph {"align":"center","fontSize":"large"} -->
 <p class="has-large-font-size">{$example['stat_three']}</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
+<!-- wp:paragraph {"align":"center"} -->
 <p>{$example['stat_three_label']}</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group --></div>
@@ -364,3 +412,7 @@ HTML,
 		);
 	}
 }
+
+add_action( 'wp_enqueue_scripts', function () {
+	wp_enqueue_style( 'sci-product-story', plugins_url( 'assets/css/product-story.css', __FILE__ ), array(), '1.5.1' );
+} );
