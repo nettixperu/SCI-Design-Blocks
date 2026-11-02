@@ -2,6 +2,12 @@
 
 User-facing highlights for stable releases. For full release details, see [GitHub Releases](https://github.com/nettixperu/SCI-Design-Blocks/releases).
 
+## 1.6.3 (unreleased)
+
+- Adds lightweight, per-button hover controls to the Core Button block for hover background color or gradient, text and border colors, shadow, and subtle lift.
+- Makes the FAQ pattern easy to find as “SCI FAQ — Acordeón desplegable”, adds a Spanish heading and editable examples, and aligns the accordion to the wide layout.
+- Updates the page-title editor asset version for the current source.
+
 ## 1.5.1
 
 - Adds the responsive SCI Features Grid and Firefox-inspired SCI Product Story patterns.

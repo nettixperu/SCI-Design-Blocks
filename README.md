@@ -9,7 +9,7 @@ Build editorial, commercial, and interface layouts from WordPress Core blocks—
 [![PHP 8.3+](https://img.shields.io/badge/PHP-8.3%2B-777BB4?logo=php&logoColor=white)](https://www.php.net/supported-versions.php)
 [![License: GPL-2.0-or-later](https://img.shields.io/badge/License-GPL--2.0--or--later-blue.svg)](COPYING.md)
 
-**Latest published stable release:** [SCI Design Blocks 1.4.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0). Version 1.5.0 release preparation is in progress; it is not available for download until publication.
+**Latest published stable release:** [SCI Design Blocks 1.4.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0). The current development source is 1.6.3 and is not a published release.
 
 ## What’s included
 
@@ -26,6 +26,8 @@ The 1.5.0 release source contains 27 patterns, 83 icons, seven Core Block Styles
 | Core Block Styles | Accordion: Minimal and Bordered; Tabs: Underline, Pills, Connected, Filled, with horizontal scrolling on narrow screens; Featured Image: optional Hover Zoom |
 
 The 1.5.0 release source adds seven Core-only compositions: Hero Cover, Hero Split, Section Intro, Benefits Grid, Services Image Cards, Pricing Split Offer, and CTA Horizontal. Minimum requirements for 1.5.0 are WordPress 7.1+ and PHP 8.3+; 1.4.0 remains unchanged at PHP 7.4+. See the [M7 equivalence and design decisions](docs/architecture/M7-PATTERN-EXPANSION-DECISIONS.md), [M8 implementation report](docs/architecture/M8-IMPLEMENTATION-REPORT.md), [M8-FIX-01 repair report](docs/architecture/M8-FIX-01-REPORT.md), [M6 PHP 8.3 decision](docs/architecture/M6-PHP83-PO-DECISION.md), [M9 final hardening report](docs/architecture/M9-FINAL-HARDENING-REPORT.md), and [pattern inventory](docs/patterns/1.5.0-preview.md).
+
+The 1.6.3 development source adds optional hover settings to each Core Button, plus a Spanish FAQ accordion pattern. Hover settings are configured per button in the editor; no frontend JavaScript is added. This source has not been published as a stable release.
 
 The 83 curated icons are available from the **SCI** collection in the Core Icon block workflow. See [Third-Party Notices](THIRD-PARTY-NOTICES.md) for icon licensing details.
 
@@ -65,7 +67,7 @@ SCI Design Blocks favors reusable compositions of WordPress Core blocks. Pattern
 
 - **No custom SCI blocks.** Inserted pattern content remains editable WordPress Core blocks.
 - **Theme-native.** Patterns use Core controls and respect theme.json and Global Styles.
-- **No SCI frontend JavaScript** and no external runtime dependencies.
+- **No SCI frontend JavaScript** and no external runtime dependencies. The optional button-hover controls use a small editor-only script.
 - The five Pricing and Comparison patterns add no SCI CSS. The plugin does include CSS for selected opt-in Core Block Styles, including Accordion, Tabs, and Hover Zoom.
 - When the plugin is inactive, inserted pattern content remains Core content. Registered SCI icons and optional visual styles may no longer be available.
 

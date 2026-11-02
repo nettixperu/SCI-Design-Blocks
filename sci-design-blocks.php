@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SCI Design Blocks
  * Description: Reusable editorial and corporate compositions built from WordPress Core blocks.
- * Version: 1.5.1
+ * Version: 1.6.3
  * Requires at least: 7.1
  * Requires PHP: 8.3
  * Author: Martín
@@ -24,6 +24,7 @@ require_once __DIR__ . '/includes/pricing-comparison-patterns.php';
 require_once __DIR__ . '/includes/hero-patterns.php';
 require_once __DIR__ . '/includes/commercial-patterns.php';
 require_once __DIR__ . '/includes/page-title-setting.php';
+require_once __DIR__ . '/includes/button-styles.php';
 
 add_action( 'init', __NAMESPACE__ . '\register_feature_patterns' );
 add_action( 'init', __NAMESPACE__ . '\register_editorial_query_patterns', 11 );
@@ -63,12 +64,12 @@ function register_feature_patterns() {
 		'icon_item_one'        => esc_html__( 'First feature', 'sci-design-blocks' ),
 		'icon_item_two'        => esc_html__( 'Second feature', 'sci-design-blocks' ),
 		'icon_item_three'      => esc_html__( 'Third feature', 'sci-design-blocks' ),
-		'accordion_question_a' => esc_html__( 'What is a private cloud?', 'sci-design-blocks' ),
-		'accordion_answer_a'   => esc_html__( 'A private cloud is a cloud environment dedicated to one organization.', 'sci-design-blocks' ),
-		'accordion_question_b' => esc_html__( 'How do backups work?', 'sci-design-blocks' ),
-		'accordion_answer_b'   => esc_html__( 'Backups run on a schedule configured for the service and its recovery needs.', 'sci-design-blocks' ),
-		'accordion_question_c' => esc_html__( 'Is support included?', 'sci-design-blocks' ),
-		'accordion_answer_c'   => esc_html__( 'Support availability and scope are defined by the selected service plan.', 'sci-design-blocks' ),
+		'accordion_question_a' => esc_html__( '¿Qué incluye este servicio?', 'sci-design-blocks' ),
+		'accordion_answer_a'   => esc_html__( 'Describe aquí qué incluye el servicio y qué recibe el cliente.', 'sci-design-blocks' ),
+		'accordion_question_b' => esc_html__( '¿Cómo funciona el proceso?', 'sci-design-blocks' ),
+		'accordion_answer_b'   => esc_html__( 'Explica aquí los pasos principales y qué debe esperar el cliente.', 'sci-design-blocks' ),
+		'accordion_question_c' => esc_html__( '¿Cómo puedo obtener ayuda?', 'sci-design-blocks' ),
+		'accordion_answer_c'   => esc_html__( 'Indica aquí los canales de soporte y sus horarios de atención.', 'sci-design-blocks' ),
 	);
 
 	$patterns = array(
@@ -356,11 +357,15 @@ HTML,
 HTML,
 		),
 		'sci-design-blocks/accordion' => array(
-			'title'       => __( 'SCI Accordion', 'sci-design-blocks' ),
-			'description' => __( 'A Core accordion with three editable items and automatic exclusive opening.', 'sci-design-blocks' ),
+			'title'       => __( 'SCI FAQ — Acordeón desplegable', 'sci-design-blocks' ),
+			'description' => __( 'Sección de preguntas frecuentes con tres respuestas desplegables y editables.', 'sci-design-blocks' ),
 			'content'     => <<<HTML
-<!-- wp:accordion {"autoclose":true} -->
-<div role="group" class="wp-block-accordion"><!-- wp:accordion-item -->
+<!-- wp:heading {"textAlign":"center"} -->
+<h2 class="wp-block-heading has-text-align-center">Preguntas frecuentes</h2>
+<!-- /wp:heading -->
+
+<!-- wp:accordion {"align":"wide","autoclose":true} -->
+<div role="group" class="wp-block-accordion alignwide"><!-- wp:accordion-item -->
 <div class="wp-block-accordion-item"><!-- wp:accordion-heading -->
 <h3 class="wp-block-accordion-heading has-icon has-icon-right"><button type="button" class="wp-block-accordion-heading__toggle"><span class="wp-block-accordion-heading__toggle-title">{$example['accordion_question_a']}</span><span class="wp-block-accordion-heading__toggle-icon" aria-hidden="true">+</span></button></h3>
 <!-- /wp:accordion-heading -->
