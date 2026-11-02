@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SCI Design Blocks
  * Description: Reusable editorial and corporate compositions built from WordPress Core blocks.
- * Version: 1.6.3
+ * Version: 1.6.4
  * Requires at least: 7.1
  * Requires PHP: 8.3
  * Author: Martín
@@ -418,6 +418,27 @@ HTML,
 	}
 }
 
-add_action( 'wp_enqueue_scripts', function () {
-	wp_enqueue_style( 'sci-product-story', plugins_url( 'assets/css/product-story.css', __FILE__ ), array(), '1.5.1' );
-} );
+add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_product_story_styles' );
+
+/**
+ * Inline Product Story CSS in the head only when its Core Group is on this page.
+ *
+ * @return void
+ */
+function enqueue_product_story_styles(): void {
+	$post = get_post( get_queried_object_id() );
+	if ( ! $post || ! str_contains( $post->post_content, 'sci-product-story' ) ) {
+		return;
+	}
+
+	$style_file = __DIR__ . '/assets/css/product-story.css';
+	$css        = is_readable( $style_file ) ? file_get_contents( $style_file ) : false;
+	if ( ! is_string( $css ) || '' === trim( $css ) ) {
+		return;
+	}
+
+	$handle = 'sci-product-story-inline';
+	wp_register_style( $handle, false, array(), (string) filemtime( $style_file ) );
+	wp_enqueue_style( $handle );
+	wp_add_inline_style( $handle, $css );
+}

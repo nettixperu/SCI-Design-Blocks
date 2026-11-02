@@ -15,40 +15,27 @@ add_action( 'init', __NAMESPACE__ . '\\register_accordion_styles', 20 );
  * @return void
  */
 function register_accordion_styles(): void {
-	$style_handle = 'sci-design-blocks-accordion-styles';
-	$plugin_file  = dirname( __DIR__ ) . '/sci-design-blocks.php';
-	$style_file   = dirname( __DIR__ ) . '/assets/css/accordion-styles.css';
-	$version      = is_readable( $style_file ) ? (string) filemtime( $style_file ) : '1.1.0';
+	$style_file = dirname( __DIR__ ) . '/assets/css/accordion-styles.css';
+	$style_css  = is_readable( $style_file ) ? file_get_contents( $style_file ) : false;
+	$minimal    = array(
+		'name'  => 'sci-minimal',
+		'label' => __( 'Minimal', 'sci-design-blocks' ),
+	);
 
-	wp_register_style(
-		$style_handle,
-		plugins_url( 'assets/css/accordion-styles.css', $plugin_file ),
-		array(),
-		$version
+	if ( is_string( $style_css ) && '' !== trim( $style_css ) ) {
+		$minimal['inline_style'] = $style_css;
+	}
+
+	register_block_style(
+		'core/accordion',
+		$minimal
 	);
 
 	register_block_style(
 		'core/accordion',
 		array(
-			'name'         => 'sci-minimal',
-			'label'        => __( 'Minimal', 'sci-design-blocks' ),
-			'style_handle' => $style_handle,
-		)
-	);
-
-	register_block_style(
-		'core/accordion',
-		array(
-			'name'         => 'sci-bordered',
-			'label'        => __( 'Bordered', 'sci-design-blocks' ),
-			'style_handle' => $style_handle,
-		)
-	);
-
-	wp_enqueue_block_style(
-		'core/accordion',
-		array(
-			'handle' => $style_handle,
+			'name'  => 'sci-bordered',
+			'label' => __( 'Bordered', 'sci-design-blocks' ),
 		)
 	);
 }

@@ -2,6 +2,11 @@
 
 User-facing highlights for stable releases. For full release details, see [GitHub Releases](https://github.com/nettixperu/SCI-Design-Blocks/releases).
 
+## 1.6.4 (unreleased)
+
+- Loads Product Story CSS only when its Core Group marker exists in the queried page, and inlines it in the head to avoid a separate render-blocking request without a flash of unstyled content.
+- Provides SCI Accordion style CSS through the Core Block Styles API inline, avoiding a separate CSS request; the selectors and visual rules remain unchanged.
+
 ## 1.6.3 (unreleased)
 
 - Adds lightweight, per-button hover controls to the Core Button block for hover background color or gradient, text and border colors, shadow, and subtle lift.

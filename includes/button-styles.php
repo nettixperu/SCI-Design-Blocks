@@ -50,7 +50,7 @@ function register_button_hover_styles(): void {
 	$plugin_file = dirname( __DIR__ ) . '/sci-design-blocks.php';
 	$style_file  = dirname( __DIR__ ) . '/assets/css/button-styles.css';
 	$handle      = 'sci-design-blocks-button-hover';
-	$version     = is_readable( $style_file ) ? (string) filemtime( $style_file ) : '1.6.3';
+	$version     = is_readable( $style_file ) ? (string) filemtime( $style_file ) : '1.6.4';
 	$style_url   = plugins_url( 'assets/css/button-styles.css', $plugin_file );
 
 	wp_register_style( $handle, $style_url, array(), $version );
@@ -183,7 +183,7 @@ function sanitize_hover_gradient( $value ): string {
 function enqueue_button_hover_editor_script(): void {
 	$plugin_file = dirname( __DIR__ ) . '/sci-design-blocks.php';
 	$script_file = dirname( __DIR__ ) . '/assets/js-button-hover-editor.js';
-	$version     = is_readable( $script_file ) ? (string) filemtime( $script_file ) : '1.6.3';
+	$version     = is_readable( $script_file ) ? (string) filemtime( $script_file ) : '1.6.4';
 
 	wp_enqueue_script(
 		'sci-design-blocks-button-hover-editor',

@@ -27,7 +27,7 @@ The 1.5.0 release source contains 27 patterns, 83 icons, seven Core Block Styles
 
 The 1.5.0 release source adds seven Core-only compositions: Hero Cover, Hero Split, Section Intro, Benefits Grid, Services Image Cards, Pricing Split Offer, and CTA Horizontal. Minimum requirements for 1.5.0 are WordPress 7.1+ and PHP 8.3+; 1.4.0 remains unchanged at PHP 7.4+. See the [M7 equivalence and design decisions](docs/architecture/M7-PATTERN-EXPANSION-DECISIONS.md), [M8 implementation report](docs/architecture/M8-IMPLEMENTATION-REPORT.md), [M8-FIX-01 repair report](docs/architecture/M8-FIX-01-REPORT.md), [M6 PHP 8.3 decision](docs/architecture/M6-PHP83-PO-DECISION.md), [M9 final hardening report](docs/architecture/M9-FINAL-HARDENING-REPORT.md), and [pattern inventory](docs/patterns/1.5.0-preview.md).
 
-The 1.6.3 development source adds optional hover settings to each Core Button, plus a Spanish FAQ accordion pattern. Hover settings are configured per button in the editor; no frontend JavaScript is added. This source has not been published as a stable release.
+The 1.6.4 development source adds optional per-button hover settings, a Spanish FAQ accordion pattern, and conditional handling for two small stylesheets reported by Lighthouse. Product Story styles are inlined only when the page content has the pattern marker; Accordion styles use the Core Block Styles API and do not require a separate CSS request. This source has not been published as a stable release.
 
 The 83 curated icons are available from the **SCI** collection in the Core Icon block workflow. See [Third-Party Notices](THIRD-PARTY-NOTICES.md) for icon licensing details.
 
