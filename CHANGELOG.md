@@ -2,6 +2,10 @@
 
 User-facing highlights for stable releases. For full release details, see [GitHub Releases](https://github.com/nettixperu/SCI-Design-Blocks/releases).
 
+## 1.6.5 (unreleased)
+
+- Uses WordPress's theme.json filter to set `font-display: swap` for Manrope when Twenty Twenty-Five is the parent theme; keeps the local font and avoids an added stylesheet or preload.
+
 ## 1.6.4 (unreleased)
 
 - Loads Product Story CSS only when its Core Group marker exists in the queried page, and inlines it in the head to avoid a separate render-blocking request without a flash of unstyled content.

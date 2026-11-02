@@ -9,7 +9,7 @@ Build editorial, commercial, and interface layouts from WordPress Core blocks—
 [![PHP 8.3+](https://img.shields.io/badge/PHP-8.3%2B-777BB4?logo=php&logoColor=white)](https://www.php.net/supported-versions.php)
 [![License: GPL-2.0-or-later](https://img.shields.io/badge/License-GPL--2.0--or--later-blue.svg)](COPYING.md)
 
-**Latest published stable release:** [SCI Design Blocks 1.4.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0). The current development source is 1.6.3 and is not a published release.
+**Latest published stable release:** [SCI Design Blocks 1.4.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0). The current development source is 1.6.5 and is not a published release.
 
 ## What’s included
 
@@ -28,6 +28,8 @@ The 1.5.0 release source contains 27 patterns, 83 icons, seven Core Block Styles
 The 1.5.0 release source adds seven Core-only compositions: Hero Cover, Hero Split, Section Intro, Benefits Grid, Services Image Cards, Pricing Split Offer, and CTA Horizontal. Minimum requirements for 1.5.0 are WordPress 7.1+ and PHP 8.3+; 1.4.0 remains unchanged at PHP 7.4+. See the [M7 equivalence and design decisions](docs/architecture/M7-PATTERN-EXPANSION-DECISIONS.md), [M8 implementation report](docs/architecture/M8-IMPLEMENTATION-REPORT.md), [M8-FIX-01 repair report](docs/architecture/M8-FIX-01-REPORT.md), [M6 PHP 8.3 decision](docs/architecture/M6-PHP83-PO-DECISION.md), [M9 final hardening report](docs/architecture/M9-FINAL-HARDENING-REPORT.md), and [pattern inventory](docs/patterns/1.5.0-preview.md).
 
 The 1.6.4 development source adds optional per-button hover settings, a Spanish FAQ accordion pattern, and conditional handling for two small stylesheets reported by Lighthouse. Product Story styles are inlined only when the page content has the pattern marker; Accordion styles use the Core Block Styles API and do not require a separate CSS request. This source has not been published as a stable release.
+
+The 1.6.5 development source sets `font-display: swap` for Manrope declared by Twenty Twenty-Five through WordPress's `wp_theme_json_data_theme` filter. The theme's local font and typography remain unchanged; no font preload or frontend stylesheet is added.
 
 The 83 curated icons are available from the **SCI** collection in the Core Icon block workflow. See [Third-Party Notices](THIRD-PARTY-NOTICES.md) for icon licensing details.
 
