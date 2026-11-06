@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SCI Design Blocks
  * Description: Reusable editorial and corporate compositions built from WordPress Core blocks.
- * Version: 1.6.5
+ * Version: 1.6.6
  * Requires at least: 7.1
  * Requires PHP: 8.3
  * Author: Martín
@@ -26,6 +26,7 @@ require_once __DIR__ . '/includes/commercial-patterns.php';
 require_once __DIR__ . '/includes/page-title-setting.php';
 require_once __DIR__ . '/includes/button-styles.php';
 require_once __DIR__ . '/includes/font-display.php';
+require_once __DIR__ . '/includes/grid-compatibility.php';
 
 add_action( 'init', __NAMESPACE__ . '\register_feature_patterns' );
 add_action( 'init', __NAMESPACE__ . '\register_editorial_query_patterns', 11 );
@@ -78,7 +79,7 @@ function register_feature_patterns() {
 			'title'       => __( 'SCI Features — Grid', 'sci-design-blocks' ),
 			'description' => __( 'Four feature cards in a responsive grid: four columns on wide screens, fewer columns as space narrows, and no forced word breaks.', 'sci-design-blocks' ),
 			'content'     => <<<'HTML'
-<!-- wp:group {"align":"wide","className":"sci-features-grid","style":{"spacing":{"blockGap":"var:preset|spacing|30"}},"layout":{"type":"grid","minimumColumnWidth":"13rem","autoFit":true}} -->
+<!-- wp:group {"align":"wide","className":"sci-features-grid","style":{"spacing":{"blockGap":"var:preset|spacing|30"}},"layout":{"type":"grid","minimumColumnWidth":"13rem"}} -->
 <div class="wp-block-group alignwide sci-features-grid">
 <!-- wp:group {"className":"sci-feature-card","style":{"color":{"background":"#ffffff","text":"#211832"},"spacing":{"padding":{"top":"var:preset|spacing|30","bottom":"var:preset|spacing|30","left":"var:preset|spacing|30","right":"var:preset|spacing|30"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group sci-feature-card has-text-color has-background" style="color:#211832;background-color:#ffffff;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><!-- wp:icon /-->

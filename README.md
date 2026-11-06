@@ -9,7 +9,7 @@ Build editorial, commercial, and interface layouts from WordPress Core blocks—
 [![PHP 8.3+](https://img.shields.io/badge/PHP-8.3%2B-777BB4?logo=php&logoColor=white)](https://www.php.net/supported-versions.php)
 [![License: GPL-2.0-or-later](https://img.shields.io/badge/License-GPL--2.0--or--later-blue.svg)](COPYING.md)
 
-**Latest published stable release:** [SCI Design Blocks 1.4.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0). The current development source is 1.6.5 and is not a published release.
+**Latest published stable release:** [SCI Design Blocks 1.4.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0). The current development source is 1.6.6 and is not a published release.
 
 ## What’s included
 
@@ -30,6 +30,8 @@ The 1.5.0 release source adds seven Core-only compositions: Hero Cover, Hero Spl
 The 1.6.4 development source adds optional per-button hover settings, a Spanish FAQ accordion pattern, and conditional handling for two small stylesheets reported by Lighthouse. Product Story styles are inlined only when the page content has the pattern marker; Accordion styles use the Core Block Styles API and do not require a separate CSS request. This source has not been published as a stable release.
 
 The 1.6.5 development source sets `font-display: swap` for Manrope declared by Twenty Twenty-Five through WordPress's `wp_theme_json_data_theme` filter. The theme's local font and typography remain unchanged; no font preload or frontend stylesheet is added.
+
+The 1.6.6 development source uses Core Grid's `auto-fill` mode for SCI patterns and converts any previously saved Core Group grid set to `auto-fit` at render time. This works around a WebKit sizing bug on iPadOS 18 when `auto-fit` and `container-type: inline-size` are combined. The filter preserves each grid's minimum column width and does not change saved content. As with native `auto-fill`, unused tracks remain on an incomplete last row instead of expanding the remaining cards. No frontend CSS or JavaScript is added. See [WebKit bug 256047](https://bugs.webkit.org/show_bug.cgi?id=256047) and [WebKit bug 282326](https://bugs.webkit.org/show_bug.cgi?id=282326).
 
 The 83 curated icons are available from the **SCI** collection in the Core Icon block workflow. See [Third-Party Notices](THIRD-PARTY-NOTICES.md) for icon licensing details.
 
@@ -85,7 +87,7 @@ Patterns rely on Core block semantics and interactions where available, includin
 
 ## Releases
 
-The latest published stable release is **SCI Design Blocks 1.4.0**; version 1.5.0 publication is pending.
+The latest published stable release is **SCI Design Blocks 1.4.0**. Development versions 1.5.0 and later have not been published as stable releases.
 
 - [Download SCI Design Blocks 1.4.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/download/v1.4.0/sci-design-blocks-1.4.0.zip)
 - [Read the 1.4.0 release notes](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0)

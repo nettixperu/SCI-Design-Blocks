@@ -64,6 +64,26 @@ require $core_dir . 'block-supports/layout.php';
 $plugin_root = isset( $argv[2] ) ? rtrim( $argv[2], '/' ) : dirname( __DIR__ );
 $plugin_file = $plugin_root . '/sci-design-blocks.php';
 require $plugin_file;
+
+$legacy_grid = array(
+	'blockName' => 'core/group',
+	'attrs'     => array(
+		'layout' => array(
+			'type'               => 'grid',
+			'minimumColumnWidth' => '16rem',
+			'autoFit'            => true,
+		),
+	),
+);
+$compatible_grid = \SCI\DesignBlocks\use_auto_fill_for_grid_compatibility( $legacy_grid, $legacy_grid, null );
+if ( true === $compatible_grid['attrs']['layout']['autoFit'] || '16rem' !== $compatible_grid['attrs']['layout']['minimumColumnWidth'] ) {
+	throw new RuntimeException( 'Legacy Core Group grids must render with auto-fill and preserve their minimum column width.' );
+}
+$non_grid = array( 'blockName' => 'core/group', 'attrs' => array( 'layout' => array( 'type' => 'flex', 'autoFit' => true ) ) );
+if ( $non_grid !== \SCI\DesignBlocks\use_auto_fill_for_grid_compatibility( $non_grid, $non_grid, null ) ) {
+	throw new RuntimeException( 'Grid compatibility must not change non-grid Group layouts.' );
+}
+
 ksort( $GLOBALS['sci_test_hooks']['init'] );
 foreach ( $GLOBALS['sci_test_hooks']['init'] as $callbacks ) {
 	foreach ( $callbacks as $callback ) {
@@ -277,8 +297,8 @@ foreach ( $new_pattern_expectations as $name => $expectation ) {
 }
 foreach ( array( 'benefits-grid', 'service-cards' ) as $grid_slug ) {
 	$grid_content = $GLOBALS['sci_test_patterns'][ 'sci-design-blocks/' . $grid_slug ]['content'];
-	if ( false === strpos( $grid_content, '"type":"grid"' ) || false === strpos( $grid_content, '"autoFit":true' ) ) {
-		throw new RuntimeException( "{$grid_slug} must use the Core auto-fit Grid layout." );
+	if ( false === strpos( $grid_content, '"type":"grid"' ) || false !== strpos( $grid_content, '"autoFit":true' ) ) {
+		throw new RuntimeException( "{$grid_slug} must use Core's default auto-fill Grid layout for WebKit compatibility." );
 	}
 }
 $benefits_grid = sci_test_find_grid( $parser->parse( $GLOBALS['sci_test_patterns']['sci-design-blocks/benefits-grid']['content'] ) );
@@ -344,10 +364,10 @@ if (
 	'core/group' !== $grid['blockName'] ||
 	'grid' !== ( $grid['attrs']['layout']['type'] ?? '' ) ||
 	'18rem' !== ( $grid['attrs']['layout']['minimumColumnWidth'] ?? '' ) ||
-	true !== ( $grid['attrs']['layout']['autoFit'] ?? false ) ||
+	true === ( $grid['attrs']['layout']['autoFit'] ?? false ) ||
 	3 !== count( $grid['innerBlocks'] )
 ) {
-	throw new RuntimeException( 'Pricing Cards must default to three cards within the native responsive Core Grid layout.' );
+	throw new RuntimeException( 'Pricing Cards must default to three cards within the native auto-fill Core Grid layout.' );
 }
 
 $pricing_card_patterns = array(

@@ -2,6 +2,11 @@
 
 User-facing highlights for stable releases. For full release details, see [GitHub Releases](https://github.com/nettixperu/SCI-Design-Blocks/releases).
 
+## 1.6.6 (unreleased)
+
+- Uses Core Grid's `auto-fill` mode in SCI patterns and converts previously saved Core Group grids from `auto-fit` to `auto-fill` at render time. This works around a WebKit issue that can collapse grid tracks when `auto-fit` is combined with `container-type: inline-size`, as happens with responsive Grid Groups in current WordPress Core.
+- The render-time compatibility filter preserves each grid's saved minimum column width and does not edit stored page content. Incomplete final rows retain empty tracks rather than stretching their remaining cards. The fix adds no frontend stylesheet or JavaScript.
+
 ## 1.6.5 (unreleased)
 
 - Uses WordPress's theme.json filter to set `font-display: swap` for Manrope when Twenty Twenty-Five is the parent theme; keeps the local font and avoids an added stylesheet or preload.
