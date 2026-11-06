@@ -93,6 +93,12 @@ foreach ( $GLOBALS['sci_test_hooks']['init'] as $callbacks ) {
 	}
 }
 
+foreach ( $GLOBALS['sci_test_patterns'] as $pattern_name => $pattern ) {
+	if ( false !== strpos( $pattern['content'], '"autoFit":true' ) ) {
+		throw new RuntimeException( "SCI pattern {$pattern_name} must not use Core Grid auto-fit because of the WebKit containment issue." );
+	}
+}
+
 $expected = array(
 	'sci-design-blocks/pricing-cards',
 	'sci-design-blocks/pricing-featured',
