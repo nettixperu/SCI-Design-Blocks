@@ -2,6 +2,12 @@
 
 User-facing highlights for stable releases. For full release details, see [GitHub Releases](https://github.com/nettixperu/SCI-Design-Blocks/releases).
 
+## 1.7.8 (ZIP de prueba)
+
+- Makes plan IDs editable, validates uniqueness and allowed characters, and updates linked Core blocks when an ID changes.
+- Warns in the Core block inspector when a linked price or button is outside SCI Market Pricing, where the market selector cannot reach it.
+- Clarifies that dynamic button prices update in preview and on the published page, and clarifies the annual note field to avoid duplicating its automatic label.
+
 ## 1.7.7 (ZIP de prueba)
 
 - Lets a linked Core Button optionally display the selected market's monthly price and period while preserving its plan-specific Fluent Forms link.

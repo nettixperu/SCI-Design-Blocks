@@ -5,7 +5,7 @@
 	const el = wp.element.createElement;
 	const { __ } = wp.i18n;
 	const { InspectorControls, InnerBlocks, useBlockProps } = wp.blockEditor;
-	const { Button, ColorPalette, PanelBody, SelectControl, TextControl, ToggleControl } = wp.components;
+	const { Button, ColorPalette, Notice, PanelBody, SelectControl, TextControl, ToggleControl } = wp.components;
 	const limit = 30;
 	const makeId = function ( prefix ) { return prefix + '_' + Math.random().toString( 36 ).slice( 2, 9 ); };
 
@@ -55,16 +55,23 @@
 			if ( props.name !== 'core/paragraph' && props.name !== 'core/button' && props.name !== 'core/heading' ) { return el( BlockEdit, props ); }
 			const isParagraph = props.name === 'core/paragraph';
 			const label = isParagraph ? __( 'ID del plan', 'sci-design-blocks' ) : ( props.name === 'core/button' ? __( 'ID del plan del botón', 'sci-design-blocks' ) : __( 'ID del plan del nombre', 'sci-design-blocks' ) );
+			const editor = wp.data && wp.data.select ? wp.data.select( 'core/block-editor' ) : null;
+			const ancestors = editor && editor.getBlockParents ? editor.getBlockParents( props.clientId ) : [];
+			const insideMarketPricing = ancestors.some( function ( clientId ) {
+				const parent = editor.getBlock( clientId );
+				return parent && parent.name === 'sci-design-blocks/market-pricing';
+			} );
 			const help = isParagraph
-				? __( 'Configura primero el importe en el bloque SCI Market Pricing. Usa el ID fijo del plan; después elige si este párrafo muestra el precio o la facturación anual.', 'sci-design-blocks' )
+				? __( 'Configura primero el importe en SCI Market Pricing. Usa el mismo ID que aparece en Planes y precios y elige si este párrafo muestra el precio o la facturación anual. El cambio se ve en la vista previa y en la página publicada.', 'sci-design-blocks' )
 				: ( props.name === 'core/button'
-					? __( 'Escribe el mismo ID que usa el párrafo del precio. El botón abrirá la URL de Fluent Forms del mercado activo; su texto y diseño siguen siendo editables con Gutenberg.', 'sci-design-blocks' )
-					: __( 'Vincula el encabezado principal de esta tarjeta con el ID fijo para editar su nombre desde Planes y precios.', 'sci-design-blocks' ) );
+					? __( 'Escribe el mismo ID que configuraste para el plan. El botón abrirá la URL de Fluent Forms del mercado activo. El precio dinámico se actualiza en la vista previa y en la página publicada.', 'sci-design-blocks' )
+					: __( 'Vincula el encabezado principal de esta tarjeta con el ID del plan para editar su nombre desde Planes y precios.', 'sci-design-blocks' ) );
 			return el( wp.element.Fragment, {},
 				el( BlockEdit, props ),
 				el( InspectorControls, {}, el( PanelBody, { title: __( 'SCI · selector de mercado', 'sci-design-blocks' ), initialOpen: false },
+					! insideMarketPricing ? el( Notice, { status: 'warning', isDismissible: false }, __( 'Este bloque debe estar dentro de SCI Market Pricing junto con el selector. Fuera de ese contenedor, el precio no puede cambiar al elegir un mercado.', 'sci-design-blocks' ) ) : null,
 					el( TextControl, { label: label, help: help, value: props.attributes.sciMarketPlanId || '', onChange: function ( value ) { props.setAttributes( { sciMarketPlanId: value.toLowerCase().replace( /[^a-z0-9_-]/g, '' ).slice( 0, 64 ) } ); } } ),
-					props.name === 'core/button' ? el( ToggleControl, { label: __( 'Mostrar el precio mensual en este botón', 'sci-design-blocks' ), help: __( 'Sustituye el texto del botón por el precio y el periodo del mercado seleccionado. El botón conserva su enlace al formulario.', 'sci-design-blocks' ), checked: props.attributes.sciMarketButtonPrice === true, onChange: function ( value ) { props.setAttributes( { sciMarketButtonPrice: value } ); } } ) : null,
+					props.name === 'core/button' ? el( ToggleControl, { label: __( 'Mostrar el precio mensual en este botón', 'sci-design-blocks' ), help: __( 'Sustituye el texto del botón por el precio y el periodo del mercado seleccionado. El botón conserva su enlace al formulario. Se actualiza en la vista previa y en la página publicada.', 'sci-design-blocks' ), checked: props.attributes.sciMarketButtonPrice === true, onChange: function ( value ) { props.setAttributes( { sciMarketButtonPrice: value } ); } } ) : null,
 					isParagraph ? el( SelectControl, { label: __( 'Contenido que cambia con el mercado', 'sci-design-blocks' ), value: props.attributes.sciMarketContentRole || 'price', options: [ { label: __( 'Precio del plan', 'sci-design-blocks' ), value: 'price' }, { label: __( 'Facturación anual', 'sci-design-blocks' ), value: 'annual' } ], onChange: function ( value ) { props.setAttributes( { sciMarketContentRole: value } ); } } ) : null ) )
 			);
 		};
@@ -76,6 +83,8 @@
 		const markets = Array.isArray( attributes.markets ) ? attributes.markets : [];
 		const plans = Array.isArray( attributes.plans ) ? attributes.plans : [];
 		const [ selectedMarket, setSelectedMarket ] = wp.element.useState( markets[0] ? markets[0].id : '' );
+		const [ planIdDrafts, setPlanIdDrafts ] = wp.element.useState( {} );
+		const [ planIdErrors, setPlanIdErrors ] = wp.element.useState( {} );
 		const marketOptions = markets.filter( function ( item ) { return item.active !== false; } ).map( function ( item ) { return { label: ( item.name || item.id ) + ' · ' + ( item.currency || 'USD' ), value: item.id }; } );
 		const blockProps = useBlockProps( { className: 'sci-market-pricing-editor' } );
 		wp.element.useEffect( function () {
@@ -121,6 +130,34 @@
 					} );
 				}
 				if ( card ) { syncHeadings( [ card ] ); }
+			}
+		}
+		function commitPlanId( index, previousId, rawValue ) {
+			const plan = plans[index];
+			let nextId = String( rawValue || '' ).trim().toLowerCase().replace( /[^a-z0-9_-]/g, '' ).slice( 0, 64 );
+			if ( nextId && ! /^[a-z]/.test( nextId ) ) { nextId = 'plan_' + nextId; }
+			const duplicate = plans.some( function ( candidate, candidateIndex ) { return candidateIndex !== index && candidate.id === nextId; } );
+			let error = '';
+			if ( ! nextId || ! /^[a-z][a-z0-9_-]{0,63}$/.test( nextId ) ) { error = __( 'Usa un ID que empiece con una letra y contenga solo letras, números, guiones o guiones bajos.', 'sci-design-blocks' ); }
+			else if ( duplicate ) { error = __( 'Ese ID ya está asignado a otro plan. Elige uno distinto.', 'sci-design-blocks' ); }
+			if ( error ) {
+				setPlanIdErrors( function ( current ) { return Object.assign( {}, current, { [ previousId ]: error } ); } );
+				return;
+			}
+			setPlanIdErrors( function ( current ) { const next = Object.assign( {}, current ); delete next[ previousId ]; return next; } );
+			setPlanIdDrafts( function ( current ) { const next = Object.assign( {}, current ); delete next[ previousId ]; return next; } );
+			if ( ! plan || nextId === previousId ) { return; }
+			setAttributes( { plans: plans.map( function ( item, i ) { return i === index ? Object.assign( {}, item, { id: nextId } ) : item; } ) } );
+			if ( wp.data && wp.data.select && wp.data.dispatch ) {
+				const editor = wp.data.select( 'core/block-editor' );
+				const dispatcher = wp.data.dispatch( 'core/block-editor' );
+				function syncPlanIds( blocks ) {
+					( blocks || [] ).forEach( function ( block ) {
+						if ( block.attributes && block.attributes.sciMarketPlanId === previousId ) { dispatcher.updateBlockAttributes( block.clientId, { sciMarketPlanId: nextId } ); }
+						syncPlanIds( block.innerBlocks );
+					} );
+				}
+				syncPlanIds( editor.getBlocks( props.clientId ) );
 			}
 		}
 		function updatePrice( planIndex, marketId, patch ) {
@@ -181,13 +218,13 @@
 		const planPanels = plans.map( function ( plan, index ) {
 			const current = plan.prices && plan.prices[selectedMarket] ? plan.prices[selectedMarket] : {};
 			const planId = plan.id || ( [ 'starter', 'business', 'enterprise' ][ index ] || 'plan_' + ( index + 1 ) );
-			return el( PanelBody, { key: planId, title: plan.name || planId, initialOpen: index === 0 },
+			return el( PanelBody, { key: 'plan-panel-' + index, title: plan.name || planId, initialOpen: index === 0 },
 				el( TextControl, { label: __( 'Nombre del plan', 'sci-design-blocks' ), value: plan.name || '', onChange: function ( value ) { updatePlan( index, { name: value } ); } } ),
-				el( TextControl, { label: __( 'ID del plan (fijo)', 'sci-design-blocks' ), help: __( 'Este ID conecta el nombre, el precio y el botón de la tarjeta. No se puede editar para evitar que se desvinculen.', 'sci-design-blocks' ), value: planId, disabled: true } ),
+				el( TextControl, { label: __( 'ID del plan', 'sci-design-blocks' ), help: planIdErrors[ planId ] || __( 'Puedes personalizarlo. Al cambiarlo, SCI actualiza los párrafos, encabezados y botones vinculados dentro de este contenedor.', 'sci-design-blocks' ), value: Object.prototype.hasOwnProperty.call( planIdDrafts, planId ) ? planIdDrafts[ planId ] : planId, onChange: function ( value ) { setPlanIdDrafts( function ( currentDrafts ) { return Object.assign( {}, currentDrafts, { [ planId ]: value } ); } ); }, onBlur: function () { commitPlanId( index, planId, Object.prototype.hasOwnProperty.call( planIdDrafts, planId ) ? planIdDrafts[ planId ] : planId ); } } ),
 				el( TextControl, { label: __( 'Precio para el mercado seleccionado', 'sci-design-blocks' ), type: 'number', min: 0, step: '0.001', value: current.amount || '', onChange: function ( value ) { updatePrice( index, selectedMarket, { amount: value } ); } } ),
 				el( TextControl, { label: __( 'Texto del periodo', 'sci-design-blocks' ), help: __( 'Ejemplo: / mes, / año, pago único.', 'sci-design-blocks' ), value: current.period || '', onChange: function ( value ) { updatePrice( index, selectedMarket, { period: value } ); } } ),
 				el( TextControl, { label: __( 'Facturación anual (opcional)', 'sci-design-blocks' ), help: __( 'Si lo dejas vacío, se calcula como el precio mensual × 12. Puedes indicar un importe distinto para cada moneda.', 'sci-design-blocks' ), type: 'number', min: 0, step: '0.01', value: current.annualAmount || '', onChange: function ( value ) { updatePrice( index, selectedMarket, { annualAmount: value } ); } } ),
-				el( TextControl, { label: __( 'Nota de facturación (opcional)', 'sci-design-blocks' ), help: __( 'Ejemplos: + IGV, + IVA, impuestos incluidos.', 'sci-design-blocks' ), value: current.annualNote || '', onChange: function ( value ) { updatePrice( index, selectedMarket, { annualNote: value } ); } } ),
+				el( TextControl, { label: __( 'Nota de facturación (opcional)', 'sci-design-blocks' ), help: __( 'La frase “Facturación anual” y el importe se agregan automáticamente. Escribe solo la nota, por ejemplo: + IGV, + IVA o impuestos incluidos.', 'sci-design-blocks' ), value: current.annualNote || '', onChange: function ( value ) { updatePrice( index, selectedMarket, { annualNote: value } ); } } ),
 				el( Button, { variant: 'tertiary', isDestructive: true, disabled: plans.length <= 1, onClick: function () { removePlan( index ); } }, __( 'Eliminar plan y tarjeta', 'sci-design-blocks' ) )
 			);
 		} );
@@ -226,7 +263,7 @@
 					el( 'strong', {}, __( 'Cómo vincular precio y botón', 'sci-design-blocks' ) ),
 					el( 'ol', {},
 						el( 'li', {}, __( 'En Planes y precios, elige el mercado y configura el precio y el periodo del plan.', 'sci-design-blocks' ) ),
-						el( 'li', {}, __( 'Si el precio va fuera del botón, selecciona su párrafo, escribe el ID fijo y elige “Precio del plan”. Si quieres el precio dentro del botón verde, selecciona el botón, escribe ese ID y activa “Mostrar el precio mensual en este botón”.', 'sci-design-blocks' ) ),
+						el( 'li', {}, __( 'Si el precio va fuera del botón, selecciona su párrafo, escribe el ID del plan y elige “Precio del plan”. Si quieres el precio dentro del botón verde, selecciona el botón, escribe ese mismo ID y activa “Mostrar el precio mensual en este botón”.', 'sci-design-blocks' ) ),
 						el( 'li', {}, __( 'El botón vinculado conserva su enlace al formulario del plan; al activar precio dinámico, su texto se reemplaza por el importe y periodo del mercado activo.', 'sci-design-blocks' ) ),
 						el( 'li', {}, __( 'Para una línea anual, vincula otro párrafo con ese ID y elige “Facturación anual”.', 'sci-design-blocks' ) )
 					),
