@@ -2,6 +2,12 @@
 
 User-facing highlights for stable releases. For full release details, see [GitHub Releases](https://github.com/nettixperu/SCI-Design-Blocks/releases).
 
+## 1.7.6 (ZIP de prueba)
+
+- Derives a market flag from the country/region in its locale when no manual emoji override is set; the existing hide-flags option still applies.
+- Adds clear in-editor steps for configuring the plan price and linking a Core Paragraph and Button with the same plan ID.
+- Leaves the manual flag field optional and clears explicit flags from the integrated pattern so Peru and Mexico use locale-based flags by default.
+
 ## 1.7.5 (ZIP de prueba)
 
 - Adds an editable plan name connected to its Core Heading; the plan ID is stable and read-only to prevent accidental unlinking.

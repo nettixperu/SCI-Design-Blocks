@@ -51,11 +51,16 @@
 		return function ( props ) {
 			if ( props.name !== 'core/paragraph' && props.name !== 'core/button' && props.name !== 'core/heading' ) { return el( BlockEdit, props ); }
 			const isParagraph = props.name === 'core/paragraph';
-			const label = isParagraph ? __( 'Vincular a un plan', 'sci-design-blocks' ) : ( props.name === 'core/button' ? __( 'Vincular botón a plan', 'sci-design-blocks' ) : __( 'Vincular nombre a plan', 'sci-design-blocks' ) );
+			const label = isParagraph ? __( 'ID del plan', 'sci-design-blocks' ) : ( props.name === 'core/button' ? __( 'ID del plan del botón', 'sci-design-blocks' ) : __( 'ID del plan del nombre', 'sci-design-blocks' ) );
+			const help = isParagraph
+				? __( 'Configura primero el importe en el bloque SCI Market Pricing. Usa el ID fijo del plan; después elige si este párrafo muestra el precio o la facturación anual.', 'sci-design-blocks' )
+				: ( props.name === 'core/button'
+					? __( 'Escribe el mismo ID que usa el párrafo del precio. El botón abrirá la URL de Fluent Forms del mercado activo; su texto y diseño siguen siendo editables con Gutenberg.', 'sci-design-blocks' )
+					: __( 'Vincula el encabezado principal de esta tarjeta con el ID fijo para editar su nombre desde Planes y precios.', 'sci-design-blocks' ) );
 			return el( wp.element.Fragment, {},
 				el( BlockEdit, props ),
 				el( InspectorControls, {}, el( PanelBody, { title: __( 'SCI · selector de mercado', 'sci-design-blocks' ), initialOpen: false },
-					el( TextControl, { label: label, help: __( 'Usa el mismo ID que configuraste en el bloque SCI Market Pricing. Déjalo vacío para no vincular este bloque.', 'sci-design-blocks' ), value: props.attributes.sciMarketPlanId || '', onChange: function ( value ) { props.setAttributes( { sciMarketPlanId: value.toLowerCase().replace( /[^a-z0-9_-]/g, '' ).slice( 0, 64 ) } ); } } ),
+					el( TextControl, { label: label, help: help, value: props.attributes.sciMarketPlanId || '', onChange: function ( value ) { props.setAttributes( { sciMarketPlanId: value.toLowerCase().replace( /[^a-z0-9_-]/g, '' ).slice( 0, 64 ) } ); } } ),
 					isParagraph ? el( SelectControl, { label: __( 'Contenido que cambia con el mercado', 'sci-design-blocks' ), value: props.attributes.sciMarketContentRole || 'price', options: [ { label: __( 'Precio del plan', 'sci-design-blocks' ), value: 'price' }, { label: __( 'Facturación anual', 'sci-design-blocks' ), value: 'annual' } ], onChange: function ( value ) { props.setAttributes( { sciMarketContentRole: value } ); } } ) : null ) )
 			);
 		};
@@ -154,7 +159,7 @@
 			return el( PanelBody, { key: market.id, title: ( market.name || __( 'Mercado', 'sci-design-blocks' ) ) + ' · ' + ( market.currency || 'USD' ), initialOpen: index === 0 },
 				el( TextControl, { label: __( 'ID estable', 'sci-design-blocks' ), value: market.id, disabled: true, help: __( 'Se crea al añadir el mercado y no cambia al editar su nombre o moneda.', 'sci-design-blocks' ) } ),
 				el( TextControl, { label: __( 'Nombre mostrado', 'sci-design-blocks' ), value: market.name || '', onChange: function ( value ) { updateMarket( index, { name: value } ); } } ),
-				el( TextControl, { label: __( 'Bandera (emoji)', 'sci-design-blocks' ), help: __( 'Ejemplos: 🇵🇪, 🇲🇽, 🇺🇸, 🇨🇴, 🇪🇸.', 'sci-design-blocks' ), value: market.flag || '', onChange: function ( value ) { updateMarket( index, { flag: value.slice( 0, 16 ) } ); } } ),
+				el( TextControl, { label: __( 'Bandera manual (opcional)', 'sci-design-blocks' ), help: __( 'Vacío: se toma automáticamente del país en la configuración regional (por ejemplo, es-PE → 🇵🇪). Escribe un emoji solo si quieres sobrescribirlo.', 'sci-design-blocks' ), value: market.flag || '', onChange: function ( value ) { updateMarket( index, { flag: value.slice( 0, 16 ) } ); } } ),
 				el( TextControl, { label: __( 'Moneda (ISO 4217)', 'sci-design-blocks' ), help: __( 'Ejemplos: PEN, MXN, USD, COP, EUR.', 'sci-design-blocks' ), value: market.currency || '', maxLength: 3, onChange: function ( value ) { updateMarket( index, { currency: value.toUpperCase() } ); } } ),
 				el( TextControl, { label: __( 'Configuración regional', 'sci-design-blocks' ), value: market.locale || '', onChange: function ( value ) { updateMarket( index, { locale: value } ); } } ),
 				el( TextControl, { label: __( 'URL del formulario Fluent Forms para este mercado', 'sci-design-blocks' ), type: 'url', value: market.formUrl || '', onChange: function ( value ) { updateMarket( index, { formUrl: value } ); } } ),
@@ -213,7 +218,16 @@
 				)
 			),
 			el( 'div', blockProps,
-				el( 'p', { className: 'sci-market-pricing-editor__help' }, __( 'Inserta aquí un patrón SCI Pricing. Vincula cada párrafo de precio y botón Core con el ID del plan correspondiente.', 'sci-design-blocks' ) ),
+				el( 'div', { className: 'sci-market-pricing-editor__help' },
+					el( 'strong', {}, __( 'Cómo vincular precio y botón', 'sci-design-blocks' ) ),
+					el( 'ol', {},
+						el( 'li', {}, __( 'En Planes y precios, elige el mercado y configura el precio y el periodo del plan.', 'sci-design-blocks' ) ),
+						el( 'li', {}, __( 'Selecciona el párrafo del precio. En Bloque → SCI · selector de mercado, escribe el ID fijo del plan y elige “Precio del plan”.', 'sci-design-blocks' ) ),
+						el( 'li', {}, __( 'Selecciona el botón Core de esa tarjeta y escribe el mismo ID en “ID del plan del botón”.', 'sci-design-blocks' ) ),
+						el( 'li', {}, __( 'Para una línea anual, vincula otro párrafo con ese ID y elige “Facturación anual”.', 'sci-design-blocks' ) )
+					),
+					el( 'p', {}, __( 'El patrón SCI Pricing — Market Selector ya incluye estos vínculos.', 'sci-design-blocks' ) )
+				),
 				el( InnerBlocks, { renderAppender: InnerBlocks.ButtonBlockAppender } )
 			)
 		);

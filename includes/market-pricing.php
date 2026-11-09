@@ -10,9 +10,22 @@ namespace SCI\DesignBlocks;
 /** Example markets are editable and are not tied to a fixed currency list. */
 function market_pricing_default_markets(): array {
 	return array(
-		array( 'id' => 'pe_pen', 'name' => __( 'Perú', 'sci-design-blocks' ), 'flag' => '🇵🇪', 'currency' => 'PEN', 'locale' => 'es-PE', 'formUrl' => '', 'active' => true ),
-		array( 'id' => 'mx_mxn', 'name' => __( 'México', 'sci-design-blocks' ), 'flag' => '🇲🇽', 'currency' => 'MXN', 'locale' => 'es-MX', 'formUrl' => '', 'active' => true ),
+		array( 'id' => 'pe_pen', 'name' => __( 'Perú', 'sci-design-blocks' ), 'flag' => '', 'currency' => 'PEN', 'locale' => 'es-PE', 'formUrl' => '', 'active' => true ),
+		array( 'id' => 'mx_mxn', 'name' => __( 'México', 'sci-design-blocks' ), 'flag' => '', 'currency' => 'MXN', 'locale' => 'es-MX', 'formUrl' => '', 'active' => true ),
 	);
+}
+
+/** Derive a regional-indicator flag from the country/region subtag of a BCP 47 locale. */
+function market_pricing_flag_from_locale( string $locale ): string {
+	$parts = explode( '-', $locale );
+	$region_index = 1;
+	if ( isset( $parts[1] ) && preg_match( '/^[A-Za-z]{4}$/', $parts[1] ) ) { $region_index = 2; }
+	$region = strtoupper( $parts[ $region_index ] ?? '' );
+	if ( ! preg_match( '/^[A-Z]{2}$/', $region ) ) { return ''; }
+	$base = 127462; // REGIONAL INDICATOR SYMBOL LETTER A.
+	$first = $base + ord( $region[0] ) - 65;
+	$second = $base + ord( $region[1] ) - 65;
+	return html_entity_decode( '&#' . $first . ';&#' . $second . ';', ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 }
 
 /** Keep IDs safe for HTML, attributes, and query strings. */
@@ -73,9 +86,9 @@ function register_market_pricing_block(): void {
 	$style = $root . '/assets/css/market-pricing.css';
 	$editor = $root . '/assets/js-market-pricing-editor.js';
 	$view = $root . '/assets/js-market-pricing.js';
-	wp_register_style( 'sci-market-pricing', plugins_url( 'assets/css/market-pricing.css', $root . '/sci-design-blocks.php' ), array(), is_file( $style ) ? (string) filemtime( $style ) : '1.7.5' );
-	wp_register_script( 'sci-market-pricing-editor', plugins_url( 'assets/js-market-pricing-editor.js', $root . '/sci-design-blocks.php' ), array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-data', 'wp-hooks', 'wp-compose', 'wp-i18n' ), is_file( $editor ) ? (string) filemtime( $editor ) : '1.7.5', true );
-	wp_register_script( 'sci-market-pricing-view', plugins_url( 'assets/js-market-pricing.js', $root . '/sci-design-blocks.php' ), array(), is_file( $view ) ? (string) filemtime( $view ) : '1.7.5', true );
+	wp_register_style( 'sci-market-pricing', plugins_url( 'assets/css/market-pricing.css', $root . '/sci-design-blocks.php' ), array(), is_file( $style ) ? (string) filemtime( $style ) : '1.7.6' );
+	wp_register_script( 'sci-market-pricing-editor', plugins_url( 'assets/js-market-pricing-editor.js', $root . '/sci-design-blocks.php' ), array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-data', 'wp-hooks', 'wp-compose', 'wp-i18n' ), is_file( $editor ) ? (string) filemtime( $editor ) : '1.7.6', true );
+	wp_register_script( 'sci-market-pricing-view', plugins_url( 'assets/js-market-pricing.js', $root . '/sci-design-blocks.php' ), array(), is_file( $view ) ? (string) filemtime( $view ) : '1.7.6', true );
 	register_block_type(
 		'sci-design-blocks/market-pricing',
 		array(
@@ -121,13 +134,15 @@ function market_pricing_normalize( $markets_raw, $plans_raw ): array {
 		$currency = strtoupper( preg_replace( '/[^A-Za-z]/', '', is_scalar( $market['currency'] ?? '' ) ? (string) $market['currency'] : '' ) );
 		$locale = preg_replace( '/[^A-Za-z0-9-]/', '', is_scalar( $market['locale'] ?? '' ) ? (string) $market['locale'] : '' );
 		$url = is_scalar( $market['formUrl'] ?? '' ) ? esc_url_raw( (string) $market['formUrl'] ) : '';
+		$flag = sanitize_text_field( is_scalar( $market['flag'] ?? '' ) ? (string) $market['flag'] : '' );
+		if ( '' === $flag ) { $flag = market_pricing_flag_from_locale( $locale ); }
 		$markets[] = array(
 			'id' => $id,
 			'name' => sanitize_text_field( is_scalar( $market['name'] ?? '' ) ? (string) $market['name'] : '' ),
 			'currency' => preg_match( '/^[A-Z]{3}$/', $currency ) ? $currency : 'USD',
 			'locale' => preg_match( '/^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$/', $locale ) ? $locale : 'en',
 			'formUrl' => $url,
-			'flag' => sanitize_text_field( is_scalar( $market['flag'] ?? '' ) ? (string) $market['flag'] : '' ),
+			'flag' => $flag,
 			'active' => ! empty( $market['active'] ),
 		);
 	}

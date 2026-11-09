@@ -9,11 +9,11 @@ Build editorial, commercial, and interface layouts from WordPress Core blocks—
 [![PHP 8.3+](https://img.shields.io/badge/PHP-8.3%2B-777BB4?logo=php&logoColor=white)](https://www.php.net/supported-versions.php)
 [![License: GPL-2.0-or-later](https://img.shields.io/badge/License-GPL--2.0--or--later-blue.svg)](COPYING.md)
 
-**Current source and test package:** 1.7.5. It is a test build and is not a tagged or production release. The latest published GitHub release remains [SCI Design Blocks 1.4.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0).
+**Current source and test package:** 1.7.6. It is a test build and is not a tagged or production release. The latest published GitHub release remains [SCI Design Blocks 1.4.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0).
 
 ## What’s included
 
-The 1.7.5 source contains 31 patterns, 83 icons, seven Core Block Styles, and one optional dynamic Gutenberg block: SCI Market Pricing. Published 1.4.0 remains immutable and contains 20 patterns, 83 icons, two Accordion styles, four Tabs styles, and an optional Featured Image Hover Zoom style.
+The 1.7.6 source contains 31 patterns, 83 icons, seven Core Block Styles, and one optional dynamic Gutenberg block: SCI Market Pricing. Published 1.4.0 remains immutable and contains 20 patterns, 83 icons, two Accordion styles, four Tabs styles, and an optional Featured Image Hover Zoom style.
 
 | Family | Included |
 | --- | --- |
@@ -81,7 +81,7 @@ Patterns rely on Core block semantics and interactions where available, includin
 
 ## Releases
 
-The latest published stable release is **SCI Design Blocks 1.4.0**. Version 1.7.5 is a test package and has not been tagged as a GitHub release.
+The latest published stable release is **SCI Design Blocks 1.4.0**. Version 1.7.6 is a test package and has not been tagged as a GitHub release.
 
 - [Download SCI Design Blocks 1.4.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/download/v1.4.0/sci-design-blocks-1.4.0.zip)
 - [Read the 1.4.0 release notes](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0)
