@@ -9,11 +9,11 @@ Build editorial, commercial, and interface layouts from WordPress Core blocks—
 [![PHP 8.3+](https://img.shields.io/badge/PHP-8.3%2B-777BB4?logo=php&logoColor=white)](https://www.php.net/supported-versions.php)
 [![License: GPL-2.0-or-later](https://img.shields.io/badge/License-GPL--2.0--or--later-blue.svg)](COPYING.md)
 
-**Current source and test package:** 1.7.4. It is a test build and is not a tagged or production release. The latest published GitHub release remains [SCI Design Blocks 1.4.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0).
+**Current source and test package:** 1.7.5. It is a test build and is not a tagged or production release. The latest published GitHub release remains [SCI Design Blocks 1.4.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0).
 
 ## What’s included
 
-The 1.7.4 source contains 31 patterns, 83 icons, seven Core Block Styles, and one optional dynamic Gutenberg block: SCI Market Pricing. Published 1.4.0 remains immutable and contains 20 patterns, 83 icons, two Accordion styles, four Tabs styles, and an optional Featured Image Hover Zoom style.
+The 1.7.5 source contains 31 patterns, 83 icons, seven Core Block Styles, and one optional dynamic Gutenberg block: SCI Market Pricing. Published 1.4.0 remains immutable and contains 20 patterns, 83 icons, two Accordion styles, four Tabs styles, and an optional Featured Image Hover Zoom style.
 
 | Family | Included |
 | --- | --- |
@@ -29,7 +29,7 @@ The current source adds Core-only compositions, including the SCI Process — 3 
 
 The 83 curated icons are available from the **SCI** collection in the Core Icon block workflow. See [Third-Party Notices](THIRD-PARTY-NOTICES.md) for icon licensing details.
 
-Pricing patterns use Core Group Grid and start with three plans. Duplicate or remove plan Groups with normal Gutenberg editing; the Product Owner reports validating up to six plans. Six is not a software limit. Comparison Feature Table uses the semantic Core Table block; narrow-screen horizontal scrolling remains within the table. SCI Market Pricing is an optional wrapper around the Core cards. It stores editable market/currency data and plan prices, then links Core Button blocks to the configured Fluent Forms URL for that market. It supports additional currencies and plan IDs; it does not render or style replacement cards.
+Pricing patterns use Core Group Grid and start with three plans. Duplicate or remove plan Groups with normal Gutenberg editing; the Product Owner reports validating up to six plans. Six is not a software limit. Comparison Feature Table uses the semantic Core Table block; narrow-screen horizontal scrolling remains within the table. SCI Market Pricing is an optional wrapper around the Core cards. Its inspector lets editors change each linked plan's name, configure its monthly and annual price per market/currency, and remove a linked Core card. Annual billing defaults to monthly price × 12; editors can override that value and add a market-specific note such as `+ IGV` or `+ IVA`. The wrapper also links Core Button blocks to the configured Fluent Forms URL for the selected market. It does not render or style replacement cards.
 
 ## Download and install
 
@@ -65,7 +65,7 @@ SCI Design Blocks favors reusable compositions of WordPress Core blocks. Pattern
 
 - **Core patterns remain portable.** Inserted card content remains editable WordPress Core blocks. SCI Market Pricing is an optional dynamic wrapper; if SCI is deactivated, its saved attributes remain in the post, but its selector and market-price behavior are unavailable until SCI is active again.
 - **Theme-native.** Patterns use Core controls and respect theme.json and Global Styles.
-- **Market Pricing uses WordPress APIs and browser standards.** Its editor adds market/price fields and plan IDs to Core paragraph/button blocks; its frontend script updates marked prices and sends only market and plan IDs to Fluent Forms. It does not send a price as checkout authority, calculate exchange rates, or add a payment runtime.
+- **Market Pricing uses WordPress APIs and browser standards.** Its editor adds market/price fields and plan IDs to Core paragraph, heading, and button blocks; its frontend script updates linked plan names, monthly/annual amounts and button routes, and sends only market and plan IDs to Fluent Forms. It does not send a price as checkout authority, calculate exchange rates, or add a payment runtime.
 - The Pricing and Comparison patterns remain Core markup. A small selector style and frontend script load only when the optional Market Pricing block is present.
 - When the plugin is inactive, inserted pattern content remains Core content. Registered SCI icons and optional visual styles may no longer be available.
 
@@ -81,7 +81,7 @@ Patterns rely on Core block semantics and interactions where available, includin
 
 ## Releases
 
-The latest published stable release is **SCI Design Blocks 1.4.0**. Version 1.7.4 is a test package and has not been tagged as a GitHub release.
+The latest published stable release is **SCI Design Blocks 1.4.0**. Version 1.7.5 is a test package and has not been tagged as a GitHub release.
 
 - [Download SCI Design Blocks 1.4.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/download/v1.4.0/sci-design-blocks-1.4.0.zip)
 - [Read the 1.4.0 release notes](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0)

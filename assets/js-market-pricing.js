@@ -44,7 +44,19 @@
 		( data.plans || [] ).forEach( function ( plan ) {
 			const price = plan.prices && plan.prices[market.id] ? plan.prices[market.id] : {};
 			Array.from( wrapper.querySelectorAll( '[data-sci-market-plan-id]' ) ).filter( function ( node ) { return node.dataset.sciMarketPlanId === plan.id; } ).forEach( function ( node ) {
-				if ( node.matches( 'p' ) ) {
+				if ( node.matches( 'h1, h2, h3, h4, h5, h6' ) ) {
+					if ( plan.name ) { node.textContent = plan.name; }
+				} else if ( node.matches( 'p' ) && node.dataset.sciMarketContentRole === 'annual' ) {
+					const monthly = Number( price.amount );
+					const annual = price.annualAmount !== '' && price.annualAmount !== undefined ? Number( price.annualAmount ) : monthly * 12;
+					const hasAnnual = Number.isFinite( annual ) && annual > 0;
+					node.hidden = ! hasAnnual && ! price.annualNote;
+					if ( node.hidden ) { node.style.display = 'none'; } else { node.style.removeProperty( 'display' ); }
+					if ( ! node.hidden ) {
+						const annualText = hasAnnual ? 'Facturación anual ' + format( annual, market ) : '';
+						node.textContent = [ annualText, price.annualNote || '' ].filter( Boolean ).join( ' ' );
+					}
+				} else if ( node.matches( 'p' ) ) {
 					const formatted = price.amount ? format( price.amount, market ) : 'Consultar';
 					node.textContent = formatted + ( price.amount && price.period ? ' ' + price.period : '' );
 				}

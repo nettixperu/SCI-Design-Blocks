@@ -1,9 +1,9 @@
-<!-- wp:sci-design-blocks/market-pricing {"align":"full","defaultMarketId":"pe_pen","selectorStyle":"segmented","showFlags":true,"showSelectorLabel":false,"markets":[{"id":"pe_pen","name":"Perú","flag":"🇵🇪","currency":"PEN","locale":"es-PE","formUrl":"","active":true},{"id":"mx_mxn","name":"México","flag":"🇲🇽","currency":"MXN","locale":"es-MX","formUrl":"","active":true}],"plans":[{"id":"starter","prices":{}},{"id":"business","prices":{}},{"id":"enterprise","prices":{}}]} -->
+<!-- wp:sci-design-blocks/market-pricing {"align":"full","defaultMarketId":"pe_pen","selectorStyle":"segmented","showFlags":true,"showSelectorLabel":false,"markets":[{"id":"pe_pen","name":"Perú","flag":"🇵🇪","currency":"PEN","locale":"es-PE","formUrl":"","active":true},{"id":"mx_mxn","name":"México","flag":"🇲🇽","currency":"MXN","locale":"es-MX","formUrl":"","active":true}],"plans":[{"id":"starter","name":"Starter","prices":{}},{"id":"business","name":"Business","prices":{}},{"id":"enterprise","name":"Enterprise","prices":{}}]} -->
 <!-- wp:group {"align":"wide","style":{"spacing":{"blockGap":"var:preset|spacing|30"}},"layout":{"type":"grid","minimumColumnWidth":"18rem","columnCount":3,"autoFit":true}} -->
 <div class="wp-block-group alignwide">
 <!-- wp:group {"layout":{"type":"flex","orientation":"vertical","verticalAlignment":"space-between"}} -->
 <div class="wp-block-group"><!-- wp:group {"layout":{"type":"flex","orientation":"vertical"}} -->
-<div class="wp-block-group"><!-- wp:heading {"level":3} -->
+<div class="wp-block-group"><!-- wp:heading {"level":3,"sciMarketPlanId":"starter"} -->
 <h3 class="wp-block-heading">Starter</h3>
 <!-- /wp:heading -->
 
@@ -11,7 +11,7 @@
 <p>Para equipos pequeños.</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:paragraph {"sciMarketPlanId":"starter"} -->
+<!-- wp:paragraph {"sciMarketPlanId":"starter","sciMarketContentRole":"price"} -->
 <p>Consultar</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
@@ -34,12 +34,15 @@
 <div class="wp-block-buttons"><!-- wp:button {"sciMarketPlanId":"starter"} -->
 <div class="wp-block-button"><a class="wp-block-button__link wp-element-button">Elegir plan</a></div>
 <!-- /wp:button --></div>
-<!-- /wp:buttons --></div>
+<!-- /wp:buttons -->
+<!-- wp:paragraph {"sciMarketPlanId":"starter","sciMarketContentRole":"annual"} -->
+<p>Facturación anual</p>
+<!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
 <!-- wp:group {"layout":{"type":"flex","orientation":"vertical","verticalAlignment":"space-between"}} -->
 <div class="wp-block-group"><!-- wp:group {"layout":{"type":"flex","orientation":"vertical"}} -->
-<div class="wp-block-group"><!-- wp:heading {"level":3} -->
+<div class="wp-block-group"><!-- wp:heading {"level":3,"sciMarketPlanId":"business"} -->
 <h3 class="wp-block-heading">Business</h3>
 <!-- /wp:heading -->
 
@@ -47,7 +50,7 @@
 <p>Para empresas en crecimiento.</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:paragraph {"sciMarketPlanId":"business"} -->
+<!-- wp:paragraph {"sciMarketPlanId":"business","sciMarketContentRole":"price"} -->
 <p>Consultar</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
@@ -74,12 +77,15 @@
 <div class="wp-block-buttons"><!-- wp:button {"sciMarketPlanId":"business"} -->
 <div class="wp-block-button"><a class="wp-block-button__link wp-element-button">Elegir plan</a></div>
 <!-- /wp:button --></div>
-<!-- /wp:buttons --></div>
+<!-- /wp:buttons -->
+<!-- wp:paragraph {"sciMarketPlanId":"business","sciMarketContentRole":"annual"} -->
+<p>Facturación anual</p>
+<!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
 <!-- wp:group {"layout":{"type":"flex","orientation":"vertical","verticalAlignment":"space-between"}} -->
 <div class="wp-block-group"><!-- wp:group {"layout":{"type":"flex","orientation":"vertical"}} -->
-<div class="wp-block-group"><!-- wp:heading {"level":3} -->
+<div class="wp-block-group"><!-- wp:heading {"level":3,"sciMarketPlanId":"enterprise"} -->
 <h3 class="wp-block-heading">Enterprise</h3>
 <!-- /wp:heading -->
 
@@ -87,7 +93,7 @@
 <p>Soluciones adaptadas a necesidades específicas.</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:paragraph {"sciMarketPlanId":"enterprise"} -->
+<!-- wp:paragraph {"sciMarketPlanId":"enterprise","sciMarketContentRole":"price"} -->
 <p>Consultar</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
@@ -114,7 +120,10 @@
 <div class="wp-block-buttons"><!-- wp:button {"sciMarketPlanId":"enterprise"} -->
 <div class="wp-block-button"><a class="wp-block-button__link wp-element-button">Hablar con un asesor</a></div>
 <!-- /wp:button --></div>
-<!-- /wp:buttons --></div>
+<!-- /wp:buttons -->
+<!-- wp:paragraph {"sciMarketPlanId":"enterprise","sciMarketContentRole":"annual"} -->
+<p>Facturación anual</p>
+<!-- /wp:paragraph --></div>
 <!-- /wp:group --></div>
 <!-- /wp:group -->
 <!-- /wp:sci-design-blocks/market-pricing -->

@@ -2,6 +2,13 @@
 
 User-facing highlights for stable releases. For full release details, see [GitHub Releases](https://github.com/nettixperu/SCI-Design-Blocks/releases).
 
+## 1.7.5 (ZIP de prueba)
+
+- Adds an editable plan name connected to its Core Heading; the plan ID is stable and read-only to prevent accidental unlinking.
+- Makes **Eliminar plan y tarjeta** remove the matching Core card when its price and button are linked to the plan; prevents deleting the last plan.
+- Adds annual billing per market. By default it is monthly price × 12; an optional annual override and market-specific tax note can be set for PEN, USD, MXN, or another configured currency.
+- Updates the integrated pricing pattern with linked plan headings and annual billing rows that follow the selected market.
+
 ## 1.7.4 (ZIP de prueba)
 
 - Makes the “Moneda o mercado” label optional and hides it by default in the integrated pricing pattern.

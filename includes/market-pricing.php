@@ -32,11 +32,14 @@ function market_pricing_color( $value ): string {
 	return preg_match( '/^var\\(--wp--preset--color--[a-z0-9-]+\\)$/', $color ) ? $color : '';
 }
 
-/** Add narrowly scoped attributes to Core price paragraphs and buttons. */
+/** Add narrowly scoped binding attributes to Core pricing blocks. */
 function market_pricing_core_attributes( array $args, string $block_name ): array {
-	if ( in_array( $block_name, array( 'core/paragraph', 'core/button' ), true ) ) {
+	if ( in_array( $block_name, array( 'core/paragraph', 'core/button', 'core/heading' ), true ) ) {
 		$args['attributes'] = isset( $args['attributes'] ) && is_array( $args['attributes'] ) ? $args['attributes'] : array();
 		$args['attributes']['sciMarketPlanId'] = array( 'type' => 'string', 'default' => '' );
+	}
+	if ( 'core/paragraph' === $block_name ) {
+		$args['attributes']['sciMarketContentRole'] = array( 'type' => 'string', 'default' => 'price' );
 	}
 	return $args;
 }
@@ -44,7 +47,7 @@ add_filter( 'register_block_type_args', __NAMESPACE__ . '\\market_pricing_core_a
 
 /** Mark explicitly linked Core blocks in their rendered HTML. */
 function market_pricing_mark_core_blocks( string $html, array $block ): string {
-	if ( ! in_array( $block['blockName'] ?? '', array( 'core/paragraph', 'core/button' ), true ) ) {
+	if ( ! in_array( $block['blockName'] ?? '', array( 'core/paragraph', 'core/button', 'core/heading' ), true ) ) {
 		return $html;
 	}
 	$id = market_pricing_id( $block['attrs']['sciMarketPlanId'] ?? '' );
@@ -54,6 +57,10 @@ function market_pricing_mark_core_blocks( string $html, array $block ): string {
 	$processor = new \WP_HTML_Tag_Processor( $html );
 	if ( $processor->next_tag() ) {
 		$processor->set_attribute( 'data-sci-market-plan-id', $id );
+		if ( 'core/paragraph' === $block['blockName'] ) {
+			$role = ( $block['attrs']['sciMarketContentRole'] ?? 'price' ) === 'annual' ? 'annual' : 'price';
+			$processor->set_attribute( 'data-sci-market-content-role', $role );
+		}
 		return $processor->get_updated_html();
 	}
 	return $html;
@@ -66,9 +73,9 @@ function register_market_pricing_block(): void {
 	$style = $root . '/assets/css/market-pricing.css';
 	$editor = $root . '/assets/js-market-pricing-editor.js';
 	$view = $root . '/assets/js-market-pricing.js';
-	wp_register_style( 'sci-market-pricing', plugins_url( 'assets/css/market-pricing.css', $root . '/sci-design-blocks.php' ), array(), is_file( $style ) ? (string) filemtime( $style ) : '1.7.4' );
-	wp_register_script( 'sci-market-pricing-editor', plugins_url( 'assets/js-market-pricing-editor.js', $root . '/sci-design-blocks.php' ), array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-data', 'wp-hooks', 'wp-compose', 'wp-i18n' ), is_file( $editor ) ? (string) filemtime( $editor ) : '1.7.4', true );
-	wp_register_script( 'sci-market-pricing-view', plugins_url( 'assets/js-market-pricing.js', $root . '/sci-design-blocks.php' ), array(), is_file( $view ) ? (string) filemtime( $view ) : '1.7.4', true );
+	wp_register_style( 'sci-market-pricing', plugins_url( 'assets/css/market-pricing.css', $root . '/sci-design-blocks.php' ), array(), is_file( $style ) ? (string) filemtime( $style ) : '1.7.5' );
+	wp_register_script( 'sci-market-pricing-editor', plugins_url( 'assets/js-market-pricing-editor.js', $root . '/sci-design-blocks.php' ), array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-data', 'wp-hooks', 'wp-compose', 'wp-i18n' ), is_file( $editor ) ? (string) filemtime( $editor ) : '1.7.5', true );
+	wp_register_script( 'sci-market-pricing-view', plugins_url( 'assets/js-market-pricing.js', $root . '/sci-design-blocks.php' ), array(), is_file( $view ) ? (string) filemtime( $view ) : '1.7.5', true );
 	register_block_type(
 		'sci-design-blocks/market-pricing',
 		array(
@@ -80,7 +87,7 @@ function register_market_pricing_block(): void {
 			'keywords' => array( __( 'pricing', 'sci-design-blocks' ), __( 'currency', 'sci-design-blocks' ), __( 'Fluent Forms', 'sci-design-blocks' ) ),
 			'attributes' => array(
 				'markets' => array( 'type' => 'array', 'default' => market_pricing_default_markets() ),
-				'plans' => array( 'type' => 'array', 'default' => array( array( 'id' => 'starter', 'prices' => array() ), array( 'id' => 'business', 'prices' => array() ), array( 'id' => 'enterprise', 'prices' => array() ) ) ),
+				'plans' => array( 'type' => 'array', 'default' => array( array( 'id' => 'starter', 'name' => 'Starter', 'prices' => array() ), array( 'id' => 'business', 'name' => 'Business', 'prices' => array() ), array( 'id' => 'enterprise', 'name' => 'Enterprise', 'prices' => array() ) ) ),
 				'defaultMarketId' => array( 'type' => 'string', 'default' => 'pe_pen' ),
 				'selectorStyle' => array( 'type' => 'string', 'default' => 'segmented' ),
 				'showFlags' => array( 'type' => 'boolean', 'default' => true ),
@@ -135,17 +142,22 @@ function market_pricing_normalize( $markets_raw, $plans_raw ): array {
 		$id = market_pricing_id( $plan['id'] ?? '', 'plan_' . ( $index + 1 ) );
 		while ( isset( $used[ $id ] ) ) { $id .= '_2'; }
 		$used[ $id ] = true;
+		$name = sanitize_text_field( is_scalar( $plan['name'] ?? '' ) ? (string) $plan['name'] : '' );
+		if ( '' === $name ) { $name = ucwords( str_replace( array( '-', '_' ), ' ', $id ) ); }
 		$prices = array();
 		$raw_prices = is_array( $plan['prices'] ?? null ) ? $plan['prices'] : array();
 		foreach ( $market_ids as $market_id ) {
 			$raw = is_array( $raw_prices[ $market_id ] ?? null ) ? $raw_prices[ $market_id ] : array();
 			$amount = is_scalar( $raw['amount'] ?? '' ) ? (string) $raw['amount'] : '';
+			$annual_amount = is_scalar( $raw['annualAmount'] ?? '' ) ? (string) $raw['annualAmount'] : '';
 			$prices[ $market_id ] = array(
 				'amount' => preg_match( '/^\\d{1,12}(?:\\.\\d{1,3})?$/', $amount ) ? $amount : '',
+				'annualAmount' => preg_match( '/^\\d{1,12}(?:\\.\\d{1,3})?$/', $annual_amount ) ? $annual_amount : '',
 				'period' => sanitize_text_field( is_scalar( $raw['period'] ?? '' ) ? (string) $raw['period'] : '' ),
+				'annualNote' => sanitize_text_field( is_scalar( $raw['annualNote'] ?? '' ) ? (string) $raw['annualNote'] : '' ),
 			);
 		}
-		$plans[] = array( 'id' => $id, 'prices' => $prices );
+		$plans[] = array( 'id' => $id, 'name' => $name, 'prices' => $prices );
 	}
 	return array( $markets, $plans );
 }

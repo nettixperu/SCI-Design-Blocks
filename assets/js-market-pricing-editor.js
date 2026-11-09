@@ -10,20 +10,53 @@
 	const makeId = function ( prefix ) { return prefix + '_' + Math.random().toString( 36 ).slice( 2, 9 ); };
 
 	wp.hooks.addFilter( 'blocks.registerBlockType', 'sci-design-blocks/market-pricing-plan-id', function ( settings, name ) {
-		if ( name === 'core/paragraph' || name === 'core/button' ) {
+		if ( name === 'core/paragraph' || name === 'core/button' || name === 'core/heading' ) {
 			settings.attributes = Object.assign( {}, settings.attributes, { sciMarketPlanId: { type: 'string', default: '' } } );
+		}
+		if ( name === 'core/paragraph' ) {
+			settings.attributes.sciMarketContentRole = { type: 'string', default: 'price' };
 		}
 		return settings;
 	} );
 
+	function findPlanCardGroup( blocks, planId ) {
+		function hasPlan( block ) {
+			if ( block.attributes && block.attributes.sciMarketPlanId === planId ) { return true; }
+			return ( block.innerBlocks || [] ).some( hasPlan );
+		}
+		function hasPriceAndButton( block ) {
+			let price = false;
+			let button = false;
+			(function scan( node ) {
+				if ( node.attributes && node.attributes.sciMarketPlanId === planId ) {
+					if ( node.name === 'core/paragraph' ) { price = true; }
+					if ( node.name === 'core/button' ) { button = true; }
+				}
+				( node.innerBlocks || [] ).forEach( scan );
+			})( block );
+			return price && button;
+		}
+		for ( const block of blocks || [] ) {
+			if ( block.name === 'core/group' && hasPlan( block ) ) {
+				const card = ( block.innerBlocks || [] ).find( function ( child ) { return child.name === 'core/group' && hasPlan( child ) && hasPriceAndButton( child ); } );
+				if ( card ) { return card; }
+			}
+			const nested = findPlanCardGroup( block.innerBlocks, planId );
+			if ( nested ) { return nested; }
+		}
+		return null;
+	}
+
 	const withPlanId = wp.compose.createHigherOrderComponent( function ( BlockEdit ) {
 		return function ( props ) {
-			if ( props.name !== 'core/paragraph' && props.name !== 'core/button' ) { return el( BlockEdit, props ); }
-			const label = props.name === 'core/paragraph' ? __( 'Vincular como precio de plan', 'sci-design-blocks' ) : __( 'Vincular botón a plan', 'sci-design-blocks' );
+			if ( props.name !== 'core/paragraph' && props.name !== 'core/button' && props.name !== 'core/heading' ) { return el( BlockEdit, props ); }
+			const isParagraph = props.name === 'core/paragraph';
+			const label = isParagraph ? __( 'Vincular a un plan', 'sci-design-blocks' ) : ( props.name === 'core/button' ? __( 'Vincular botón a plan', 'sci-design-blocks' ) : __( 'Vincular nombre a plan', 'sci-design-blocks' ) );
 			return el( wp.element.Fragment, {},
 				el( BlockEdit, props ),
 				el( InspectorControls, {}, el( PanelBody, { title: __( 'SCI · selector de mercado', 'sci-design-blocks' ), initialOpen: false },
-					el( TextControl, { label: label, help: __( 'Usa el mismo ID que configuraste en el bloque SCI Market Pricing. Déjalo vacío para no vincular este bloque.', 'sci-design-blocks' ), value: props.attributes.sciMarketPlanId || '', onChange: function ( value ) { props.setAttributes( { sciMarketPlanId: value.toLowerCase().replace( /[^a-z0-9_-]/g, '' ).slice( 0, 64 ) } ); } } ) ) )
+					el( TextControl, { label: label, help: __( 'Usa el mismo ID que configuraste en el bloque SCI Market Pricing. Déjalo vacío para no vincular este bloque.', 'sci-design-blocks' ), value: props.attributes.sciMarketPlanId || '', onChange: function ( value ) { props.setAttributes( { sciMarketPlanId: value.toLowerCase().replace( /[^a-z0-9_-]/g, '' ).slice( 0, 64 ) } ); } } ),
+					isParagraph ? el( SelectControl, { label: __( 'Contenido que cambia con el mercado', 'sci-design-blocks' ), value: props.attributes.sciMarketContentRole || 'price', options: [ { label: __( 'Precio del plan', 'sci-design-blocks' ), value: 'price' }, { label: __( 'Facturación anual', 'sci-design-blocks' ), value: 'annual' } ], onChange: function ( value ) { props.setAttributes( { sciMarketContentRole: value } ); } } ) : null ) )
 			);
 		};
 	}, 'withPlanId' );
@@ -36,6 +69,20 @@
 		const [ selectedMarket, setSelectedMarket ] = wp.element.useState( markets[0] ? markets[0].id : '' );
 		const marketOptions = markets.filter( function ( item ) { return item.active !== false; } ).map( function ( item ) { return { label: ( item.name || item.id ) + ' · ' + ( item.currency || 'USD' ), value: item.id }; } );
 		const blockProps = useBlockProps( { className: 'sci-market-pricing-editor' } );
+		wp.element.useEffect( function () {
+			let changed = false;
+			const used = {};
+			const migrated = plans.map( function ( plan, index ) {
+				const fallback = [ 'starter', 'business', 'enterprise' ][ index ] || makeId( 'plan' );
+				let id = ( plan.id || '' ).toLowerCase().replace( /[^a-z0-9_-]/g, '' ).slice( 0, 64 ) || fallback;
+				while ( used[id] ) { id = id + '_2'; }
+				used[id] = true;
+				const name = typeof plan.name === 'string' && plan.name ? plan.name : id.charAt( 0 ).toUpperCase() + id.slice( 1 );
+				if ( id !== plan.id || name !== plan.name ) { changed = true; return Object.assign( {}, plan, { id: id, name: name } ); }
+				return plan;
+			} );
+			if ( changed ) { setAttributes( { plans: migrated } ); }
+		}, [ plans ] );
 		const palette = wp.data && wp.data.select ? ( wp.data.select( 'core/block-editor' ).getSettings().colors || [] ) : [];
 		function colorControl( label, attribute ) {
 			return el( wp.element.Fragment, { key: attribute },
@@ -49,6 +96,23 @@
 		}
 		function updatePlan( index, patch ) {
 			setAttributes( { plans: plans.map( function ( item, i ) { return i === index ? Object.assign( {}, item, patch ) : item; } ) } );
+			if ( Object.prototype.hasOwnProperty.call( patch, 'name' ) && wp.data && wp.data.select && wp.data.dispatch ) {
+				const planId = plans[index] && plans[index].id;
+				const editor = wp.data.select( 'core/block-editor' );
+				const dispatcher = wp.data.dispatch( 'core/block-editor' );
+				const card = findPlanCardGroup( editor.getBlocks( props.clientId ), planId );
+				let headingUpdated = false;
+				function syncHeadings( blocks ) {
+					( blocks || [] ).forEach( function ( block ) {
+						if ( block.name === 'core/heading' && ! headingUpdated ) {
+							dispatcher.updateBlockAttributes( block.clientId, { content: patch.name, sciMarketPlanId: planId } );
+							headingUpdated = true;
+						}
+						syncHeadings( block.innerBlocks );
+					} );
+				}
+				if ( card ) { syncHeadings( [ card ] ); }
+			}
 		}
 		function updatePrice( planIndex, marketId, patch ) {
 			const prices = Object.assign( {}, plans[planIndex].prices || {} );
@@ -72,10 +136,19 @@
 		}
 		function addPlan() {
 			if ( plans.length >= 50 ) { return; }
-			setAttributes( { plans: plans.concat( [ { id: makeId( 'plan' ), prices: {} } ] ) } );
+			setAttributes( { plans: plans.concat( [ { id: makeId( 'plan' ), name: __( 'Nuevo plan', 'sci-design-blocks' ), prices: {} } ] ) } );
 		}
 		function removePlan( index ) {
-			if ( window.confirm( __( '¿Eliminar este plan y sus precios?', 'sci-design-blocks' ) ) ) { setAttributes( { plans: plans.filter( function ( _, i ) { return i !== index; } ) } ); }
+			const plan = plans[index];
+			if ( ! plan || plans.length <= 1 ) { return; }
+			const planId = plan.id;
+			const editor = wp.data && wp.data.select ? wp.data.select( 'core/block-editor' ) : null;
+			const dispatcher = wp.data && wp.data.dispatch ? wp.data.dispatch( 'core/block-editor' ) : null;
+			if ( editor && dispatcher ) {
+				const card = findPlanCardGroup( editor.getBlocks( props.clientId ), planId );
+				if ( card ) { dispatcher.removeBlock( card.clientId ); }
+			}
+			setAttributes( { plans: plans.filter( function ( _, i ) { return i !== index; } ) } );
 		}
 		const marketPanels = markets.map( function ( market, index ) {
 			return el( PanelBody, { key: market.id, title: ( market.name || __( 'Mercado', 'sci-design-blocks' ) ) + ' · ' + ( market.currency || 'USD' ), initialOpen: index === 0 },
@@ -98,11 +171,15 @@
 		} );
 		const planPanels = plans.map( function ( plan, index ) {
 			const current = plan.prices && plan.prices[selectedMarket] ? plan.prices[selectedMarket] : {};
-			return el( PanelBody, { key: plan.id, title: ( plan.id || __( 'Plan', 'sci-design-blocks' ) ), initialOpen: index === 0 },
-				el( TextControl, { label: __( 'ID del plan', 'sci-design-blocks' ), help: __( 'Debe coincidir con el ID asignado al párrafo de precio y al botón Core.', 'sci-design-blocks' ), value: plan.id || '', onChange: function ( value ) { updatePlan( index, { id: value.toLowerCase().replace( /[^a-z0-9_-]/g, '' ).slice( 0, 64 ) } ); } } ),
+			const planId = plan.id || ( [ 'starter', 'business', 'enterprise' ][ index ] || 'plan_' + ( index + 1 ) );
+			return el( PanelBody, { key: planId, title: plan.name || planId, initialOpen: index === 0 },
+				el( TextControl, { label: __( 'Nombre del plan', 'sci-design-blocks' ), value: plan.name || '', onChange: function ( value ) { updatePlan( index, { name: value } ); } } ),
+				el( TextControl, { label: __( 'ID del plan (fijo)', 'sci-design-blocks' ), help: __( 'Este ID conecta el nombre, el precio y el botón de la tarjeta. No se puede editar para evitar que se desvinculen.', 'sci-design-blocks' ), value: planId, disabled: true } ),
 				el( TextControl, { label: __( 'Precio para el mercado seleccionado', 'sci-design-blocks' ), type: 'number', min: 0, step: '0.001', value: current.amount || '', onChange: function ( value ) { updatePrice( index, selectedMarket, { amount: value } ); } } ),
 				el( TextControl, { label: __( 'Texto del periodo', 'sci-design-blocks' ), help: __( 'Ejemplo: / mes, / año, pago único.', 'sci-design-blocks' ), value: current.period || '', onChange: function ( value ) { updatePrice( index, selectedMarket, { period: value } ); } } ),
-				el( Button, { variant: 'tertiary', isDestructive: true, onClick: function () { removePlan( index ); } }, __( 'Eliminar plan', 'sci-design-blocks' ) )
+				el( TextControl, { label: __( 'Facturación anual (opcional)', 'sci-design-blocks' ), help: __( 'Si lo dejas vacío, se calcula como el precio mensual × 12. Puedes indicar un importe distinto para cada moneda.', 'sci-design-blocks' ), type: 'number', min: 0, step: '0.01', value: current.annualAmount || '', onChange: function ( value ) { updatePrice( index, selectedMarket, { annualAmount: value } ); } } ),
+				el( TextControl, { label: __( 'Nota de facturación (opcional)', 'sci-design-blocks' ), help: __( 'Ejemplos: + IGV, + IVA, impuestos incluidos.', 'sci-design-blocks' ), value: current.annualNote || '', onChange: function ( value ) { updatePrice( index, selectedMarket, { annualNote: value } ); } } ),
+				el( Button, { variant: 'tertiary', isDestructive: true, disabled: plans.length <= 1, onClick: function () { removePlan( index ); } }, __( 'Eliminar plan y tarjeta', 'sci-design-blocks' ) )
 			);
 		} );
 
