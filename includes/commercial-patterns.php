@@ -20,6 +20,11 @@ function register_commercial_patterns(): void {
 			'description' => __( 'Centered static introduction for a page section using editable Core text blocks.', 'sci-design-blocks' ),
 			'file'        => 'sci-section-intro.html',
 		),
+		'sci-design-blocks/process-steps' => array(
+			'title'       => __( 'SCI Process — 3 Steps', 'sci-design-blocks' ),
+			'description' => __( 'Three centered, responsive steps that use the available wide content area without leaving empty grid tracks.', 'sci-design-blocks' ),
+			'file'        => 'sci-process-steps.html',
+		),
 		'sci-design-blocks/benefits-grid' => array(
 			'title'       => __( 'SCI Benefits — Grid', 'sci-design-blocks' ),
 			'description' => __( 'A section introduction and three editable benefit cards in a responsive Core Grid.', 'sci-design-blocks' ),

@@ -2,6 +2,16 @@
 
 User-facing highlights for stable releases. For full release details, see [GitHub Releases](https://github.com/nettixperu/SCI-Design-Blocks/releases).
 
+## 1.6.4 (ZIP de prueba)
+
+- Adds the Core-only SCI Process — 3 Steps pattern with three responsive columns centered in the available wide area.
+- Sets explicit column counts on responsive Core Grid patterns, preventing unused auto-fill tracks from leaving cards clustered on the left.
+- Existing page content is not migrated: replace the saved section with the new pattern to receive the corrected layout.
+
+## 1.6.3 (source carried forward)
+
+- Carries forward the sitewide page-title control and lightweight Core Button hover styles from the local plugin package.
+
 ## 1.5.1
 
 - Adds the responsive SCI Features Grid and Firefox-inspired SCI Product Story patterns.

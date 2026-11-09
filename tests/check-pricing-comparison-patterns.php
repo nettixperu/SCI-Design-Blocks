@@ -82,6 +82,7 @@ $expected = array(
 	'sci-design-blocks/hero-cover',
 	'sci-design-blocks/hero-split',
 	'sci-design-blocks/section-intro',
+	'sci-design-blocks/process-steps',
 	'sci-design-blocks/benefits-grid',
 	'sci-design-blocks/service-cards',
 	'sci-design-blocks/pricing-split',
@@ -96,6 +97,7 @@ $expected_titles = array(
 	'sci-design-blocks/hero-cover' => 'SCI Hero — Cover',
 	'sci-design-blocks/hero-split' => 'SCI Hero — Split',
 	'sci-design-blocks/section-intro' => 'SCI Section — Intro',
+	'sci-design-blocks/process-steps' => 'SCI Process — 3 Steps',
 	'sci-design-blocks/benefits-grid' => 'SCI Benefits — Grid',
 	'sci-design-blocks/service-cards' => 'SCI Services — Image Cards',
 	'sci-design-blocks/pricing-split' => 'SCI Pricing — Split Offer',
@@ -242,6 +244,10 @@ $new_pattern_expectations = array(
 		'root' => 'core/group',
 		'required' => array( 'core/heading', 'core/paragraph' ),
 	),
+	'sci-design-blocks/process-steps' => array(
+		'root' => 'core/group',
+		'required' => array( 'core/group', 'core/heading', 'core/paragraph', 'core/icon' ),
+	),
 	'sci-design-blocks/benefits-grid' => array(
 		'root' => 'core/group',
 		'required' => array( 'core/group', 'core/heading', 'core/paragraph' ),
@@ -265,7 +271,7 @@ foreach ( $new_pattern_expectations as $name => $expectation ) {
 	if ( 1 !== count( $top_level_blocks ) || $expectation['root'] !== $top_level_blocks[0]['blockName'] ) {
 		throw new RuntimeException( "Unexpected root block in {$name}." );
 	}
-	if ( in_array( $name, array( 'sci-design-blocks/section-intro', 'sci-design-blocks/benefits-grid', 'sci-design-blocks/service-cards', 'sci-design-blocks/pricing-split', 'sci-design-blocks/cta-horizontal' ), true ) && 'full' !== ( $top_level_blocks[0]['attrs']['align'] ?? '' ) ) {
+	if ( in_array( $name, array( 'sci-design-blocks/section-intro', 'sci-design-blocks/benefits-grid', 'sci-design-blocks/service-cards', 'sci-design-blocks/process-steps', 'sci-design-blocks/pricing-split', 'sci-design-blocks/cta-horizontal' ), true ) && 'full' !== ( $top_level_blocks[0]['attrs']['align'] ?? '' ) ) {
 		throw new RuntimeException( "M8 section {$name} must use the Core full-width alignment at its root." );
 	}
 	$names = sci_test_names( $tree );
@@ -277,7 +283,7 @@ foreach ( $new_pattern_expectations as $name => $expectation ) {
 }
 foreach ( array( 'benefits-grid', 'service-cards' ) as $grid_slug ) {
 	$grid_content = $GLOBALS['sci_test_patterns'][ 'sci-design-blocks/' . $grid_slug ]['content'];
-	if ( false === strpos( $grid_content, '"type":"grid"' ) || false === strpos( $grid_content, '"autoFit":true' ) ) {
+	if ( false === strpos( $grid_content, '"type":"grid"' ) || false === strpos( $grid_content, '"autoFit":true' ) || false === strpos( $grid_content, '"columnCount":3' ) ) {
 		throw new RuntimeException( "{$grid_slug} must use the Core auto-fit Grid layout." );
 	}
 }
@@ -345,6 +351,7 @@ if (
 	'grid' !== ( $grid['attrs']['layout']['type'] ?? '' ) ||
 	'18rem' !== ( $grid['attrs']['layout']['minimumColumnWidth'] ?? '' ) ||
 	true !== ( $grid['attrs']['layout']['autoFit'] ?? false ) ||
+	3 !== ( $grid['attrs']['layout']['columnCount'] ?? 0 ) ||
 	3 !== count( $grid['innerBlocks'] )
 ) {
 	throw new RuntimeException( 'Pricing Cards must default to three cards within the native responsive Core Grid layout.' );

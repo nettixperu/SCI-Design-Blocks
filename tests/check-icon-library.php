@@ -73,9 +73,9 @@ function wp_register_icon( $name, $args ) {
 $plugin_root = getenv( 'SCI_PLUGIN_ROOT' ) ? rtrim( getenv( 'SCI_PLUGIN_ROOT' ), '/' ) : dirname( __DIR__ );
 $plugin_file = $plugin_root . '/sci-design-blocks.php';
 $plugin      = file_get_contents( $plugin_file );
-$expected_plugin_version = getenv( 'SCI_EXPECTED_VERSION' ) ? getenv( 'SCI_EXPECTED_VERSION' ) : '1.5.0';
+$expected_plugin_version = getenv( 'SCI_EXPECTED_VERSION' ) ? getenv( 'SCI_EXPECTED_VERSION' ) : '1.6.4';
 if ( PHP_VERSION_ID < 80300 ) {
-	throw new RuntimeException( 'PHP 8.3 or newer is required to run the current 1.5.0 test suite.' );
+	throw new RuntimeException( 'PHP 8.3 or newer is required to run the current 1.6.4 test suite.' );
 }
 if ( false === $plugin || ! preg_match( '/^ \* Version: ' . preg_quote( $expected_plugin_version, '/' ) . '$/m', $plugin ) || ! preg_match( '/^ \* Requires at least: 7\.1$/m', $plugin ) || ! preg_match( '/^ \* Requires PHP: 8\.3$/m', $plugin ) ) {
 	throw new RuntimeException( 'Plugin release version or platform minimum is incorrect.' );
@@ -117,6 +117,7 @@ $expected_patterns = array(
 	'sci-design-blocks/service-cards',
 	'sci-design-blocks/pricing-split',
 	'sci-design-blocks/cta-horizontal',
+	'sci-design-blocks/process-steps',
 );
 $manifest       = require $plugin_root . '/icons/manifest.php';
 $expected_icons = array_map(
@@ -250,7 +251,7 @@ if ( false === strpos( $accordion_pattern, '<!-- wp:accordion {"autoclose":true}
 }
 
 if ( 27 !== count( $GLOBALS['sci_test_patterns'] ) ) {
-	throw new RuntimeException( 'Expected 27 patterns after adding five M7 compositions.' );
+	throw new RuntimeException( 'Expected 28 patterns after adding the SCI Process — 3 Steps composition.' );
 }
 
 foreach ( $GLOBALS['sci_test_patterns'] as $pattern_name => $pattern ) {

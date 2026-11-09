@@ -9,11 +9,11 @@ Build editorial, commercial, and interface layouts from WordPress Core blocks—
 [![PHP 8.3+](https://img.shields.io/badge/PHP-8.3%2B-777BB4?logo=php&logoColor=white)](https://www.php.net/supported-versions.php)
 [![License: GPL-2.0-or-later](https://img.shields.io/badge/License-GPL--2.0--or--later-blue.svg)](COPYING.md)
 
-**Latest published stable release:** [SCI Design Blocks 1.4.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0). Version 1.5.0 release preparation is in progress; it is not available for download until publication.
+**Current source and test package:** 1.6.4. The latest published GitHub release remains [SCI Design Blocks 1.4.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0); 1.6.4 is supplied as a test ZIP and is not a tagged release.
 
 ## What’s included
 
-The 1.5.0 release source contains 27 patterns, 83 icons, seven Core Block Styles, and three CSS files. Published 1.4.0 remains immutable and contains 20 patterns, 83 icons, two Accordion styles, four Tabs styles, and an optional Featured Image Hover Zoom style.
+The 1.6.4 source contains 28 patterns, 83 icons, seven Core Block Styles, and five CSS files. Published 1.4.0 remains immutable and contains 20 patterns, 83 icons, two Accordion styles, four Tabs styles, and an optional Featured Image Hover Zoom style.
 
 | Family | Included |
 | --- | --- |
@@ -21,11 +21,11 @@ The 1.5.0 release source contains 27 patterns, 83 icons, seven Core Block Styles
 | Editorial | Featured Hero, Editorial Lead, Compact List, Editorial Grid, Editorial Stack, Editorial Sections |
 | Pricing | Pricing Cards, Pricing Featured, Pricing Compact |
 | Comparison | Comparison — 2 Options, Comparison — Feature Table |
-| Hero and sections (1.5.0 source) | Hero Cover, Hero Split, Section Intro, Benefits Grid, Services Image Cards |
-| Commercial CTA (1.5.0 source) | Pricing Split Offer, CTA Horizontal |
+| Hero and sections | Hero Cover, Hero Split, Section Intro, Benefits Grid, Services Image Cards, Process — 3 Steps |
+| Commercial CTA | Pricing Split Offer, CTA Horizontal |
 | Core Block Styles | Accordion: Minimal and Bordered; Tabs: Underline, Pills, Connected, Filled, with horizontal scrolling on narrow screens; Featured Image: optional Hover Zoom |
 
-The 1.5.0 release source adds seven Core-only compositions: Hero Cover, Hero Split, Section Intro, Benefits Grid, Services Image Cards, Pricing Split Offer, and CTA Horizontal. Minimum requirements for 1.5.0 are WordPress 7.1+ and PHP 8.3+; 1.4.0 remains unchanged at PHP 7.4+. See the [M7 equivalence and design decisions](docs/architecture/M7-PATTERN-EXPANSION-DECISIONS.md), [M8 implementation report](docs/architecture/M8-IMPLEMENTATION-REPORT.md), [M8-FIX-01 repair report](docs/architecture/M8-FIX-01-REPORT.md), [M6 PHP 8.3 decision](docs/architecture/M6-PHP83-PO-DECISION.md), [M9 final hardening report](docs/architecture/M9-FINAL-HARDENING-REPORT.md), and [pattern inventory](docs/patterns/1.5.0-preview.md).
+The current source adds Core-only compositions, including the SCI Process — 3 Steps pattern. Responsive card grids use an explicit column count with the Core Grid layout so a three-card section stays centered and fills its available wide area. To update a page that already contains a previous pattern insertion, replace that saved section with the new pattern; WordPress stores inserted patterns as editable page content. Minimum requirements for the current source are WordPress 7.1+ and PHP 8.3+; 1.4.0 remains unchanged at PHP 7.4+. See the [M7 equivalence and design decisions](docs/architecture/M7-PATTERN-EXPANSION-DECISIONS.md), [M8 implementation report](docs/architecture/M8-IMPLEMENTATION-REPORT.md), [M8-FIX-01 repair report](docs/architecture/M8-FIX-01-REPORT.md), [M6 PHP 8.3 decision](docs/architecture/M6-PHP83-PO-DECISION.md), [M9 final hardening report](docs/architecture/M9-FINAL-HARDENING-REPORT.md), and [pattern inventory](docs/patterns/1.5.0-preview.md).
 
 The 83 curated icons are available from the **SCI** collection in the Core Icon block workflow. See [Third-Party Notices](THIRD-PARTY-NOTICES.md) for icon licensing details.
 
@@ -47,7 +47,7 @@ SHA-256:
 3. Upload the ZIP, install, and activate SCI Design Blocks.
 4. Open the block inserter and choose a pattern from the **SCI Design Blocks** category.
 
-Stable release 1.4.0 requirements: WordPress 7.1+, PHP 7.4+, and the WordPress Block Editor. The 1.5.0 release source requires WordPress 7.1+ and PHP 8.3+; its ZIP will be linked here after publication. No npm or build tools are required to install or use the plugin.
+Stable release 1.4.0 requirements: WordPress 7.1+, PHP 7.4+, and the WordPress Block Editor. The current source requires WordPress 7.1+ and PHP 8.3+. No npm or build tools are required to install or use the plugin.
 
 ## Quick start
 
@@ -81,7 +81,7 @@ Patterns rely on Core block semantics and interactions where available, includin
 
 ## Releases
 
-The latest published stable release is **SCI Design Blocks 1.4.0**; version 1.5.0 publication is pending.
+The latest published stable release is **SCI Design Blocks 1.4.0**. Version 1.6.4 is a test package and has not been tagged as a GitHub release.
 
 - [Download SCI Design Blocks 1.4.0](https://github.com/nettixperu/SCI-Design-Blocks/releases/download/v1.4.0/sci-design-blocks-1.4.0.zip)
 - [Read the 1.4.0 release notes](https://github.com/nettixperu/SCI-Design-Blocks/releases/tag/v1.4.0)
