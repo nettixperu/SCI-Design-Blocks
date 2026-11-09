@@ -32,12 +32,11 @@ function market_pricing_core_attributes( array $args, string $block_name ): arra
 add_filter( 'register_block_type_args', __NAMESPACE__ . '\\market_pricing_core_attributes', 20, 2 );
 
 /** Mark explicitly linked Core blocks in their rendered HTML. */
-function market_pricing_mark_core_blocks( string $html, \WP_Block $block ): string {
-	$parsed = $block->parsed_block;
-	if ( ! in_array( $parsed['blockName'] ?? '', array( 'core/paragraph', 'core/button' ), true ) ) {
+function market_pricing_mark_core_blocks( string $html, array $block ): string {
+	if ( ! in_array( $block['blockName'] ?? '', array( 'core/paragraph', 'core/button' ), true ) ) {
 		return $html;
 	}
-	$id = market_pricing_id( $parsed['attrs']['sciMarketPlanId'] ?? '' );
+	$id = market_pricing_id( $block['attrs']['sciMarketPlanId'] ?? '' );
 	if ( '' === $id || ! class_exists( '\\WP_HTML_Tag_Processor' ) ) {
 		return $html;
 	}
@@ -56,9 +55,9 @@ function register_market_pricing_block(): void {
 	$style = $root . '/assets/css/market-pricing.css';
 	$editor = $root . '/assets/js-market-pricing-editor.js';
 	$view = $root . '/assets/js-market-pricing.js';
-	wp_register_style( 'sci-market-pricing', plugins_url( 'assets/css/market-pricing.css', $root . '/sci-design-blocks.php' ), array(), is_file( $style ) ? (string) filemtime( $style ) : '1.7.1' );
-	wp_register_script( 'sci-market-pricing-editor', plugins_url( 'assets/js-market-pricing-editor.js', $root . '/sci-design-blocks.php' ), array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-hooks', 'wp-compose', 'wp-i18n' ), is_file( $editor ) ? (string) filemtime( $editor ) : '1.7.1', true );
-	wp_register_script( 'sci-market-pricing-view', plugins_url( 'assets/js-market-pricing.js', $root . '/sci-design-blocks.php' ), array(), is_file( $view ) ? (string) filemtime( $view ) : '1.7.1', true );
+	wp_register_style( 'sci-market-pricing', plugins_url( 'assets/css/market-pricing.css', $root . '/sci-design-blocks.php' ), array(), is_file( $style ) ? (string) filemtime( $style ) : '1.7.2' );
+	wp_register_script( 'sci-market-pricing-editor', plugins_url( 'assets/js-market-pricing-editor.js', $root . '/sci-design-blocks.php' ), array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-hooks', 'wp-compose', 'wp-i18n' ), is_file( $editor ) ? (string) filemtime( $editor ) : '1.7.2', true );
+	wp_register_script( 'sci-market-pricing-view', plugins_url( 'assets/js-market-pricing.js', $root . '/sci-design-blocks.php' ), array(), is_file( $view ) ? (string) filemtime( $view ) : '1.7.2', true );
 	register_block_type(
 		'sci-design-blocks/market-pricing',
 		array(

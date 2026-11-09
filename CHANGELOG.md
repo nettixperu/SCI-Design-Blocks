@@ -2,6 +2,12 @@
 
 User-facing highlights for stable releases. For full release details, see [GitHub Releases](https://github.com/nettixperu/SCI-Design-Blocks/releases).
 
+## 1.7.2 (ZIP de prueba)
+
+- Fixes a fatal render-time PHP type mismatch in the `render_block` filter callback. WordPress passes the parsed block array as the second argument.
+- Keeps the SCI Market Pricing wrapper, Core block price/button bindings, and market/plan configuration introduced in 1.7.1.
+- This remains an untagged test build; it does not update a WordPress site.
+
 ## 1.7.1 (ZIP de prueba)
 
 - Reworks the 1.7.0 pricing-card proposal into SCI Market Pricing: a small wrapper around editable Core pricing patterns.
