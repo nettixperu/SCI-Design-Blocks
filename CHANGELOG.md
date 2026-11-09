@@ -2,6 +2,11 @@
 
 User-facing highlights for stable releases. For full release details, see [GitHub Releases](https://github.com/nettixperu/SCI-Design-Blocks/releases).
 
+## 1.7.9 (ZIP de prueba)
+
+- Improves the Market Pricing editor guide with short, step-by-step instructions and high-contrast styling.
+- Explains exactly how to nest the pricing table under SCI Market Pricing in List View; clarifies that the editor canvas does not update dynamic prices.
+
 ## 1.7.8 (ZIP de prueba)
 
 - Makes plan IDs editable, validates uniqueness and allowed characters, and updates linked Core blocks when an ID changes.

@@ -69,7 +69,7 @@
 			return el( wp.element.Fragment, {},
 				el( BlockEdit, props ),
 				el( InspectorControls, {}, el( PanelBody, { title: __( 'SCI · selector de mercado', 'sci-design-blocks' ), initialOpen: false },
-					! insideMarketPricing ? el( Notice, { status: 'warning', isDismissible: false }, __( 'Este bloque debe estar dentro de SCI Market Pricing junto con el selector. Fuera de ese contenedor, el precio no puede cambiar al elegir un mercado.', 'sci-design-blocks' ) ) : null,
+					! insideMarketPricing ? el( Notice, { status: 'warning', isDismissible: false }, __( 'Para vincularlo: abre Vista de lista y arrastra la tabla de precios dentro de “SCI Market Pricing”. Debe quedar indentada debajo de ese bloque. Si queda al mismo nivel, el selector no puede cambiar este precio.', 'sci-design-blocks' ) ) : null,
 					el( TextControl, { label: label, help: help, value: props.attributes.sciMarketPlanId || '', onChange: function ( value ) { props.setAttributes( { sciMarketPlanId: value.toLowerCase().replace( /[^a-z0-9_-]/g, '' ).slice( 0, 64 ) } ); } } ),
 					props.name === 'core/button' ? el( ToggleControl, { label: __( 'Mostrar el precio mensual en este botón', 'sci-design-blocks' ), help: __( 'Sustituye el texto del botón por el precio y el periodo del mercado seleccionado. El botón conserva su enlace al formulario. Se actualiza en la vista previa y en la página publicada.', 'sci-design-blocks' ), checked: props.attributes.sciMarketButtonPrice === true, onChange: function ( value ) { props.setAttributes( { sciMarketButtonPrice: value } ); } } ) : null,
 					isParagraph ? el( SelectControl, { label: __( 'Contenido que cambia con el mercado', 'sci-design-blocks' ), value: props.attributes.sciMarketContentRole || 'price', options: [ { label: __( 'Precio del plan', 'sci-design-blocks' ), value: 'price' }, { label: __( 'Facturación anual', 'sci-design-blocks' ), value: 'annual' } ], onChange: function ( value ) { props.setAttributes( { sciMarketContentRole: value } ); } } ) : null ) )
@@ -260,14 +260,10 @@
 			),
 			el( 'div', blockProps,
 				el( 'div', { className: 'sci-market-pricing-editor__help' },
-					el( 'strong', {}, __( 'Cómo vincular precio y botón', 'sci-design-blocks' ) ),
-					el( 'ol', {},
-						el( 'li', {}, __( 'En Planes y precios, elige el mercado y configura el precio y el periodo del plan.', 'sci-design-blocks' ) ),
-						el( 'li', {}, __( 'Si el precio va fuera del botón, selecciona su párrafo, escribe el ID del plan y elige “Precio del plan”. Si quieres el precio dentro del botón verde, selecciona el botón, escribe ese mismo ID y activa “Mostrar el precio mensual en este botón”.', 'sci-design-blocks' ) ),
-						el( 'li', {}, __( 'El botón vinculado conserva su enlace al formulario del plan; al activar precio dinámico, su texto se reemplaza por el importe y periodo del mercado activo.', 'sci-design-blocks' ) ),
-						el( 'li', {}, __( 'Para una línea anual, vincula otro párrafo con ese ID y elige “Facturación anual”.', 'sci-design-blocks' ) )
-					),
-					el( 'p', {}, __( 'El patrón SCI Pricing — Market Selector ya incluye estos vínculos.', 'sci-design-blocks' ) )
+					el( 'strong', {}, __( 'Cómo hacer que cambien los precios', 'sci-design-blocks' ) ),
+					el( 'p', {}, __( '1. En Vista de lista, arrastra la tabla de precios dentro de SCI Market Pricing. Debe quedar indentada debajo del bloque del selector.', 'sci-design-blocks' ) ),
+					el( 'p', {}, __( '2. En Planes y precios, configura el importe. Usa el mismo ID del plan en su precio y botón (por ejemplo, starter). Para mostrar el importe en el botón, activa “Mostrar el precio mensual en este botón”.', 'sci-design-blocks' ) ),
+					el( 'p', {}, __( '3. Guarda y prueba en Vista previa o en la página publicada. El lienzo del editor no actualiza los precios.', 'sci-design-blocks' ) )
 				),
 				el( InnerBlocks, { renderAppender: InnerBlocks.ButtonBlockAppender } )
 			)

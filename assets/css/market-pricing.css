@@ -97,7 +97,26 @@
 	font-size: 1.2em;
 	line-height: 1;
 }
-.sci-market-pricing-editor__help {
-	padding: .75rem;
-	background: #f0f0f0;
+.sci-market-pricing-editor .sci-market-pricing-editor__help {
+	max-width: 48rem;
+	margin-block: 1rem;
+	padding: 1rem 1.25rem;
+	color: #1e1e1e;
+	font-size: 14px;
+	line-height: 1.5;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+}
+.sci-market-pricing-editor .sci-market-pricing-editor__help > * {
+	color: inherit;
+	font-size: inherit;
+	line-height: inherit;
+}
+.sci-market-pricing-editor .sci-market-pricing-editor__help > :first-child {
+	display: block;
+	margin-block: 0 .5rem;
+}
+.sci-market-pricing-editor .sci-market-pricing-editor__help > p {
+	margin-block: .35rem;
 }
