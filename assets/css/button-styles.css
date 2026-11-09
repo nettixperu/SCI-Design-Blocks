@@ -1,0 +1,54 @@
+.sci-hover-enabled .wp-block-button__link,
+.wp-block-button.sci-hover-enabled > .wp-block-button__link,
+.wp-block-button.is-style-sci-hover-lift > .wp-block-button__link,
+.wp-block-button.is-style-sci-outline-hover-lift > .wp-block-button__link {
+	transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.wp-block-button.is-style-sci-outline-hover-lift > .wp-block-button__link:not(:hover):not(:focus-visible):not(:active) {
+	background: transparent;
+	border: 1px solid currentColor;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+	.sci-hover-enabled .wp-block-button__link:hover,
+	.wp-block-button.sci-hover-enabled > .wp-block-button__link:hover,
+	.wp-block-button.is-style-sci-hover-lift > .wp-block-button__link:hover,
+	.wp-block-button.is-style-sci-outline-hover-lift > .wp-block-button__link:hover {
+		background: var(--sci-hover-background);
+		color: var(--sci-hover-text-color);
+		border-color: var(--sci-hover-border-color);
+		box-shadow: var(--sci-hover-shadow);
+		transform: translateY(var(--sci-hover-lift, -2px));
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.sci-hover-enabled .wp-block-button__link:focus-visible,
+	.wp-block-button.sci-hover-enabled > .wp-block-button__link:focus-visible,
+	.wp-block-button.is-style-sci-hover-lift > .wp-block-button__link:focus-visible,
+	.wp-block-button.is-style-sci-outline-hover-lift > .wp-block-button__link:focus-visible {
+		background: var(--sci-hover-background);
+		color: var(--sci-hover-text-color);
+		border-color: var(--sci-hover-border-color);
+		box-shadow: var(--sci-hover-shadow);
+		transform: translateY(var(--sci-hover-lift, -2px));
+	}
+
+	.sci-hover-enabled .wp-block-button__link:active,
+	.wp-block-button.sci-hover-enabled > .wp-block-button__link:active,
+	.wp-block-button.is-style-sci-hover-lift > .wp-block-button__link:active,
+	.wp-block-button.is-style-sci-outline-hover-lift > .wp-block-button__link:active {
+		transform: translateY(0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.sci-hover-enabled .wp-block-button__link,
+	.wp-block-button.sci-hover-enabled > .wp-block-button__link,
+	.wp-block-button.is-style-sci-hover-lift > .wp-block-button__link,
+	.wp-block-button.is-style-sci-outline-hover-lift > .wp-block-button__link {
+		transition: none;
+		transform: none;
+	}
+}

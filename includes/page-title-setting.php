@@ -47,6 +47,6 @@ function enqueue_title_editor_setting(): void {
  $screen = get_current_screen();
  if ( ! $screen || 'page' !== $screen->post_type || ! hide_page_titles() ) { return; }
  wp_enqueue_script( 'wp-hooks' );
- wp_enqueue_script( 'sci-page-title-editor', plugins_url( 'assets/js-page-title-editor.js', dirname( __DIR__ ) . '/sci-design-blocks.php' ), array( 'wp-hooks' ), '1.5.1', true );
+ wp_enqueue_script( 'sci-page-title-editor', plugins_url( 'assets/js-page-title-editor.js', dirname( __DIR__ ) . '/sci-design-blocks.php' ), array( 'wp-hooks' ), '1.6.1', true );
  wp_add_inline_script( 'sci-page-title-editor', 'window.sciDesignBlocksTitleSettings = { hideTitles: true };', 'before' );
 }
