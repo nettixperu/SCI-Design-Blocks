@@ -10,8 +10,8 @@ namespace SCI\DesignBlocks;
 /** Example markets are editable and are not tied to a fixed currency list. */
 function market_pricing_default_markets(): array {
 	return array(
-		array( 'id' => 'pe_pen', 'name' => __( 'Perú', 'sci-design-blocks' ), 'currency' => 'PEN', 'locale' => 'es-PE', 'formUrl' => '', 'active' => true ),
-		array( 'id' => 'mx_mxn', 'name' => __( 'México', 'sci-design-blocks' ), 'currency' => 'MXN', 'locale' => 'es-MX', 'formUrl' => '', 'active' => true ),
+		array( 'id' => 'pe_pen', 'name' => __( 'Perú', 'sci-design-blocks' ), 'flag' => '🇵🇪', 'currency' => 'PEN', 'locale' => 'es-PE', 'formUrl' => '', 'active' => true ),
+		array( 'id' => 'mx_mxn', 'name' => __( 'México', 'sci-design-blocks' ), 'flag' => '🇲🇽', 'currency' => 'MXN', 'locale' => 'es-MX', 'formUrl' => '', 'active' => true ),
 	);
 }
 
@@ -55,9 +55,9 @@ function register_market_pricing_block(): void {
 	$style = $root . '/assets/css/market-pricing.css';
 	$editor = $root . '/assets/js-market-pricing-editor.js';
 	$view = $root . '/assets/js-market-pricing.js';
-	wp_register_style( 'sci-market-pricing', plugins_url( 'assets/css/market-pricing.css', $root . '/sci-design-blocks.php' ), array(), is_file( $style ) ? (string) filemtime( $style ) : '1.7.2' );
-	wp_register_script( 'sci-market-pricing-editor', plugins_url( 'assets/js-market-pricing-editor.js', $root . '/sci-design-blocks.php' ), array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-hooks', 'wp-compose', 'wp-i18n' ), is_file( $editor ) ? (string) filemtime( $editor ) : '1.7.2', true );
-	wp_register_script( 'sci-market-pricing-view', plugins_url( 'assets/js-market-pricing.js', $root . '/sci-design-blocks.php' ), array(), is_file( $view ) ? (string) filemtime( $view ) : '1.7.2', true );
+	wp_register_style( 'sci-market-pricing', plugins_url( 'assets/css/market-pricing.css', $root . '/sci-design-blocks.php' ), array(), is_file( $style ) ? (string) filemtime( $style ) : '1.7.3' );
+	wp_register_script( 'sci-market-pricing-editor', plugins_url( 'assets/js-market-pricing-editor.js', $root . '/sci-design-blocks.php' ), array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-hooks', 'wp-compose', 'wp-i18n' ), is_file( $editor ) ? (string) filemtime( $editor ) : '1.7.3', true );
+	wp_register_script( 'sci-market-pricing-view', plugins_url( 'assets/js-market-pricing.js', $root . '/sci-design-blocks.php' ), array(), is_file( $view ) ? (string) filemtime( $view ) : '1.7.3', true );
 	register_block_type(
 		'sci-design-blocks/market-pricing',
 		array(
@@ -71,6 +71,8 @@ function register_market_pricing_block(): void {
 				'markets' => array( 'type' => 'array', 'default' => market_pricing_default_markets() ),
 				'plans' => array( 'type' => 'array', 'default' => array( array( 'id' => 'starter', 'prices' => array() ), array( 'id' => 'business', 'prices' => array() ), array( 'id' => 'enterprise', 'prices' => array() ) ) ),
 				'defaultMarketId' => array( 'type' => 'string', 'default' => 'pe_pen' ),
+				'selectorStyle' => array( 'type' => 'string', 'default' => 'segmented' ),
+				'showFlags' => array( 'type' => 'boolean', 'default' => true ),
 			),
 			'supports' => array( 'align' => array( 'wide', 'full' ), 'spacing' => array( 'margin' => true, 'padding' => true ) ),
 			'style' => 'sci-market-pricing',
@@ -101,6 +103,7 @@ function market_pricing_normalize( $markets_raw, $plans_raw ): array {
 			'currency' => preg_match( '/^[A-Z]{3}$/', $currency ) ? $currency : 'USD',
 			'locale' => preg_match( '/^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$/', $locale ) ? $locale : 'en',
 			'formUrl' => $url,
+			'flag' => sanitize_text_field( is_scalar( $market['flag'] ?? '' ) ? (string) $market['flag'] : '' ),
 			'active' => ! empty( $market['active'] ),
 		);
 	}
@@ -136,14 +139,31 @@ function render_market_pricing_block( array $attributes, string $content, $block
 	$active = array_values( array_filter( $markets, static fn( $market ) => $market['active'] ) );
 	$default = market_pricing_id( $attributes['defaultMarketId'] ?? '', $active[0]['id'] );
 	if ( ! in_array( $default, array_column( $active, 'id' ), true ) ) { $default = $active[0]['id']; }
+	$selector_style = in_array( $attributes['selectorStyle'] ?? '', array( 'select', 'pills', 'segmented' ), true ) ? $attributes['selectorStyle'] : 'segmented';
+	$show_flags = ! array_key_exists( 'showFlags', $attributes ) || ! empty( $attributes['showFlags'] );
 	$payload = wp_json_encode( array( 'markets' => $active, 'plans' => $plans ), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT );
 	$wrapper = function_exists( 'get_block_wrapper_attributes' ) ? get_block_wrapper_attributes( array( 'class' => 'sci-market-pricing', 'data-sci-market-pricing' => '', 'data-default-market' => $default, 'data-pricing' => $payload ?: '{}' ) ) : 'class="wp-block-sci-design-blocks-market-pricing sci-market-pricing" data-sci-market-pricing data-default-market="' . esc_attr( $default ) . '" data-pricing="' . esc_attr( $payload ?: '{}' ) . '"';
 	$label = esc_html__( 'Moneda o mercado', 'sci-design-blocks' );
-	$html = '<div ' . $wrapper . '><label class="sci-market-pricing__selector"><span>' . $label . '</span><select data-sci-market-control aria-label="' . esc_attr( $label ) . '">';
-	foreach ( $active as $market ) {
-		$caption = trim( $market['name'] . ( $market['name'] && $market['currency'] ? ' · ' : '' ) . $market['currency'] );
-		$html .= '<option value="' . esc_attr( $market['id'] ) . '"' . selected( $default, $market['id'], false ) . '>' . esc_html( $caption ) . '</option>';
+	$html = '<div ' . $wrapper . '><div class="sci-market-pricing__selector"><span class="sci-market-pricing__label">' . $label . '</span>';
+	if ( 'select' === $selector_style ) {
+		$html .= '<select data-sci-market-control aria-label="' . esc_attr( $label ) . '">';
+		foreach ( $active as $market ) {
+			$caption = $show_flags && '' !== $market['flag'] ? $market['flag'] . ' ' : '';
+			$caption .= trim( $market['name'] . ( $market['name'] && $market['currency'] ? ' · ' : '' ) . $market['currency'] );
+			$html .= '<option value="' . esc_attr( $market['id'] ) . '"' . selected( $default, $market['id'], false ) . '>' . esc_html( $caption ) . '</option>';
+		}
+		$html .= '</select>';
+	} else {
+		$instance = wp_unique_id( 'sci-market-' );
+		$html .= '<fieldset class="sci-market-pricing__options sci-market-pricing__options--' . esc_attr( $selector_style ) . '"><legend class="screen-reader-text">' . $label . '</legend>';
+		foreach ( $active as $market ) {
+			$caption = trim( $market['name'] . ( $market['name'] && $market['currency'] ? ' · ' : '' ) . $market['currency'] );
+			$html .= '<label class="sci-market-pricing__option"><input type="radio" name="' . esc_attr( $instance ) . '" value="' . esc_attr( $market['id'] ) . '" data-sci-market-control ' . checked( $default, $market['id'], false ) . '><span class="sci-market-pricing__option-content">';
+			if ( $show_flags && '' !== $market['flag'] ) { $html .= '<span class="sci-market-pricing__flag" aria-hidden="true">' . esc_html( $market['flag'] ) . '</span>'; }
+			$html .= '<span>' . esc_html( $caption ) . '</span></span></label>';
+		}
+		$html .= '</fieldset>';
 	}
-	$html .= '</select></label>' . $content . '</div>';
+	$html .= '</div>' . $content . '</div>';
 	return $html;
 }

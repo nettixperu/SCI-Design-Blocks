@@ -5,6 +5,9 @@
 	gap: .5rem;
 	margin-block-end: 1.5rem;
 }
+.sci-market-pricing__label {
+	font: inherit;
+}
 .sci-market-pricing__selector select {
 	max-width: 100%;
 	min-height: 2.75rem;
@@ -18,6 +21,74 @@
 .sci-market-pricing__selector select:focus-visible {
 	outline: 2px solid currentColor;
 	outline-offset: 2px;
+}
+.sci-market-pricing__options {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: .35rem;
+	min-width: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+.sci-market-pricing__option {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	min-height: 2.75rem;
+	cursor: pointer;
+}
+.sci-market-pricing__option input {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	border: 0;
+	clip: rect(0, 0, 0, 0);
+	clip-path: inset(50%);
+	overflow: hidden;
+	white-space: nowrap;
+}
+.sci-market-pricing__option-content {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: .4rem;
+	min-height: 2.75rem;
+	padding: .45rem .9rem;
+	color: inherit;
+	font: inherit;
+	border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+	border-radius: 999px;
+}
+.sci-market-pricing__options--segmented {
+	gap: 0;
+	padding: .2rem;
+	border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+	border-radius: 999px;
+}
+.sci-market-pricing__options--segmented .sci-market-pricing__option-content {
+	border-color: transparent;
+}
+.sci-market-pricing__option input:checked + .sci-market-pricing__option-content {
+	color: var(--wp--preset--color--base, #fff);
+	background: var(--wp--preset--color--contrast, #171717);
+	border-color: var(--wp--preset--color--contrast, #171717);
+}
+.sci-market-pricing__options--pills .sci-market-pricing__option input:checked + .sci-market-pricing__option-content {
+	color: inherit;
+	background: transparent;
+	border-color: currentColor;
+	box-shadow: inset 0 0 0 1px currentColor;
+}
+.sci-market-pricing__option input:focus-visible + .sci-market-pricing__option-content {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+}
+.sci-market-pricing__flag {
+	font-size: 1.2em;
+	line-height: 1;
 }
 .sci-market-pricing-editor__help {
 	padding: .75rem;

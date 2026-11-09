@@ -2,6 +2,12 @@
 
 User-facing highlights for stable releases. For full release details, see [GitHub Releases](https://github.com/nettixperu/SCI-Design-Blocks/releases).
 
+## 1.7.3 (ZIP de prueba)
+
+- Adds native segmented, pill, and dropdown market selectors, with configurable flag emoji per market.
+- Uses the segmented selector with Peru and Mexico flags in the integrated pricing pattern by default.
+- Keeps the selector accessible through native radio/select controls and adds no external UI library.
+
 ## 1.7.2 (ZIP de prueba)
 
 - Fixes a fatal render-time PHP type mismatch in the `render_block` filter callback. WordPress passes the parsed block array as the second argument.

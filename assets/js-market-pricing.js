@@ -37,7 +37,10 @@
 		const data = parse( wrapper.getAttribute( 'data-pricing' ) );
 		const market = ( data.markets || [] ).find( function ( item ) { return item.id === marketId && item.active; } ) || ( data.markets || [] ).find( function ( item ) { return item.id === wrapper.dataset.defaultMarket; } );
 		if ( ! market ) { return; }
-		wrapper.querySelectorAll( controlSelector ).forEach( function ( select ) { select.value = market.id; } );
+		wrapper.querySelectorAll( controlSelector ).forEach( function ( control ) {
+			if ( control.type === 'radio' ) { control.checked = control.value === market.id; }
+			else { control.value = market.id; }
+		} );
 		( data.plans || [] ).forEach( function ( plan ) {
 			const price = plan.prices && plan.prices[market.id] ? plan.prices[market.id] : {};
 			Array.from( wrapper.querySelectorAll( '[data-sci-market-plan-id]' ) ).filter( function ( node ) { return node.dataset.sciMarketPlanId === plan.id; } ).forEach( function ( node ) {

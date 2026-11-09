@@ -51,7 +51,7 @@
 		function addMarket() {
 			if ( markets.length >= limit ) { return; }
 			const id = makeId( 'market' );
-			const next = markets.concat( [ { id: id, name: __( 'Nuevo mercado', 'sci-design-blocks' ), currency: 'USD', locale: 'en-US', formUrl: '', active: true } ] );
+			const next = markets.concat( [ { id: id, name: __( 'Nuevo mercado', 'sci-design-blocks' ), flag: '', currency: 'USD', locale: 'en-US', formUrl: '', active: true } ] );
 			setAttributes( { markets: next, defaultMarketId: attributes.defaultMarketId || id } );
 			setSelectedMarket( id );
 		}
@@ -74,6 +74,7 @@
 			return el( PanelBody, { key: market.id, title: ( market.name || __( 'Mercado', 'sci-design-blocks' ) ) + ' · ' + ( market.currency || 'USD' ), initialOpen: index === 0 },
 				el( TextControl, { label: __( 'ID estable', 'sci-design-blocks' ), value: market.id, disabled: true, help: __( 'Se crea al añadir el mercado y no cambia al editar su nombre o moneda.', 'sci-design-blocks' ) } ),
 				el( TextControl, { label: __( 'Nombre mostrado', 'sci-design-blocks' ), value: market.name || '', onChange: function ( value ) { updateMarket( index, { name: value } ); } } ),
+				el( TextControl, { label: __( 'Bandera (emoji)', 'sci-design-blocks' ), help: __( 'Ejemplos: 🇵🇪, 🇲🇽, 🇺🇸, 🇨🇴, 🇪🇸.', 'sci-design-blocks' ), value: market.flag || '', onChange: function ( value ) { updateMarket( index, { flag: value.slice( 0, 16 ) } ); } } ),
 				el( TextControl, { label: __( 'Moneda (ISO 4217)', 'sci-design-blocks' ), help: __( 'Ejemplos: PEN, MXN, USD, COP, EUR.', 'sci-design-blocks' ), value: market.currency || '', maxLength: 3, onChange: function ( value ) { updateMarket( index, { currency: value.toUpperCase() } ); } } ),
 				el( TextControl, { label: __( 'Configuración regional', 'sci-design-blocks' ), value: market.locale || '', onChange: function ( value ) { updateMarket( index, { locale: value } ); } } ),
 				el( TextControl, { label: __( 'URL del formulario Fluent Forms para este mercado', 'sci-design-blocks' ), type: 'url', value: market.formUrl || '', onChange: function ( value ) { updateMarket( index, { formUrl: value } ); } } ),
@@ -100,6 +101,14 @@
 
 		return el( wp.element.Fragment, {},
 			el( InspectorControls, {},
+				el( PanelBody, { title: __( 'Selector de mercado', 'sci-design-blocks' ), initialOpen: true },
+					el( SelectControl, { label: __( 'Estilo del selector', 'sci-design-blocks' ), value: attributes.selectorStyle || 'segmented', options: [
+						{ label: __( 'Segmentado con banderas', 'sci-design-blocks' ), value: 'segmented' },
+						{ label: __( 'Botones tipo píldora', 'sci-design-blocks' ), value: 'pills' },
+						{ label: __( 'Desplegable nativo', 'sci-design-blocks' ), value: 'select' },
+					], onChange: function ( value ) { setAttributes( { selectorStyle: value } ); } } ),
+					el( ToggleControl, { label: __( 'Mostrar banderas', 'sci-design-blocks' ), checked: attributes.showFlags !== false, onChange: function ( value ) { setAttributes( { showFlags: value } ); } } )
+				),
 				el( PanelBody, { title: __( 'Mercados y monedas', 'sci-design-blocks' ), initialOpen: true },
 					el( SelectControl, { label: __( 'Mercado predeterminado', 'sci-design-blocks' ), value: attributes.defaultMarketId || '', options: marketOptions, onChange: function ( value ) { setAttributes( { defaultMarketId: value } ); } } ),
 					marketPanels,
