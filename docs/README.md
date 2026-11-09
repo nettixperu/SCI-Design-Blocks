@@ -1,5 +1,7 @@
 # Documentation
 
+- [SCI Market Pricing block](blocks/market-pricing.md): extensible markets, currencies, plan price IDs, Fluent Forms handoff, and staging checks.
+
 ## Current product references
 
 - [SCI Design Blocks 1.5.0 architecture, hardening, QA and release disposition](architecture/M9-FINAL-HARDENING-REPORT.md)

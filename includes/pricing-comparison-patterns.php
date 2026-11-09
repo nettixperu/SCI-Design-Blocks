@@ -14,6 +14,11 @@ namespace SCI\DesignBlocks;
  */
 function register_pricing_comparison_patterns(): void {
 	$patterns = array(
+		'sci-design-blocks/pricing-market-selector' => array(
+			'title'       => __( 'SCI Pricing — Market Selector', 'sci-design-blocks' ),
+			'description' => __( 'Pricing cards made with editable Core blocks, with one market and currency selector connected to Fluent Forms.', 'sci-design-blocks' ),
+			'file'        => 'sci-pricing-market-selector.html',
+		),
 		'sci-design-blocks/pricing-cards' => array(
 			'title'       => __( 'SCI Pricing — Cards', 'sci-design-blocks' ),
 			'description' => __( 'Three editable pricing plans using the responsive Core Grid layout.', 'sci-design-blocks' ),

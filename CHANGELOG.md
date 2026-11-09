@@ -2,6 +2,14 @@
 
 User-facing highlights for stable releases. For full release details, see [GitHub Releases](https://github.com/nettixperu/SCI-Design-Blocks/releases).
 
+## 1.7.1 (ZIP de prueba)
+
+- Reworks the 1.7.0 pricing-card proposal into SCI Market Pricing: a small wrapper around editable Core pricing patterns.
+- Adds a market/currency selector with configurable markets (up to 30), plan records (up to 50), market-specific displayed prices, and a Fluent Forms URL per market.
+- Extends Core Paragraph and Button blocks with an optional SCI plan ID so price text and CTA links can follow the selected market while keeping card content and styling in Gutenberg.
+- Sends only stable `plan` and `market` identifiers to Fluent Forms; displayed amounts are not sent as payment authority. Payment Item amounts and supported currency remain configured in Fluent Forms.
+- Adds an integrated Core pricing pattern and documentation for setup and staging validation. This remains an untagged staging build and does not change a WordPress site.
+
 ## 1.6.4 (ZIP de prueba)
 
 - Adds the Core-only SCI Process — 3 Steps pattern with three responsive columns centered in the available wide area.

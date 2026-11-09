@@ -11,12 +11,15 @@ $GLOBALS['sci_test_collections']  = array();
 $GLOBALS['sci_test_icons']        = array();
 $GLOBALS['sci_test_block_styles'] = array();
 $GLOBALS['sci_test_stylesheets']  = array();
+$GLOBALS['sci_test_scripts']      = array();
+$GLOBALS['sci_test_blocks']       = array();
 $GLOBALS['sci_test_block_style_assets'] = array();
 $GLOBALS['sci_test_translations'] = array();
 
 function add_action( $hook, $callback, $priority = 10 ) {
 	$GLOBALS['sci_test_hooks'][ $hook ][ $priority ][] = $callback;
 }
+function add_filter( $hook, $callback, $priority = 10, $accepted_args = 1 ) {}
 
 function __( $text, $domain = null ) {
 	$GLOBALS['sci_test_translations'][] = array( $text, $domain );
@@ -41,6 +44,14 @@ function plugins_url( $path, $plugin = '' ) {
 
 function wp_register_style( $handle, $src, $deps = array(), $ver = false, $media = 'all' ) {
 	$GLOBALS['sci_test_stylesheets'][ $handle ] = compact( 'src', 'deps', 'ver', 'media' );
+	return true;
+}
+function wp_register_script( $handle, $src, $deps = array(), $ver = false, $args = array() ) {
+	$GLOBALS['sci_test_scripts'][ $handle ] = compact( 'src', 'deps', 'ver', 'args' );
+	return true;
+}
+function register_block_type( $name, $args ) {
+	$GLOBALS['sci_test_blocks'][ $name ] = $args;
 	return true;
 }
 
@@ -73,9 +84,9 @@ function wp_register_icon( $name, $args ) {
 $plugin_root = getenv( 'SCI_PLUGIN_ROOT' ) ? rtrim( getenv( 'SCI_PLUGIN_ROOT' ), '/' ) : dirname( __DIR__ );
 $plugin_file = $plugin_root . '/sci-design-blocks.php';
 $plugin      = file_get_contents( $plugin_file );
-$expected_plugin_version = getenv( 'SCI_EXPECTED_VERSION' ) ? getenv( 'SCI_EXPECTED_VERSION' ) : '1.6.4';
+$expected_plugin_version = getenv( 'SCI_EXPECTED_VERSION' ) ? getenv( 'SCI_EXPECTED_VERSION' ) : '1.7.1';
 if ( PHP_VERSION_ID < 80300 ) {
-	throw new RuntimeException( 'PHP 8.3 or newer is required to run the current 1.6.4 test suite.' );
+	throw new RuntimeException( 'PHP 8.3 or newer is required to run the current 1.7.1 test suite.' );
 }
 if ( false === $plugin || ! preg_match( '/^ \* Version: ' . preg_quote( $expected_plugin_version, '/' ) . '$/m', $plugin ) || ! preg_match( '/^ \* Requires at least: 7\.1$/m', $plugin ) || ! preg_match( '/^ \* Requires PHP: 8\.3$/m', $plugin ) ) {
 	throw new RuntimeException( 'Plugin release version or platform minimum is incorrect.' );
@@ -88,8 +99,15 @@ foreach ( $GLOBALS['sci_test_hooks']['init'] as $callbacks ) {
 		call_user_func( $callback );
 	}
 }
+if (
+	! isset( $GLOBALS['sci_test_blocks']['sci-design-blocks/market-pricing'] ) ||
+	! isset( $GLOBALS['sci_test_scripts']['sci-market-pricing-editor'], $GLOBALS['sci_test_scripts']['sci-market-pricing-view'] )
+) {
+	throw new RuntimeException( 'Expected the SCI Market Pricing block and its editor/frontend scripts to register.' );
+}
 
 $expected_patterns = array(
+	'sci-design-blocks/features-grid',
 	'sci-design-blocks/feature-icon-vertical',
 	'sci-design-blocks/feature-image-vertical',
 	'sci-design-blocks/feature-icon-left',
@@ -106,6 +124,7 @@ $expected_patterns = array(
 	'sci-design-blocks/posts-editorial-stack',
 	'sci-design-blocks/posts-editorial-sections',
 	'sci-design-blocks/pricing-cards',
+	'sci-design-blocks/pricing-market-selector',
 	'sci-design-blocks/pricing-featured',
 	'sci-design-blocks/pricing-compact',
 	'sci-design-blocks/comparison-2-options',
@@ -118,6 +137,7 @@ $expected_patterns = array(
 	'sci-design-blocks/pricing-split',
 	'sci-design-blocks/cta-horizontal',
 	'sci-design-blocks/process-steps',
+	'sci-design-blocks/product-story',
 );
 $manifest       = require $plugin_root . '/icons/manifest.php';
 $expected_icons = array_map(
@@ -135,7 +155,7 @@ sort( $icon_names );
 sort( $expected_icons );
 
 if ( 1 !== count( $GLOBALS['sci_test_categories'] ) || $pattern_names !== $expected_patterns || isset( $GLOBALS['sci_test_patterns']['sci-design-blocks/posts-visual-grid'] ) ) {
-	throw new RuntimeException( 'Expected the original category, 9 general patterns, 6 editorial patterns, 5 pricing/comparison patterns, 2 Heroes, 5 M7 patterns, and no stale Visual Grid.' );
+	throw new RuntimeException( 'Pattern inventory mismatch. Categories: ' . count( $GLOBALS['sci_test_categories'] ) . '; unexpected: ' . implode( ', ', array_diff( $pattern_names, $expected_patterns ) ) . '; missing: ' . implode( ', ', array_diff( $expected_patterns, $pattern_names ) ) );
 }
 $editorial_source = file_get_contents( $plugin_root . '/includes/editorial-query-patterns.php' );
 if ( false === $editorial_source || false !== strpos( $editorial_source, 'posts-visual-grid' ) || ! preg_match_all( "/^\t\t'(sci-design-blocks\/posts-[^']+)' => array\(/m", $editorial_source, $editorial_slug_matches ) ) {
@@ -176,20 +196,29 @@ if ( array( 'sci-bordered', 'sci-minimal' ) !== $style_names ) {
 	throw new RuntimeException( 'Expected exactly the opt-in Minimal and Bordered Core Accordion styles.' );
 }
 if (
-	3 !== count( $GLOBALS['sci_test_stylesheets'] ) ||
+	5 !== count( $GLOBALS['sci_test_stylesheets'] ) ||
 	! isset( $GLOBALS['sci_test_stylesheets']['sci-design-blocks-accordion-styles'] ) ||
 	! isset( $GLOBALS['sci_test_stylesheets']['sci-design-blocks-tabs-styles'] ) ||
-	! isset( $GLOBALS['sci_test_stylesheets']['sci-design-blocks-editorial-image-styles'] )
+	! isset( $GLOBALS['sci_test_stylesheets']['sci-design-blocks-editorial-image-styles'] ) ||
+	! isset( $GLOBALS['sci_test_stylesheets']['sci-market-pricing'] )
 ) {
-	throw new RuntimeException( 'Expected one stylesheet handle each for Accordion, Tabs, and editorial image styles.' );
+	throw new RuntimeException( 'Expected stylesheet handles for Accordion, Tabs, editorial images, button hover, and Market Pricing.' );
 }
 $expected_block_style_assets = array(
 	'core/accordion'         => array( array( 'handle' => 'sci-design-blocks-accordion-styles' ) ),
 	'core/tabs'              => array( array( 'handle' => 'sci-design-blocks-tabs-styles' ) ),
 	'core/post-featured-image' => array( array( 'handle' => 'sci-design-blocks-editorial-image-styles' ) ),
+	'core/button'              => array(
+		array(
+			'handle' => 'sci-design-blocks-button-hover',
+			'src'    => 'plugin-assets/assets/css/button-styles.css',
+			'path'   => $plugin_root . '/assets/css/button-styles.css',
+			'ver'    => (string) filemtime( $plugin_root . '/assets/css/button-styles.css' ),
+		),
+	),
 );
 if ( $expected_block_style_assets !== $GLOBALS['sci_test_block_style_assets'] ) {
-	throw new RuntimeException( 'Expected exactly one type-level Core stylesheet association per existing style asset.' );
+	throw new RuntimeException( 'Expected exactly one type-level Core stylesheet association per existing style asset. Actual: ' . json_encode( $GLOBALS['sci_test_block_style_assets'] ) );
 }
 foreach ( array( 'sci-minimal' => 'Minimal', 'sci-bordered' => 'Bordered' ) as $name => $label ) {
 	$style = $accordion_styles[ $name ];
@@ -246,12 +275,12 @@ foreach ( array( 'sci-underline' => 'Underline', 'sci-pills' => 'Pills', 'sci-co
 }
 
 $accordion_pattern = $GLOBALS['sci_test_patterns']['sci-design-blocks/accordion']['content'] ?? '';
-if ( false === strpos( $accordion_pattern, '<!-- wp:accordion {"autoclose":true} -->' ) || false !== strpos( $accordion_pattern, 'is-style-sci-' ) ) {
+if ( ! preg_match( '/<!-- wp:accordion \{"[^}]*autoclose":true[^}]*\} -->/', $accordion_pattern ) || false !== strpos( $accordion_pattern, 'is-style-sci-' ) ) {
 	throw new RuntimeException( 'The original SCI Accordion pattern must keep Core markup and autoclose unchanged.' );
 }
 
-if ( 27 !== count( $GLOBALS['sci_test_patterns'] ) ) {
-	throw new RuntimeException( 'Expected 28 patterns after adding the SCI Process — 3 Steps composition.' );
+if ( 31 !== count( $GLOBALS['sci_test_patterns'] ) ) {
+	throw new RuntimeException( 'Expected the 31 registered patterns, including the integrated Core market-pricing pattern.' );
 }
 
 foreach ( $GLOBALS['sci_test_patterns'] as $pattern_name => $pattern ) {
@@ -279,7 +308,7 @@ foreach ( $GLOBALS['sci_test_patterns'] as $pattern_name => $pattern ) {
 		}
 
 		$label = strtolower( strip_tags( $anchor[2] ) );
-		if ( false === strpos( $label, 'configure link before publishing' ) && false === strpos( $label, 'configurar enlace antes de publicar' ) ) {
+		if ( false === strpos( $label, 'configure link before publishing' ) && false === strpos( $label, 'configurar enlace antes de publicar' ) && false === strpos( $label, 'configura el enlace antes de publicar' ) ) {
 			throw new RuntimeException( 'Unlinked Core Button must be clearly marked as an editor placeholder in ' . $pattern_name . '.' );
 		}
 	}
@@ -333,4 +362,4 @@ if ( false === $notice || false === strpos( $notice, 'Bootstrap Icons' ) || fals
 	throw new RuntimeException( 'Bootstrap MIT third-party notice is missing or incomplete.' );
 }
 
-fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, one SCI collection, 83 icons, seven Core Block Styles, six editorial Query, five Pricing/Comparison, two Heroes and five M7 patterns (27 total).\n" );
+	fwrite( STDOUT, "Static registration checks PASS: WordPress 7.1, 83 icons, seven Core Block Styles, 31 patterns and the SCI Market Pricing block.\n" );

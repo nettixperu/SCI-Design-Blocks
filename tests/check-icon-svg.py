@@ -72,10 +72,19 @@ allowed_css = {
     ROOT / "assets" / "css" / "accordion-styles.css",
     ROOT / "assets" / "css" / "tabs-styles.css",
     ROOT / "assets" / "css" / "editorial-image-styles.css",
+    ROOT / "assets" / "css" / "button-styles.css",
+    ROOT / "assets" / "css" / "product-story.css",
+    ROOT / "assets" / "css" / "market-pricing.css",
 }
-unexpected_assets = [p for p in runtime_css_js if p.suffix.lower() == ".js" or p not in allowed_css]
+allowed_js = {
+    ROOT / "assets" / "js-button-hover-editor.js",
+    ROOT / "assets" / "js-page-title-editor.js",
+    ROOT / "assets" / "js-market-pricing-editor.js",
+    ROOT / "assets" / "js-market-pricing.js",
+}
+unexpected_assets = [p for p in runtime_css_js if (p.suffix.lower() == ".js" and p not in allowed_js) or (p.suffix.lower() == ".css" and p not in allowed_css)]
 if unexpected_assets:
     sys.exit("Unexpected CSS or JavaScript file in plugin source: " + ", ".join(str(p.relative_to(ROOT)) for p in unexpected_assets))
 if (ROOT / "package.json").exists() or (ROOT / "composer.json").exists() or (ROOT / "vendor").exists():
     sys.exit("Unexpected runtime/development dependency manifest or vendor tree")
-print("SVG/source checks PASS: 83 entries match 83 safe sources; only approved Accordion/Tabs/Hover Zoom CSS is present; no frontend JS/dependency manifest.")
+print("SVG/source checks PASS: 83 entries match 83 safe sources; runtime assets match the explicitly maintained Core style and Market Pricing allowlists; no external dependency manifest or vendor tree.")
