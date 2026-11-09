@@ -16,6 +16,9 @@
 		if ( name === 'core/paragraph' ) {
 			settings.attributes.sciMarketContentRole = { type: 'string', default: 'price' };
 		}
+		if ( name === 'core/button' ) {
+			settings.attributes.sciMarketButtonPrice = { type: 'boolean', default: false };
+		}
 		return settings;
 	} );
 
@@ -61,6 +64,7 @@
 				el( BlockEdit, props ),
 				el( InspectorControls, {}, el( PanelBody, { title: __( 'SCI · selector de mercado', 'sci-design-blocks' ), initialOpen: false },
 					el( TextControl, { label: label, help: help, value: props.attributes.sciMarketPlanId || '', onChange: function ( value ) { props.setAttributes( { sciMarketPlanId: value.toLowerCase().replace( /[^a-z0-9_-]/g, '' ).slice( 0, 64 ) } ); } } ),
+					props.name === 'core/button' ? el( ToggleControl, { label: __( 'Mostrar el precio mensual en este botón', 'sci-design-blocks' ), help: __( 'Sustituye el texto del botón por el precio y el periodo del mercado seleccionado. El botón conserva su enlace al formulario.', 'sci-design-blocks' ), checked: props.attributes.sciMarketButtonPrice === true, onChange: function ( value ) { props.setAttributes( { sciMarketButtonPrice: value } ); } } ) : null,
 					isParagraph ? el( SelectControl, { label: __( 'Contenido que cambia con el mercado', 'sci-design-blocks' ), value: props.attributes.sciMarketContentRole || 'price', options: [ { label: __( 'Precio del plan', 'sci-design-blocks' ), value: 'price' }, { label: __( 'Facturación anual', 'sci-design-blocks' ), value: 'annual' } ], onChange: function ( value ) { props.setAttributes( { sciMarketContentRole: value } ); } } ) : null ) )
 			);
 		};
@@ -222,8 +226,8 @@
 					el( 'strong', {}, __( 'Cómo vincular precio y botón', 'sci-design-blocks' ) ),
 					el( 'ol', {},
 						el( 'li', {}, __( 'En Planes y precios, elige el mercado y configura el precio y el periodo del plan.', 'sci-design-blocks' ) ),
-						el( 'li', {}, __( 'Selecciona el párrafo del precio. En Bloque → SCI · selector de mercado, escribe el ID fijo del plan y elige “Precio del plan”.', 'sci-design-blocks' ) ),
-						el( 'li', {}, __( 'Selecciona el botón Core de esa tarjeta y escribe el mismo ID en “ID del plan del botón”.', 'sci-design-blocks' ) ),
+						el( 'li', {}, __( 'Si el precio va fuera del botón, selecciona su párrafo, escribe el ID fijo y elige “Precio del plan”. Si quieres el precio dentro del botón verde, selecciona el botón, escribe ese ID y activa “Mostrar el precio mensual en este botón”.', 'sci-design-blocks' ) ),
+						el( 'li', {}, __( 'El botón vinculado conserva su enlace al formulario del plan; al activar precio dinámico, su texto se reemplaza por el importe y periodo del mercado activo.', 'sci-design-blocks' ) ),
 						el( 'li', {}, __( 'Para una línea anual, vincula otro párrafo con ese ID y elige “Facturación anual”.', 'sci-design-blocks' ) )
 					),
 					el( 'p', {}, __( 'El patrón SCI Pricing — Market Selector ya incluye estos vínculos.', 'sci-design-blocks' ) )

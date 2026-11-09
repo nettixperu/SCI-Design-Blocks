@@ -46,6 +46,12 @@
 			Array.from( wrapper.querySelectorAll( '[data-sci-market-plan-id]' ) ).filter( function ( node ) { return node.dataset.sciMarketPlanId === plan.id; } ).forEach( function ( node ) {
 				if ( node.matches( 'h1, h2, h3, h4, h5, h6' ) ) {
 					if ( plan.name ) { node.textContent = plan.name; }
+				} else if ( node.matches( '.wp-block-button' ) && node.dataset.sciMarketButtonPrice === 'true' ) {
+					const link = node.querySelector( 'a.wp-block-button__link' );
+					if ( link ) {
+						const formatted = price.amount ? format( price.amount, market ) : 'Consultar';
+						link.textContent = formatted + ( price.amount && price.period ? ' ' + price.period : '' );
+					}
 				} else if ( node.matches( 'p' ) && node.dataset.sciMarketContentRole === 'annual' ) {
 					const monthly = Number( price.amount );
 					const annual = price.annualAmount !== '' && price.annualAmount !== undefined ? Number( price.annualAmount ) : monthly * 12;

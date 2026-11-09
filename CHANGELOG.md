@@ -2,6 +2,12 @@
 
 User-facing highlights for stable releases. For full release details, see [GitHub Releases](https://github.com/nettixperu/SCI-Design-Blocks/releases).
 
+## 1.7.7 (ZIP de prueba)
+
+- Lets a linked Core Button optionally display the selected market's monthly price and period while preserving its plan-specific Fluent Forms link.
+- Keeps button pricing opt-in; Core Buttons retain their original text and behavior unless the new control is enabled.
+- Documents both supported price placements: a linked Core Paragraph or the linked price button itself.
+
 ## 1.7.6 (ZIP de prueba)
 
 - Derives a market flag from the country/region in its locale when no manual emoji override is set; the existing hide-flags option still applies.
