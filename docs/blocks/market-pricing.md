@@ -6,7 +6,7 @@ SCI Market Pricing connects an editable pricing pattern built with WordPress Cor
 
 1. Insert **SCI Pricing — Market Selector** from the SCI Design Blocks pattern category.
 2. Edit the cards with Core Group, Heading, Paragraph, List, and Button blocks. Duplicate or remove card groups as needed.
-3. Select the outer **SCI Market Pricing** block. Choose the selector style, then add or edit markets, currencies, and flag emoji; configure the form URL for each market.
+3. Select the outer **SCI Market Pricing** block. Choose the selector style, whether to show its label, and optional colors from the theme palette. Then add or edit markets, currencies, and flag emoji; configure the form URL for each market.
 4. Under **Plans and prices**, choose a market and enter each plan's amount and period text. The starting plan IDs are `starter`, `business`, and `enterprise`; add as many plans as needed.
 5. Select each Core price paragraph and each Core Button in a card. In **SCI · selector de mercado**, set the same plan ID as in the container. The sample pattern is already linked.
 6. Set the default market, save, and verify the published page.
@@ -17,7 +17,7 @@ For a pricing pattern already in use, place its Core groups inside SCI Market Pr
 
 Markets are not hard-coded to PEN or MXN. Each one has a stable ID, display name, optional flag emoji, ISO 4217 currency code, locale, form URL, and active/inactive setting. Add another currency or another market in the block inspector. `Intl.NumberFormat` formats the displayed amount using the selected market's locale and currency. SCI does not fetch exchange rates or convert amounts.
 
-The selector can use a **segmented** radio group, separate **pill** buttons, or the native **dropdown**. Segmented is the integrated pattern's default. The **Mostrar banderas** control can hide flags; each market has a text field for its flag emoji. Emoji appearance depends on the visitor's operating system and font, and native dropdown rendering varies by browser.
+The selector can use a **segmented** radio group, separate **pill** buttons, or the native **dropdown**. Segmented is the integrated pattern's default. The **Mostrar banderas** control can hide flags; each market has a text field for its flag emoji. The “Moneda o mercado” label is optional and hidden in the integrated pattern by default. In the Selector de mercado panel, the theme palette can set general text, border, selector background, selected option fill, and selected option text; clearing a color returns that part to theme-inherited styling. Emoji appearance depends on the visitor's operating system and font, and native dropdown rendering varies by browser.
 
 Plans are keyed by stable IDs. Each plan can have a different amount and billing-period label for each market. Plan cards are just Core blocks, so their count and content can be changed in Gutenberg; add a matching plan record in the container and link its price paragraph and button using the same ID. The configuration currently accepts up to 50 plans and 30 markets to bound saved input.
 

@@ -2,6 +2,13 @@
 
 User-facing highlights for stable releases. For full release details, see [GitHub Releases](https://github.com/nettixperu/SCI-Design-Blocks/releases).
 
+## 1.7.4 (ZIP de prueba)
+
+- Makes the “Moneda o mercado” label optional and hides it by default in the integrated pricing pattern.
+- Adds Gutenberg palette controls for selector text, border, background, selected option fill, and selected option text colors.
+- Accepts safe hex colors and Twenty Twenty-Five palette color variables; invalid CSS color values are discarded.
+- Leaves styling empty by default so the selector inherits the active theme palette unless an editor chooses explicit colors.
+
 ## 1.7.3 (ZIP de prueba)
 
 - Adds native segmented, pill, and dropdown market selectors, with configurable flag emoji per market.

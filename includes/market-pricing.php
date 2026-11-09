@@ -21,6 +21,17 @@ function market_pricing_id( $value, string $fallback = '' ): string {
 	return preg_match( '/^[a-z][a-z0-9_-]{0,63}$/', $id ) ? $id : $fallback;
 }
 
+/** Accept hex colors and named Twenty Twenty-Five palette variables only. */
+function market_pricing_color( $value ): string {
+	if ( ! is_string( $value ) || '' === trim( $value ) ) { return ''; }
+	$color = trim( $value );
+	if ( sanitize_hex_color( $color ) ) { return $color; }
+	if ( preg_match( '/^var:preset\\|color\\|([a-z0-9-]+)$/', $color, $match ) ) {
+		return 'var(--wp--preset--color--' . $match[1] . ')';
+	}
+	return preg_match( '/^var\\(--wp--preset--color--[a-z0-9-]+\\)$/', $color ) ? $color : '';
+}
+
 /** Add narrowly scoped attributes to Core price paragraphs and buttons. */
 function market_pricing_core_attributes( array $args, string $block_name ): array {
 	if ( in_array( $block_name, array( 'core/paragraph', 'core/button' ), true ) ) {
@@ -55,9 +66,9 @@ function register_market_pricing_block(): void {
 	$style = $root . '/assets/css/market-pricing.css';
 	$editor = $root . '/assets/js-market-pricing-editor.js';
 	$view = $root . '/assets/js-market-pricing.js';
-	wp_register_style( 'sci-market-pricing', plugins_url( 'assets/css/market-pricing.css', $root . '/sci-design-blocks.php' ), array(), is_file( $style ) ? (string) filemtime( $style ) : '1.7.3' );
-	wp_register_script( 'sci-market-pricing-editor', plugins_url( 'assets/js-market-pricing-editor.js', $root . '/sci-design-blocks.php' ), array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-hooks', 'wp-compose', 'wp-i18n' ), is_file( $editor ) ? (string) filemtime( $editor ) : '1.7.3', true );
-	wp_register_script( 'sci-market-pricing-view', plugins_url( 'assets/js-market-pricing.js', $root . '/sci-design-blocks.php' ), array(), is_file( $view ) ? (string) filemtime( $view ) : '1.7.3', true );
+	wp_register_style( 'sci-market-pricing', plugins_url( 'assets/css/market-pricing.css', $root . '/sci-design-blocks.php' ), array(), is_file( $style ) ? (string) filemtime( $style ) : '1.7.4' );
+	wp_register_script( 'sci-market-pricing-editor', plugins_url( 'assets/js-market-pricing-editor.js', $root . '/sci-design-blocks.php' ), array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-data', 'wp-hooks', 'wp-compose', 'wp-i18n' ), is_file( $editor ) ? (string) filemtime( $editor ) : '1.7.4', true );
+	wp_register_script( 'sci-market-pricing-view', plugins_url( 'assets/js-market-pricing.js', $root . '/sci-design-blocks.php' ), array(), is_file( $view ) ? (string) filemtime( $view ) : '1.7.4', true );
 	register_block_type(
 		'sci-design-blocks/market-pricing',
 		array(
@@ -73,6 +84,12 @@ function register_market_pricing_block(): void {
 				'defaultMarketId' => array( 'type' => 'string', 'default' => 'pe_pen' ),
 				'selectorStyle' => array( 'type' => 'string', 'default' => 'segmented' ),
 				'showFlags' => array( 'type' => 'boolean', 'default' => true ),
+				'showSelectorLabel' => array( 'type' => 'boolean', 'default' => true ),
+				'selectorTextColor' => array( 'type' => 'string', 'default' => '' ),
+				'selectorBorderColor' => array( 'type' => 'string', 'default' => '' ),
+				'selectorBackgroundColor' => array( 'type' => 'string', 'default' => '' ),
+				'selectorActiveColor' => array( 'type' => 'string', 'default' => '' ),
+				'selectorActiveTextColor' => array( 'type' => 'string', 'default' => '' ),
 			),
 			'supports' => array( 'align' => array( 'wide', 'full' ), 'spacing' => array( 'margin' => true, 'padding' => true ) ),
 			'style' => 'sci-market-pricing',
@@ -141,10 +158,26 @@ function render_market_pricing_block( array $attributes, string $content, $block
 	if ( ! in_array( $default, array_column( $active, 'id' ), true ) ) { $default = $active[0]['id']; }
 	$selector_style = in_array( $attributes['selectorStyle'] ?? '', array( 'select', 'pills', 'segmented' ), true ) ? $attributes['selectorStyle'] : 'segmented';
 	$show_flags = ! array_key_exists( 'showFlags', $attributes ) || ! empty( $attributes['showFlags'] );
+	$show_label = ! array_key_exists( 'showSelectorLabel', $attributes ) || ! empty( $attributes['showSelectorLabel'] );
+	$selector_colors = array(
+		'--sci-market-selector-text' => market_pricing_color( $attributes['selectorTextColor'] ?? '' ),
+		'--sci-market-selector-border' => market_pricing_color( $attributes['selectorBorderColor'] ?? '' ),
+		'--sci-market-selector-background' => market_pricing_color( $attributes['selectorBackgroundColor'] ?? '' ),
+		'--sci-market-selector-active' => market_pricing_color( $attributes['selectorActiveColor'] ?? '' ),
+		'--sci-market-selector-active-text' => market_pricing_color( $attributes['selectorActiveTextColor'] ?? '' ),
+	);
+	$selector_style_rules = array();
+	foreach ( $selector_colors as $property => $value ) {
+		if ( '' !== $value ) { $selector_style_rules[] = $property . ':' . $value; }
+	}
+	$inline_style = implode( ';', $selector_style_rules );
 	$payload = wp_json_encode( array( 'markets' => $active, 'plans' => $plans ), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT );
-	$wrapper = function_exists( 'get_block_wrapper_attributes' ) ? get_block_wrapper_attributes( array( 'class' => 'sci-market-pricing', 'data-sci-market-pricing' => '', 'data-default-market' => $default, 'data-pricing' => $payload ?: '{}' ) ) : 'class="wp-block-sci-design-blocks-market-pricing sci-market-pricing" data-sci-market-pricing data-default-market="' . esc_attr( $default ) . '" data-pricing="' . esc_attr( $payload ?: '{}' ) . '"';
+	$wrapper_attributes = array( 'class' => 'sci-market-pricing', 'data-sci-market-pricing' => '', 'data-default-market' => $default, 'data-pricing' => $payload ?: '{}' );
+	if ( '' !== $inline_style ) { $wrapper_attributes['style'] = $inline_style; }
+	$wrapper = function_exists( 'get_block_wrapper_attributes' ) ? get_block_wrapper_attributes( $wrapper_attributes ) : 'class="wp-block-sci-design-blocks-market-pricing sci-market-pricing" data-sci-market-pricing data-default-market="' . esc_attr( $default ) . '" data-pricing="' . esc_attr( $payload ?: '{}' ) . '"' . ( '' !== $inline_style ? ' style="' . esc_attr( $inline_style ) . '"' : '' );
 	$label = esc_html__( 'Moneda o mercado', 'sci-design-blocks' );
-	$html = '<div ' . $wrapper . '><div class="sci-market-pricing__selector"><span class="sci-market-pricing__label">' . $label . '</span>';
+	$html = '<div ' . $wrapper . '><div class="sci-market-pricing__selector">';
+	if ( $show_label ) { $html .= '<span class="sci-market-pricing__label">' . $label . '</span>'; }
 	if ( 'select' === $selector_style ) {
 		$html .= '<select data-sci-market-control aria-label="' . esc_attr( $label ) . '">';
 		foreach ( $active as $market ) {

@@ -5,7 +5,7 @@
 	const el = wp.element.createElement;
 	const { __ } = wp.i18n;
 	const { InspectorControls, InnerBlocks, useBlockProps } = wp.blockEditor;
-	const { Button, PanelBody, SelectControl, TextControl, ToggleControl } = wp.components;
+	const { Button, ColorPalette, PanelBody, SelectControl, TextControl, ToggleControl } = wp.components;
 	const limit = 30;
 	const makeId = function ( prefix ) { return prefix + '_' + Math.random().toString( 36 ).slice( 2, 9 ); };
 
@@ -36,6 +36,13 @@
 		const [ selectedMarket, setSelectedMarket ] = wp.element.useState( markets[0] ? markets[0].id : '' );
 		const marketOptions = markets.filter( function ( item ) { return item.active !== false; } ).map( function ( item ) { return { label: ( item.name || item.id ) + ' · ' + ( item.currency || 'USD' ), value: item.id }; } );
 		const blockProps = useBlockProps( { className: 'sci-market-pricing-editor' } );
+		const palette = wp.data && wp.data.select ? ( wp.data.select( 'core/block-editor' ).getSettings().colors || [] ) : [];
+		function colorControl( label, attribute ) {
+			return el( wp.element.Fragment, { key: attribute },
+				el( 'p', {}, label ),
+				el( ColorPalette, { colors: palette, value: attributes[attribute] || '', clearable: true, onChange: function ( value ) { setAttributes( { [ attribute ]: value || '' } ); } } )
+			);
+		}
 
 		function updateMarket( index, patch ) {
 			setAttributes( { markets: markets.map( function ( item, i ) { return i === index ? Object.assign( {}, item, patch ) : item; } ) } );
@@ -107,7 +114,14 @@
 						{ label: __( 'Botones tipo píldora', 'sci-design-blocks' ), value: 'pills' },
 						{ label: __( 'Desplegable nativo', 'sci-design-blocks' ), value: 'select' },
 					], onChange: function ( value ) { setAttributes( { selectorStyle: value } ); } } ),
-					el( ToggleControl, { label: __( 'Mostrar banderas', 'sci-design-blocks' ), checked: attributes.showFlags !== false, onChange: function ( value ) { setAttributes( { showFlags: value } ); } } )
+					el( ToggleControl, { label: __( 'Mostrar banderas', 'sci-design-blocks' ), checked: attributes.showFlags !== false, onChange: function ( value ) { setAttributes( { showFlags: value } ); } } ),
+					el( ToggleControl, { label: __( 'Mostrar el texto “Moneda o mercado”', 'sci-design-blocks' ), checked: attributes.showSelectorLabel !== false, onChange: function ( value ) { setAttributes( { showSelectorLabel: value } ); } } ),
+					el( 'p', {}, __( 'Colores del selector · usa la paleta del tema o elige un color personalizado.', 'sci-design-blocks' ) ),
+					colorControl( __( 'Texto y etiquetas', 'sci-design-blocks' ), 'selectorTextColor' ),
+					colorControl( __( 'Borde', 'sci-design-blocks' ), 'selectorBorderColor' ),
+					colorControl( __( 'Fondo del selector', 'sci-design-blocks' ), 'selectorBackgroundColor' ),
+					colorControl( __( 'Fondo de la opción seleccionada', 'sci-design-blocks' ), 'selectorActiveColor' ),
+					colorControl( __( 'Texto de la opción seleccionada', 'sci-design-blocks' ), 'selectorActiveTextColor' )
 				),
 				el( PanelBody, { title: __( 'Mercados y monedas', 'sci-design-blocks' ), initialOpen: true },
 					el( SelectControl, { label: __( 'Mercado predeterminado', 'sci-design-blocks' ), value: attributes.defaultMarketId || '', options: marketOptions, onChange: function ( value ) { setAttributes( { defaultMarketId: value } ); } } ),

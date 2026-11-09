@@ -3,6 +3,7 @@
 	flex-wrap: wrap;
 	align-items: center;
 	gap: .5rem;
+	color: var(--sci-market-selector-text, inherit);
 	margin-block-end: 1.5rem;
 }
 .sci-market-pricing__label {
@@ -12,11 +13,11 @@
 	max-width: 100%;
 	min-height: 2.75rem;
 	padding: .5rem 2rem .5rem .75rem;
-	color: inherit;
+	color: var(--sci-market-selector-text, inherit);
 	font: inherit;
-	border: 1px solid currentColor;
+	border: 1px solid var(--sci-market-selector-border, currentColor);
 	border-radius: .35rem;
-	background-color: transparent;
+	background-color: var(--sci-market-selector-background, transparent);
 }
 .sci-market-pricing__selector select:focus-visible {
 	outline: 2px solid currentColor;
@@ -29,7 +30,7 @@
 	min-width: 0;
 	margin: 0;
 	padding: 0;
-	border: 0;
+	border: 1px solid transparent;
 }
 .sci-market-pricing__option {
 	position: relative;
@@ -57,30 +58,36 @@
 	gap: .4rem;
 	min-height: 2.75rem;
 	padding: .45rem .9rem;
-	color: inherit;
+	color: var(--sci-market-selector-text, inherit);
 	font: inherit;
-	border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+	border: 1px solid var(--sci-market-selector-border, color-mix(in srgb, currentColor 35%, transparent));
 	border-radius: 999px;
 }
 .sci-market-pricing__options--segmented {
 	gap: 0;
 	padding: .2rem;
-	border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+	background-color: var(--sci-market-selector-background, transparent);
+	border-color: var(--sci-market-selector-border, color-mix(in srgb, currentColor 35%, transparent));
 	border-radius: 999px;
+}
+.sci-market-pricing__options--pills {
+	padding: .2rem;
+	background-color: var(--sci-market-selector-background, transparent);
+	border-radius: .5rem;
 }
 .sci-market-pricing__options--segmented .sci-market-pricing__option-content {
 	border-color: transparent;
 }
 .sci-market-pricing__option input:checked + .sci-market-pricing__option-content {
-	color: var(--wp--preset--color--base, #fff);
-	background: var(--wp--preset--color--contrast, #171717);
-	border-color: var(--wp--preset--color--contrast, #171717);
+	color: var(--sci-market-selector-active-text, var(--wp--preset--color--base, #fff));
+	background: var(--sci-market-selector-active, var(--wp--preset--color--contrast, #171717));
+	border-color: var(--sci-market-selector-active, var(--wp--preset--color--contrast, #171717));
 }
 .sci-market-pricing__options--pills .sci-market-pricing__option input:checked + .sci-market-pricing__option-content {
-	color: inherit;
-	background: transparent;
-	border-color: currentColor;
-	box-shadow: inset 0 0 0 1px currentColor;
+	color: var(--sci-market-selector-active-text, var(--sci-market-selector-text, inherit));
+	background: var(--sci-market-selector-active, transparent);
+	border-color: var(--sci-market-selector-active, currentColor);
+	box-shadow: inset 0 0 0 1px var(--sci-market-selector-active, currentColor);
 }
 .sci-market-pricing__option input:focus-visible + .sci-market-pricing__option-content {
 	outline: 2px solid currentColor;
