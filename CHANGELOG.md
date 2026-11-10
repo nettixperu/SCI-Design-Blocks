@@ -2,6 +2,11 @@
 
 User-facing highlights for stable releases. For full release details, see [GitHub Releases](https://github.com/nettixperu/SCI-Design-Blocks/releases).
 
+## 1.8.0 (ZIP de prueba)
+
+- Lets a Market Pricing selector update linked Core pricing blocks elsewhere in the same nearest shared container, including sibling SCI pricing patterns.
+- Updates editor guidance: keep the selector and pricing pattern in the same Group; no manual nesting of the pricing pattern inside the selector is required.
+
 ## 1.7.9 (ZIP de prueba)
 
 - Improves the Market Pricing editor guide with short, step-by-step instructions and high-contrast styling.

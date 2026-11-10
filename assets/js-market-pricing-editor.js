@@ -49,6 +49,22 @@
 		}
 		return null;
 	}
+	function findPlanScope( editor, wrapperClientId, planId ) {
+		const candidates = [ editor.getBlocks( wrapperClientId ) ];
+		( editor.getBlockParents( wrapperClientId ) || [] ).forEach( function ( parentId ) { candidates.push( editor.getBlocks( parentId ) ); } );
+		for ( const blocks of candidates ) {
+			let found = false;
+			(function scan( nodes ) {
+				( nodes || [] ).forEach( function ( node ) {
+					const pricingOwner = ( editor.getBlockParents( node.clientId ) || [] ).map( function ( parentId ) { return editor.getBlock( parentId ); } ).find( function ( parent ) { return parent && parent.name === 'sci-design-blocks/market-pricing'; } );
+					if ( node.attributes && node.attributes.sciMarketPlanId === planId && ( ! pricingOwner || pricingOwner.clientId === wrapperClientId ) ) { found = true; }
+					scan( node.innerBlocks );
+				} );
+			})( blocks );
+			if ( found ) { return blocks; }
+		}
+		return candidates[0] || [];
+	}
 
 	const withPlanId = wp.compose.createHigherOrderComponent( function ( BlockEdit ) {
 		return function ( props ) {
@@ -57,9 +73,14 @@
 			const label = isParagraph ? __( 'ID del plan', 'sci-design-blocks' ) : ( props.name === 'core/button' ? __( 'ID del plan del botón', 'sci-design-blocks' ) : __( 'ID del plan del nombre', 'sci-design-blocks' ) );
 			const editor = wp.data && wp.data.select ? wp.data.select( 'core/block-editor' ) : null;
 			const ancestors = editor && editor.getBlockParents ? editor.getBlockParents( props.clientId ) : [];
-			const insideMarketPricing = ancestors.some( function ( clientId ) {
+			function containsMarketPricing( blocks ) {
+				return ( blocks || [] ).some( function ( block ) {
+					return block.name === 'sci-design-blocks/market-pricing' || containsMarketPricing( block.innerBlocks );
+				} );
+			}
+			const connectedToMarketPricing = ancestors.some( function ( clientId ) {
 				const parent = editor.getBlock( clientId );
-				return parent && parent.name === 'sci-design-blocks/market-pricing';
+				return parent && ( parent.name === 'sci-design-blocks/market-pricing' || containsMarketPricing( parent.innerBlocks ) );
 			} );
 			const help = isParagraph
 				? __( 'Configura primero el importe en SCI Market Pricing. Usa el mismo ID que aparece en Planes y precios y elige si este párrafo muestra el precio o la facturación anual. El cambio se ve en la vista previa y en la página publicada.', 'sci-design-blocks' )
@@ -69,7 +90,7 @@
 			return el( wp.element.Fragment, {},
 				el( BlockEdit, props ),
 				el( InspectorControls, {}, el( PanelBody, { title: __( 'SCI · selector de mercado', 'sci-design-blocks' ), initialOpen: false },
-					! insideMarketPricing ? el( Notice, { status: 'warning', isDismissible: false }, __( 'Para vincularlo: abre Vista de lista y arrastra la tabla de precios dentro de “SCI Market Pricing”. Debe quedar indentada debajo de ese bloque. Si queda al mismo nivel, el selector no puede cambiar este precio.', 'sci-design-blocks' ) ) : null,
+					! connectedToMarketPricing ? el( Notice, { status: 'warning', isDismissible: false }, __( 'Para vincularlo, coloca el selector SCI Market Pricing y la tabla de precios dentro del mismo bloque Grupo. No es necesario anidar la tabla dentro del selector.', 'sci-design-blocks' ) ) : null,
 					el( TextControl, { label: label, help: help, value: props.attributes.sciMarketPlanId || '', onChange: function ( value ) { props.setAttributes( { sciMarketPlanId: value.toLowerCase().replace( /[^a-z0-9_-]/g, '' ).slice( 0, 64 ) } ); } } ),
 					props.name === 'core/button' ? el( ToggleControl, { label: __( 'Mostrar el precio mensual en este botón', 'sci-design-blocks' ), help: __( 'Sustituye el texto del botón por el precio y el periodo del mercado seleccionado. El botón conserva su enlace al formulario. Se actualiza en la vista previa y en la página publicada.', 'sci-design-blocks' ), checked: props.attributes.sciMarketButtonPrice === true, onChange: function ( value ) { props.setAttributes( { sciMarketButtonPrice: value } ); } } ) : null,
 					isParagraph ? el( SelectControl, { label: __( 'Contenido que cambia con el mercado', 'sci-design-blocks' ), value: props.attributes.sciMarketContentRole || 'price', options: [ { label: __( 'Precio del plan', 'sci-design-blocks' ), value: 'price' }, { label: __( 'Facturación anual', 'sci-design-blocks' ), value: 'annual' } ], onChange: function ( value ) { props.setAttributes( { sciMarketContentRole: value } ); } } ) : null ) )
@@ -118,7 +139,7 @@
 				const planId = plans[index] && plans[index].id;
 				const editor = wp.data.select( 'core/block-editor' );
 				const dispatcher = wp.data.dispatch( 'core/block-editor' );
-				const card = findPlanCardGroup( editor.getBlocks( props.clientId ), planId );
+				const card = findPlanCardGroup( findPlanScope( editor, props.clientId, planId ), planId );
 				let headingUpdated = false;
 				function syncHeadings( blocks ) {
 					( blocks || [] ).forEach( function ( block ) {
@@ -153,11 +174,12 @@
 				const dispatcher = wp.data.dispatch( 'core/block-editor' );
 				function syncPlanIds( blocks ) {
 					( blocks || [] ).forEach( function ( block ) {
-						if ( block.attributes && block.attributes.sciMarketPlanId === previousId ) { dispatcher.updateBlockAttributes( block.clientId, { sciMarketPlanId: nextId } ); }
+						const pricingOwner = ( editor.getBlockParents( block.clientId ) || [] ).map( function ( parentId ) { return editor.getBlock( parentId ); } ).find( function ( parent ) { return parent && parent.name === 'sci-design-blocks/market-pricing'; } );
+						if ( block.attributes && block.attributes.sciMarketPlanId === previousId && ( ! pricingOwner || pricingOwner.clientId === props.clientId ) ) { dispatcher.updateBlockAttributes( block.clientId, { sciMarketPlanId: nextId } ); }
 						syncPlanIds( block.innerBlocks );
 					} );
 				}
-				syncPlanIds( editor.getBlocks( props.clientId ) );
+				syncPlanIds( findPlanScope( editor, props.clientId, previousId ) );
 			}
 		}
 		function updatePrice( planIndex, marketId, patch ) {
@@ -191,7 +213,7 @@
 			const editor = wp.data && wp.data.select ? wp.data.select( 'core/block-editor' ) : null;
 			const dispatcher = wp.data && wp.data.dispatch ? wp.data.dispatch( 'core/block-editor' ) : null;
 			if ( editor && dispatcher ) {
-				const card = findPlanCardGroup( editor.getBlocks( props.clientId ), planId );
+				const card = findPlanCardGroup( findPlanScope( editor, props.clientId, planId ), planId );
 				if ( card ) { dispatcher.removeBlock( card.clientId ); }
 			}
 			setAttributes( { plans: plans.filter( function ( _, i ) { return i !== index; } ) } );
@@ -261,7 +283,7 @@
 			el( 'div', blockProps,
 				el( 'div', { className: 'sci-market-pricing-editor__help' },
 					el( 'strong', {}, __( 'Cómo hacer que cambien los precios', 'sci-design-blocks' ) ),
-					el( 'p', {}, __( '1. En Vista de lista, arrastra la tabla de precios dentro de SCI Market Pricing. Debe quedar indentada debajo del bloque del selector.', 'sci-design-blocks' ) ),
+					el( 'p', {}, __( '1. Coloca SCI Market Pricing y la tabla de precios dentro del mismo bloque Grupo. En Vista de lista, ambos deben quedar dentro de ese Grupo; pueden ser bloques hermanos.', 'sci-design-blocks' ) ),
 					el( 'p', {}, __( '2. En Planes y precios, configura el importe. Usa el mismo ID del plan en su precio y botón (por ejemplo, starter). Para mostrar el importe en el botón, activa “Mostrar el precio mensual en este botón”.', 'sci-design-blocks' ) ),
 					el( 'p', {}, __( '3. Guarda y prueba en Vista previa o en la página publicada. El lienzo del editor no actualiza los precios.', 'sci-design-blocks' ) )
 				),

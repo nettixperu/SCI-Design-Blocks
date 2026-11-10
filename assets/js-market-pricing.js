@@ -11,7 +11,8 @@
 		catch ( error ) { return String( amount ) + ' ' + ( market.currency || '' ); }
 	}
 	function setRoute( wrapper, planId, market ) {
-		const marker = Array.from( wrapper.querySelectorAll( '[data-sci-market-plan-id]' ) ).find( function ( node ) { return node.dataset.sciMarketPlanId === planId && node.matches( '.wp-block-button' ); } );
+		const scope = findScope( wrapper );
+		const marker = Array.from( scope.querySelectorAll( '[data-sci-market-plan-id]' ) ).find( function ( node ) { return node.dataset.sciMarketPlanId === planId && node.matches( '.wp-block-button' ) && belongsToPricingWrapper( node, wrapper ); } );
 		const target = marker && marker.querySelector( 'a.wp-block-button__link' );
 		if ( ! target ) { return; }
 		if ( ! market.formUrl ) {
@@ -33,8 +34,26 @@
 			target.setAttribute( 'tabindex', '-1' );
 		}
 	}
+	function belongsToPricingWrapper( node, wrapper ) {
+		const owner = node.closest( rootSelector );
+		return ! owner || owner === wrapper;
+	}
+	function findScope( wrapper ) {
+		const data = parse( wrapper.getAttribute( 'data-pricing' ) );
+		const planIds = new Set( ( data.plans || [] ).map( function ( plan ) { return plan.id; } ) );
+		let scope = wrapper.parentElement;
+		while ( scope && scope !== document.body && scope !== document.documentElement ) {
+			const hasLinkedBlock = Array.from( scope.querySelectorAll( '[data-sci-market-plan-id]' ) ).some( function ( node ) {
+				return ! wrapper.contains( node ) && planIds.has( node.dataset.sciMarketPlanId ) && belongsToPricingWrapper( node, wrapper );
+			} );
+			if ( hasLinkedBlock ) { return scope; }
+			scope = scope.parentElement;
+		}
+		return wrapper;
+	}
 	function update( wrapper, marketId ) {
 		const data = parse( wrapper.getAttribute( 'data-pricing' ) );
+		const scope = findScope( wrapper );
 		const market = ( data.markets || [] ).find( function ( item ) { return item.id === marketId && item.active; } ) || ( data.markets || [] ).find( function ( item ) { return item.id === wrapper.dataset.defaultMarket; } );
 		if ( ! market ) { return; }
 		wrapper.querySelectorAll( controlSelector ).forEach( function ( control ) {
@@ -43,7 +62,7 @@
 		} );
 		( data.plans || [] ).forEach( function ( plan ) {
 			const price = plan.prices && plan.prices[market.id] ? plan.prices[market.id] : {};
-			Array.from( wrapper.querySelectorAll( '[data-sci-market-plan-id]' ) ).filter( function ( node ) { return node.dataset.sciMarketPlanId === plan.id; } ).forEach( function ( node ) {
+			Array.from( scope.querySelectorAll( '[data-sci-market-plan-id]' ) ).filter( function ( node ) { return node.dataset.sciMarketPlanId === plan.id && belongsToPricingWrapper( node, wrapper ); } ).forEach( function ( node ) {
 				if ( node.matches( 'h1, h2, h3, h4, h5, h6' ) ) {
 					if ( plan.name ) { node.textContent = plan.name; }
 				} else if ( node.matches( '.wp-block-button' ) && node.dataset.sciMarketButtonPrice === 'true' ) {
