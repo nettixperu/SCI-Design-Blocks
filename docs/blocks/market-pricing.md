@@ -1,6 +1,6 @@
 # SCI Market Pricing
 
-SCI Market Pricing connects an editable pricing pattern built with WordPress Core blocks to a market/currency selector. It does not draw or replace the pricing cards. The existing groups, headings, descriptions, feature lists, and buttons remain normal Gutenberg content. The selector and pricing pattern can be sibling blocks inside the same Group; the cards do not need to be nested inside the selector.
+SCI Market Pricing connects an editable pricing pattern built with WordPress Core blocks to a market/currency selector. It does not draw or replace the pricing cards. The existing groups, headings, descriptions, feature lists, and buttons remain normal Gutenberg content. The selector and pricing pattern can be sibling blocks inside the same Group; the cards do not need to be nested inside the selector. The selector is centered by default, and its segmented controls stack and center on narrow screens.
 
 ## Add the pattern
 

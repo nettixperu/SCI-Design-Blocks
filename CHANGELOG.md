@@ -2,6 +2,11 @@
 
 User-facing highlights for stable releases. For full release details, see [GitHub Releases](https://github.com/nettixperu/SCI-Design-Blocks/releases).
 
+## 1.8.1 (ZIP de prueba)
+
+- Centers the market selector by default and presents segmented market options as a centered, vertical list on narrow screens.
+- Keeps the selector as one optional reusable block; pricing patterns can include it without duplicating selector logic across card patterns.
+
 ## 1.8.0 (ZIP de prueba)
 
 - Lets a Market Pricing selector update linked Core pricing blocks elsewhere in the same nearest shared container, including sibling SCI pricing patterns.
